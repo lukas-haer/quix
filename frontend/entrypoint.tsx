@@ -1,2 +1,8 @@
 import { type Entrypoint } from "uix/providers/entrypoints.ts";
-export default "Hello, UIX!" satisfies Entrypoint;
+import { CreateQuiz } from './components/gamemaster/createQuiz/CreateQuiz.tsx';
+
+
+export default <div>
+	"Hello, UIX!"
+	<CreateQuiz/>
+</div> satisfies Entrypoint;
