@@ -43,9 +43,14 @@ const questionSet = $([
 				return null;
 			})}
 		</div>
+		
+
 	</div>
+
+	<button onclick={() => console.log(questionSet)}>Log</button>
 
 </section>
 )
+
 
 export class CreateQuiz extends Component {}
