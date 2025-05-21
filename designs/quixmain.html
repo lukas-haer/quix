@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QUIX</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Avenir+Next:wght@700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            overflow: hidden; /* Disable default scrolling */
+        }
+
+        .section {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .section:nth-child(1) {
+            background: #ffffff;
+            color: #000;
+        }
+
+        .section:nth-child(2) {
+            background: #000;
+            color: #fff;
+        }
+
+        h1 {
+            font-family: 'Avenir Next', Arial, sans-serif;
+            font-size: 4rem;
+            font-weight: bold;
+            font-style: italic;
+        }
+
+        .code-input-container {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .code-input {
+            width: 50px;
+            height: 70px;
+            border: 2px solid #000;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 2rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .code-input.pulsing {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(0, 123, 255, 1);
+            }
+            100% {
+                box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            }
+        }
+
+        .code-input:focus {
+            outline: none;
+            caret-color: transparent; /* Hide the cursor */
+        }
+
+        .section-text {
+            font-family: 'Avenir Next', Arial, sans-serif;
+            font-size: 3rem;
+            font-weight: bold;
+            font-style: italic;
+        }
+
+        .button {
+            margin-top: 2rem;
+            padding: 1rem 2rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fff;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="section" id="section1">
+        <h1>JOIN QUIX</h1>
+        <div class="code-input-container">
+            <input type="text" class="code-input" maxlength="1">
+            <input type="text" class="code-input" maxlength="1">
+            <input type="text" class="code-input" maxlength="1">
+            <input type="text" class="code-input" maxlength="1">
+            <input type="text" class="code-input" maxlength="1">
+            <input type="text" class="code-input" maxlength="1">
+        </div>
+    </div>
+
+    <div class="section" id="section2">
+        <div class="section-text">CREATE QUIX</div>
+        <button class="button" onclick="openGameEditor()">Open Game Editor</button>
+    </div>
+
+    <script>
+        const sections = document.querySelectorAll('.section');
+        let currentSectionIndex = 0;
+
+        function scrollToSection(index) {
+            sections[index].scrollIntoView({ behavior: 'smooth' });
+        }
+
+        window.addEventListener('wheel', (event) => {
+            if (event.deltaY > 0) {
+                // Scrolling down
+                if (currentSectionIndex < sections.length - 1) {
+                    currentSectionIndex++;
+                    scrollToSection(currentSectionIndex);
+                }
+            } else {
+                // Scrolling up
+                if (currentSectionIndex > 0) {
+                    currentSectionIndex--;
+                    scrollToSection(currentSectionIndex);
+                }
+            }
+        });
+
+        window.addEventListener('keydown', (event) => {
+            if (event.key === 'ArrowDown') {
+                if (currentSectionIndex < sections.length - 1) {
+                    currentSectionIndex++;
+                    scrollToSection(currentSectionIndex);
+                }
+            } else if (event.key === 'ArrowUp') {
+                if (currentSectionIndex > 0) {
+                    currentSectionIndex--;
+                    scrollToSection(currentSectionIndex);
+                }
+            }
+        });
+
+        function openGameEditor() {
+            alert("Game Editor will open here.");
+        }
+
+        // Add event listeners to code inputs
+        const codeInputs = document.querySelectorAll('.code-input');
+        codeInputs.forEach((input, index) => {
+            input.addEventListener('input', () => {
+                if (input.value.length === 1 && index < codeInputs.length - 1) {
+                    codeInputs[index + 1].focus();
+                }
+                updateInputColors();
+            });
+
+            input.addEventListener('keydown', (event) => {
+                if (event.key === 'Backspace' && input.value === '' && index > 0) {
+                    codeInputs[index - 1].focus();
+                }
+                updateInputColors();
+            });
+        });
+
+        function updateInputColors() {
+            const filledInputs = Array.from(codeInputs).filter(input => input.value.length === 1).length;
+            const colorIntensity = Math.min(filledInputs / codeInputs.length, 1);
+            const color = `rgba(0, 123, 255, ${colorIntensity})`;
+
+            codeInputs.forEach(input => {
+                input.style.backgroundColor = color;
+            });
+
+            if (codeInputs[0].value.length === 1) {
+                codeInputs.forEach(input => {
+                    input.classList.add('pulsing');
+                });
+            } else {
+                codeInputs.forEach(input => {
+                    input.classList.remove('pulsing');
+                });
+            }
+        }
+    </script>
+</body>
+</html>
