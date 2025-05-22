@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANSWER THE QUESTION</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Avenir+Next:wght@700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            overflow: hidden; /* Disable default scrolling */
+        }
+
+        .section {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative; /* For positioning elements */
+        }
+
+        .section {
+            background: #ffffff;
+            color: #000;
+        }
+
+        h1 {
+            font-family: 'Avenir Next', Arial, sans-serif;
+            font-size: 3rem; /* Smaller font size for longer questions */
+            font-weight: bold;
+            font-style: italic;
+            margin-bottom: 1rem;
+        }
+
+        .button-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .button {
+            width: 150px;
+            height: 150px;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+        }
+
+        .button1 {
+            background-color: #007BFF;
+        }
+
+        .button1:hover {
+            background: linear-gradient(135deg, #0056b3, #007BFF);
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 0 30px 10px rgba(0, 123, 255, 0.7);
+            filter: brightness(1.2);
+            animation: pulse 1s infinite;
+        }
+
+        .button2 {
+            background-color: #28a745;
+        }
+
+        .button2:hover {
+            background: linear-gradient(135deg, #218838, #28a745);
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 0 30px 10px rgba(40, 167, 69, 0.7);
+            filter: brightness(1.2);
+            animation: pulse 1s infinite;
+        }
+
+        .button3 {
+            background-color: #ffc107;
+        }
+
+        .button3:hover {
+            background: linear-gradient(135deg, #e0a800, #ffc107);
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 0 30px 10px rgba(255, 193, 7, 0.7);
+            filter: brightness(1.2);
+            animation: pulse 1s infinite;
+        }
+
+        .button4 {
+            background-color: #dc3545;
+        }
+
+        .button4:hover {
+            background: linear-gradient(135deg, #c82333, #dc3545);
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 0 30px 10px rgba(220, 53, 69, 0.7);
+            filter: brightness(1.2);
+            animation: pulse 1s infinite;
+        }
+
+        .countdown-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0%;
+            height: 20px; /* Bigger height */
+            background: linear-gradient(90deg, rgba(0, 123, 255, 0) 0%, rgba(0, 123, 255, 1) 100%);
+            box-shadow: 0 0 20px rgba(0, 123, 255, 0.7); /* Glowy effect */
+            animation: countdown 30s linear forwards;
+        }
+
+        @keyframes countdown {
+            from {
+                width: 0%;
+            }
+            to {
+                width: 100%;
+            }
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1.1);
+            }
+            50% {
+                transform: scale(1.15);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="section">
+        <h1>WHAT IS YOUR FAVORITE COLOR?</h1>
+        <div class="button-container">
+            <button class="button button1" onclick="answerQuestion('Answer 1')"></button>
+            <button class="button button2" onclick="answerQuestion('Answer 2')"></button>
+            <button class="button button3" onclick="answerQuestion('Answer 3')"></button>
+            <button class="button button4" onclick="answerQuestion('Answer 4')"></button>
+        </div>
+        <div class="countdown-bar" id="countdownBar"></div>
+    </div>
+
+    <script>
+        function answerQuestion(answer) {
+            alert(`You selected: ${answer}`);
+        }
+
+        // Apply bounce effect sequentially without focusing on any button
+        window.addEventListener('DOMContentLoaded', () => {
+            const buttons = document.querySelectorAll('.button');
+            buttons.forEach((button, index) => {
+                setTimeout(() => {
+                    button.style.animation = 'bounce 0.5s ease-in-out';
+                    setTimeout(() => {
+                        button.style.animation = ''; // Reset animation
+                    }, 500);
+                }, index * 200); // Delay each bounce by 200ms
+            });
+
+            // Set a timeout to notify the user when the countdown ends
+            setTimeout(() => {
+                alert('Time is up! Shouldve made a selection.');
+            }, 30000); // 30 seconds
+        });
+    </script>
+</body>
+</html>
