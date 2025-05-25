@@ -1,5 +1,6 @@
 import { Component, template, style } from "uix/components/Component.ts";
 import { SingleChoiceQuestion } from "common/models/question/types/SingleChoiseQuestion.ts";
+import { removeQuestionById } from "frontend/src/components/gamecreation/createQuiz/CreateQuiz.tsx"
 
 @template((props) => <section> 
 
@@ -26,6 +27,7 @@ import { SingleChoiceQuestion } from "common/models/question/types/SingleChoiseQ
 				<button type="button" class={props.question.correctAnswer == 'c' ? 'correctAnswerButton selected' : 'correctAnswerButton'} onclick={ () => props.question.correctAnswer = 'c' }>C</button>
 				<button type="button" class={props.question.correctAnswer == 'd' ? 'correctAnswerButton selected' : 'correctAnswerButton'} onclick={ () => props.question.correctAnswer = 'd' } >D</button>
 			</div>
+			<button type="button" onclick={ () => removeQuestionById(props.id.toString()) }>Delete Question</button>
 		</div>	
 
 </section>
@@ -41,4 +43,4 @@ import { SingleChoiceQuestion } from "common/models/question/types/SingleChoiseQ
 	
 `)
 
-export class CreateSingleChoiseQuestion extends Component<{ question: SingleChoiceQuestion }> {}
+export class CreateSingleChoiseQuestion extends Component<{ question: SingleChoiceQuestion, id:string }> {}
