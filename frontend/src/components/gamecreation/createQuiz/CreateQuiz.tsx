@@ -62,15 +62,11 @@ function addQuestion(type:string) {
 }
 
 export function removeQuestionById(questionId: string) {
-  console.log("remove " + questionId + " type: "+ typeof questionId);
-  console.log("og: "+ quiz.questions[0].id +" type: "+ typeof quiz.questions[0].id);
-  
-  
-  quiz.questions = [...quiz.questions.filter(
-    (question: Question) => question.id !== questionId
-  )];
+ 
+  const questionIndex = quiz.questions.findIndex(q => q.id === questionId);
+  quiz.questions.splice(questionIndex,1);
 
-  console.log("Questions after removal:", quiz.questions);
+  
 }
 
 function exportQuestionSet() {
