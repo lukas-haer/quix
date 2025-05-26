@@ -11,46 +11,50 @@ import { Question } from "common/models/question/Question.ts";
 
 	return (
         <div class="game-creation-container">
-            <h3>Frage {props.question.id}</h3>
-            <label for={`questionText-${question.id}`}>Frage:</label>
+            <h3>Question {props.question.position}</h3>
+            <label for={`questionText-${question.id}`}>Question-Text:</label>
             <textarea
                 id={`questionText-${question.id}`}
-                placeholder={"Question"}
+                placeholder="Add question Text here..."
             >
-                {" "}
                 {questioncontent.questionText}
             </textarea>
             <div class="gc-row">
-                <div class="gc-col gc-col-6 inline">
+                <div class="gc-col gc-col-6" >
 					<div class="input-group-container">
 						<p class="input-group-text bgcolor-A">A: </p>
-                		<input class="input-field" type="text" value={answers.a} />
+                		<input class="input-field" type="text" placeholder="Answer A" value={answers.a} />
 					</div>
                 </div>
                 <div class="gc-col gc-col-6">
 					<div class="input-group-container">
 						<p class="input-group-text bgcolor-B" >B: </p>
-                		<input class="input-field" type="text" value={answers.b} />
-					</div>                </div>
+                		<input class="input-field" type="text" placeholder="Answer B" value={answers.b} />
+					</div>               
+                </div>
+            </div>
+            <div class="gc-row">
                 <div class="gc-col gc-col-6">
 					<div class="input-group-container">
 						<p class="input-group-text bgcolor-C">C: </p>
-                		<input class="input-field" type="text" value={answers.c} />
-					</div>                </div>
+                		<input class="input-field" type="text" placeholder="Answer C" value={answers.c} />
+					</div>                
+                </div>
                 <div class="gc-col gc-col-6">
 					<div class="input-group-container">
 						<p class="input-group-text bgcolor-D">D: </p>
-                		<input class="input-field" type="text" value={answers.d} />
-					</div>                </div>
+                		<input class="input-field" type="text" placeholder="Answer D" value={answers.d} />
+					</div>                
+                </div>
             </div>
             <div class="select-correct-answer">
-                <strong style={"margin-right: 10px"}>Richtige Antwort:</strong>
+                <strong style={"margin-right: 10px"}>Correct Answer:</strong>
                 <button
                     type="button"
                     class={
                         questioncontent.correctAnswer == "a"
-                            ? "correctAnswerButton bgcolor-A selected"
-                            : "correctAnswerButton bgcolor-A"
+                            ? "btn bgcolor-A selected"
+                            : "btn bgcolor-A"
                     }
                     onclick={() => (questioncontent.correctAnswer = "a")}
                 >
@@ -60,8 +64,8 @@ import { Question } from "common/models/question/Question.ts";
                     type="button"
                     class={
                         questioncontent.correctAnswer == "b"
-                            ? "correctAnswerButton bgcolor-B selected"
-                            : "correctAnswerButton bgcolor-B"
+                            ? "btn bgcolor-B selected"
+                            : "btn bgcolor-B"
                     }
                     onclick={() => (questioncontent.correctAnswer = "b")}
                 >
@@ -71,8 +75,8 @@ import { Question } from "common/models/question/Question.ts";
                     type="button"
                     class={
                         questioncontent.correctAnswer == "c"
-                            ? "correctAnswerButton bgcolor-C selected"
-                            : "correctAnswerButton bgcolor-C"
+                            ? "btn bgcolor-C selected"
+                            : "btn bgcolor-C"
                     }
                     onclick={() => (questioncontent.correctAnswer = "c")}
                 >
@@ -82,8 +86,8 @@ import { Question } from "common/models/question/Question.ts";
                     type="button"
                     class={
                         questioncontent.correctAnswer == "d"
-                            ? "correctAnswerButton bgcolor-D selected"
-                            : "correctAnswerButton bgcolor-D"
+                            ? "btn bgcolor-D selected"
+                            : "btn bgcolor-D"
                     }
                     onclick={() => (questioncontent.correctAnswer = "d")}
                 >
@@ -92,11 +96,12 @@ import { Question } from "common/models/question/Question.ts";
             </div>
             <button
                 type="button"
-                class={"bgcolor-D"}
+                class={"btn bgcolor-D"}
                 onclick={() => removeQuestionById(props.id.toString())}
             >
                 Delete Question
             </button>
+
         </div>
     );})
 

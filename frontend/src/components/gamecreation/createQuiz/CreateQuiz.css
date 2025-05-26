@@ -33,38 +33,54 @@ input {
 	height: 40px;
 }
 
-button{
-	margin: 0px 5px 0px 0px;
+.btn{
+	margin-left: 0px;
+	margin-right: 5px;
 	border: 1px solid var(--border);
 	background-color: var(--bg-color);
+}
+
+.margin0 {
+	margin: 0;
 }
 
 .inline{
 	display: inline;
 }
 
+.vertically-centered {
+	display: flex;
+	align-items: center;
+}
+
+.align-right {
+	text-align: right;
+	justify-content: flex-end;
+}
+
 .gc-row {
     display: flex;
+	width: 100%;
     flex-wrap: wrap;
     margin: 0;
     align-items: stretch; 
 }
 
-.gc-col-6 {
-	flex: 0 0 auto;
-	width: 50%;
+.gc-col {
+	flex: 1 0 auto;
 	padding-right: 15px;
+	box-sizing: border-box;
 }
+.gc-col:nth-child(2n) { padding-right: 0;}
 
-.gc-col-6:nth-child(2n) {
-	padding-right: 0;
-
-}
+.gc-col-3 {width: 25%;}
+.gc-col-6 {width: 50%;}
+.gc-col-9 {width: 75%;}
 
 .input-group-container {
   display: flex;
   width: 100%;
-  height: 40px;
+  height: 41px;
   margin-bottom: 10px;
   overflow: hidden;
   align-items: center;
@@ -125,9 +141,6 @@ button{
 	--bg-color-selected: #580101;
 }
 
-.correctAnswerButton{
-	border: 2px none;
-}
 
 .selected {
 	background-color: var(--bg-color-selected);
@@ -143,4 +156,12 @@ button{
 
 .select-correct-answer {
 	margin-bottom: 15px;
+}
+
+#addQuestion-select{
+	margin-right: 10px;
+}
+
+#export-btn {
+	background-color: var(--color-b);
 }
