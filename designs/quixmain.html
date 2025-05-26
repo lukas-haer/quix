@@ -42,6 +42,10 @@
     color: #fff;
 }
 
+.button, .code-input-container {
+    transition: opacity 0.9s ease;
+}
+
         h1 {
             font-family: 'Avenir Next', Arial, sans-serif; 
             font-size: 4rem;
@@ -70,6 +74,8 @@
         .code-input.pulsing {
             animation: pulse 1.5s infinite;
         }
+
+        
 
         @keyframes pulse {
             0% {
@@ -174,7 +180,7 @@
 <body>
     <div class="section" id="section1">
         <h1>JOIN QUIX</h1>
-        <div class="code-input-container">
+        <div id="code-input-container" class="code-input-container">
             <input type="text" class="code-input" maxlength="1">
             <input type="text" class="code-input" maxlength="1">
             <input type="text" class="code-input" maxlength="1">
@@ -186,31 +192,48 @@
 
     <div class="section" id="section2">
         <h1 class="section-text">HOST QUIX</h1>
-        <button class="button" onclick="openGameEditor()">Open Game Editor</button>
+        <button id="openGameEditorButton" class="button" onclick="openGameEditor()">Open Game Editor</button>
     </div>
 
    <script>
     const section1 = document.getElementById('section1');
     const section2 = document.getElementById('section2');
+    const openGameEditorButton = document.getElementById('openGameEditorButton');
+    const codeInputContainer = document.getElementById('code-input-container');
     const codeInputs = document.querySelectorAll('.code-input');
     let activeSection = "section1";
 
     // Smooth height swap based on scroll position
-    window.addEventListener('wheel', (event) => {  
-              
-        const scrollY = event.deltaY;
+window.addEventListener('wheel', (event) => {
+    const scrollY = event.deltaY;
 
-        
-        if (activeSection == "section1" && scrollY > 0) {
-            section1.style.height = '15vh';
-            section2.style.height = '85vh';
-            activeSection = "section2";
-        } else if (activeSection == "section2" && scrollY < 0) {
-            section1.style.height = '85vh';
-            section2.style.height = '15vh';
-            activeSection = "section1";  
-        }
-    });
+    if (activeSection == "section1" && scrollY > 0) {
+        section1.style.height = '15vh';
+        section2.style.height = '85vh';
+        activeSection = "section2";
+
+        // Fade out code input container
+        codeInputContainer.style.opacity = '0';
+
+
+        // Fade in button
+        setTimeout(() => {
+            openGameEditorButton.style.opacity = '1';
+        }, 0);
+    } else if (activeSection == "section2" && scrollY < 0) {
+        section1.style.height = '85vh';
+        section2.style.height = '15vh';
+        activeSection = "section1";
+
+        // Fade out button
+        openGameEditorButton.style.opacity = '0';
+
+        // Fade in code input container
+        setTimeout(() => {
+            openGameEditorButton.style.opacity = '1';
+        }, 900);
+    }
+});
 
     // Open Game Editor button
     function openGameEditor() {
