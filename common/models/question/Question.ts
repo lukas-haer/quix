@@ -1,7 +1,7 @@
 import { type SingleChoiceQuestion } from './types/SingleChoiseQuestion.ts';
 
-export type Question = {
+export type Question<T> = {
 	id: string;
 	type: string;
-	questionContent: SingleChoiceQuestion
+	questionContent: T
 }
