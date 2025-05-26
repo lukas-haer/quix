@@ -1,3 +1,15 @@
+:root {
+	--bg-color: #797979;
+	--color-a: #007BFF;
+	--color-a-selected: #0056b3;
+	--color-b: #28a745;	
+	--color-b-selected: #1e7b34;
+	--color-c: #ffc107;
+	--color-c-selected: #b38f00;
+	--color-d: #dc3545;
+	--color-d-selected: #a92835;
+}
+
 h1, h3, h4, h5 {
 	margin: 0;
 	margin-bottom: 15px;
@@ -18,17 +30,17 @@ label {
 
 input {
 	width: 100%;
+	height: 40px;
 }
 
 button{
-	margin: 0px 5px;
+	margin: 0px 5px 0px 0px;
+	border: 1px solid var(--border);
+	background-color: var(--bg-color);
 }
- 
-.game-creation-container {
-	padding: 20px 20px;
-	margin: 30px 0px;
-	border: 1px solid #000;
-	border-radius: 10px;
+
+.inline{
+	display: inline;
 }
 
 .gc-row {
@@ -47,4 +59,88 @@ button{
 .gc-col-6:nth-child(2n) {
 	padding-right: 0;
 
+}
+
+.input-group-container {
+  display: flex;
+  width: 100%;
+  height: 40px;
+  margin-bottom: 10px;
+  overflow: hidden;
+  align-items: center;
+ 
+  color: var(--text);
+  background-color: var(--bg);
+
+}
+
+.input-group-container > input {
+	margin-bottom: 0;
+	border: 1px solid  var(--border);
+	border-top-right-radius: var(--standard-border-radius);
+    border-bottom-right-radius: var(--standard-border-radius);
+	border-top-left-radius: 0;
+  	border-bottom-left-radius: 0;
+}
+
+.input-group-container > input:focus {
+	border: 2px solid #0d6efd;
+	
+}
+
+.input-group-text {
+  margin: 0;
+  color: #fff;
+  background: var(--bg-color);
+  min-width: 50px;
+  height: 100%;
+  text-align: center;
+  border: 1px solid var(--border);
+  border-right: 0px;
+  border-top-left-radius: var(--standard-border-radius);
+  border-bottom-left-radius: var(--standard-border-radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bgcolor-A{
+	--bg-color: var(--color-a);
+	--bg-color-selected: var(--color-a-selected);
+}
+.bgcolor-B{
+	--bg-color: var(--color-b);
+	--bg-color-selected: var(--color-b-selected);
+}
+.bgcolor-C{
+	--bg-color: var(--color-c);
+	--bg-color-selected: var(--color-c-selected);
+}
+.bgcolor-D{
+	--bg-color: var(--color-d);
+	--bg-color-selected: var(--color-d-selected);
+}
+.bgcolor-dark-red{
+	--bg-color: #740000;
+	--bg-color-selected: #580101;
+}
+
+.correctAnswerButton{
+	border: 2px none;
+}
+
+.selected {
+	background-color: var(--bg-color-selected);
+	border: 5px solid var(--bg-color-selected);
+}
+ 
+.game-creation-container {
+	padding: 20px 20px;
+	margin: 30px 0px;
+	border: 1px solid #000;
+	border-radius: 10px;
+}
+
+.select-correct-answer {
+	margin-bottom: 15px;
 }

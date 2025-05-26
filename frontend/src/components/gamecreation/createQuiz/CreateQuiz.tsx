@@ -22,6 +22,7 @@ const quiz = $({
     questions: [
         {
 			id: crypto.randomUUID(),
+			position: 1,
             type: "single-choice",
             questionContent: {
                 questionText: "What is the best Frontend Framework?",
@@ -36,9 +37,10 @@ const quiz = $({
         },
         {
 			id: crypto.randomUUID(),
+			position: 2,
             type: "single-choice",
             questionContent: {
-                questionText: "What is the best Frontend Framework?",
+                questionText: "Which technology does not exitst?",
                 answers: {
                     a: "Reverse Hashing",
                     b: "Reactivity",
@@ -62,6 +64,7 @@ function addQuestion(type:string) {
 		quiz.questions.push({
 			id: crypto.randomUUID(),
 			type: "single-choice",
+			position: quiz.questions.length + 1, 
 			questionContent: {
 				questionText: "",
 				answers: {
@@ -143,7 +146,7 @@ function exportQuestionSet() {
             })}
         </div>
 
-        <textarea name="" id="">
+        <textarea style={"height: 500px"} name="" id="">
             {JSON.stringify(quiz, null, 2)}
         </textarea>
 

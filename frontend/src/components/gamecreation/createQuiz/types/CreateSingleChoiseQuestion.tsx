@@ -21,27 +21,36 @@ import { Question } from "common/models/question/Question.ts";
                 {questioncontent.questionText}
             </textarea>
             <div class="gc-row">
-                <div class="gc-col gc-col-6">
-                    <input type="text" value={answers.a} />
+                <div class="gc-col gc-col-6 inline">
+					<div class="input-group-container">
+						<p class="input-group-text bgcolor-A">A: </p>
+                		<input class="input-field" type="text" value={answers.a} />
+					</div>
                 </div>
                 <div class="gc-col gc-col-6">
-                    <input type="text" value={answers.b} />
-                </div>
+					<div class="input-group-container">
+						<p class="input-group-text bgcolor-B" >B: </p>
+                		<input class="input-field" type="text" value={answers.b} />
+					</div>                </div>
                 <div class="gc-col gc-col-6">
-                    <input type="text" value={answers.c} />
-                </div>
+					<div class="input-group-container">
+						<p class="input-group-text bgcolor-C">C: </p>
+                		<input class="input-field" type="text" value={answers.c} />
+					</div>                </div>
                 <div class="gc-col gc-col-6">
-                    <input type="text" value={answers.d} />
-                </div>
+					<div class="input-group-container">
+						<p class="input-group-text bgcolor-D">D: </p>
+                		<input class="input-field" type="text" value={answers.d} />
+					</div>                </div>
             </div>
-            <div>
-                <strong>Richtige Antwort:</strong>
+            <div class="select-correct-answer">
+                <strong style={"margin-right: 10px"}>Richtige Antwort:</strong>
                 <button
                     type="button"
                     class={
                         questioncontent.correctAnswer == "a"
-                            ? "correctAnswerButton selected"
-                            : "correctAnswerButton"
+                            ? "correctAnswerButton bgcolor-A selected"
+                            : "correctAnswerButton bgcolor-A"
                     }
                     onclick={() => (questioncontent.correctAnswer = "a")}
                 >
@@ -51,8 +60,8 @@ import { Question } from "common/models/question/Question.ts";
                     type="button"
                     class={
                         questioncontent.correctAnswer == "b"
-                            ? "correctAnswerButton selected"
-                            : "correctAnswerButton"
+                            ? "correctAnswerButton bgcolor-B selected"
+                            : "correctAnswerButton bgcolor-B"
                     }
                     onclick={() => (questioncontent.correctAnswer = "b")}
                 >
@@ -62,8 +71,8 @@ import { Question } from "common/models/question/Question.ts";
                     type="button"
                     class={
                         questioncontent.correctAnswer == "c"
-                            ? "correctAnswerButton selected"
-                            : "correctAnswerButton"
+                            ? "correctAnswerButton bgcolor-C selected"
+                            : "correctAnswerButton bgcolor-C"
                     }
                     onclick={() => (questioncontent.correctAnswer = "c")}
                 >
@@ -73,8 +82,8 @@ import { Question } from "common/models/question/Question.ts";
                     type="button"
                     class={
                         questioncontent.correctAnswer == "d"
-                            ? "correctAnswerButton selected"
-                            : "correctAnswerButton"
+                            ? "correctAnswerButton bgcolor-D selected"
+                            : "correctAnswerButton bgcolor-D"
                     }
                     onclick={() => (questioncontent.correctAnswer = "d")}
                 >
@@ -83,17 +92,13 @@ import { Question } from "common/models/question/Question.ts";
             </div>
             <button
                 type="button"
+                class={"bgcolor-D"}
                 onclick={() => removeQuestionById(props.id.toString())}
             >
                 Delete Question
             </button>
         </div>
     );})
-@style(css`
-	.selected {
-		background-color:rgb(35, 13, 129);
-	}
-	
-`)
+
 
 export class CreateSingleChoiseQuestion extends Component<{ question: Question<SingleChoiceQuestion>, id:string }> {}
