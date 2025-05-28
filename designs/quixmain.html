@@ -148,7 +148,19 @@
         .sticky-top {
             position: sticky;
             top: 0;
+        }
+
+        .pt-30{
             padding-top: 30px;
+        }
+
+        .sticky-bottom {
+            position: sticky;
+            top: 0;
+        }
+
+        .pb-30 {
+            padding-bottom: 30px;
         }
 
         .arrow {
@@ -190,7 +202,7 @@
 
 <body>
     <div class="section" id="section1">
-        <h1 class="sticky-top">JOIN QUIX</h1>
+        <h1 class="sticky-top pt-30">JOIN QUIX</h1>
         <div id="code-input-container" class="code-input-container">
             <input type="text" class="code-input" maxlength="1">
             <input type="text" class="code-input" maxlength="1">
@@ -202,7 +214,7 @@
     </div>
 
     <div class="section" id="section2">
-        <h1 class="section-text">HOST QUIX</h1>
+        <h1 class="section-text sticky-top pb-30">HOST QUIX</h1>
         <button id="openGameEditorButton" class="button" onclick="openGameEditor()">Open Game Editor</button>
     </div>
 
@@ -224,7 +236,6 @@ window.addEventListener('wheel', (event) => {
         activeSection = "section2";
 
         codeInputContainer.style.opacity = '0';
-
         openGameEditorButton.style.opacity = '1';
             
     } else if (activeSection == "section2" && scrollY < 0) {
