@@ -136,8 +136,19 @@
             transition: background-color 0.3s ease;
         }
 
+        #openGameEditorButton {
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
         .button:hover {
             background-color: #0056b3;
+        }
+
+        .sticky-top {
+            position: sticky;
+            top: 0;
+            padding-top: 30px;
         }
 
         .arrow {
@@ -179,7 +190,7 @@
 
 <body>
     <div class="section" id="section1">
-        <h1>JOIN QUIX</h1>
+        <h1 class="sticky-top">JOIN QUIX</h1>
         <div id="code-input-container" class="code-input-container">
             <input type="text" class="code-input" maxlength="1">
             <input type="text" class="code-input" maxlength="1">
@@ -206,32 +217,24 @@
     // Smooth height swap based on scroll position
 window.addEventListener('wheel', (event) => {
     const scrollY = event.deltaY;
-
+    
     if (activeSection == "section1" && scrollY > 0) {
         section1.style.height = '15vh';
         section2.style.height = '85vh';
         activeSection = "section2";
 
-        // Fade out code input container
         codeInputContainer.style.opacity = '0';
 
-
-        // Fade in button
-        setTimeout(() => {
-            openGameEditorButton.style.opacity = '1';
-        }, 0);
+        openGameEditorButton.style.opacity = '1';
+            
     } else if (activeSection == "section2" && scrollY < 0) {
         section1.style.height = '85vh';
         section2.style.height = '15vh';
         activeSection = "section1";
 
-        // Fade out button
         openGameEditorButton.style.opacity = '0';
+        codeInputContainer.style.opacity = '1';
 
-        // Fade in code input container
-        setTimeout(() => {
-            openGameEditorButton.style.opacity = '1';
-        }, 900);
     }
 });
 
