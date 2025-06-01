@@ -1,13 +1,14 @@
 import MainMenu from "./src/components/MainMenu/MainMenu.tsx";
 import GameConatiner from "./src/components/player/GameContainer/GameConatiner.tsx";
 import AnswerScreen from "./src/components/player/AnswerScreen/AnswerScreen.tsx";
-
+import HostDashboard from "./src/components/host/HostDashboard.tsx";
+import JoinScreen from "./src/components/player/JoinScreen/JoinScreen.tsx";
 
 
 export default {
     "/": () => <MainMenu />,
-    "/join": () => <GameConatiner />,
-    "/create": () => <div>... everything missing here</div>,
+    "/join": () => <JoinScreen handleJoin={() => {}} />,
+    "/create": () => <HostDashboard />,
     "/test": () => <AnswerScreen
       correct={true}
       currentScore={15}

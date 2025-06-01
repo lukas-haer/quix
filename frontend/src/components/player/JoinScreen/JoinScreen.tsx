@@ -2,6 +2,13 @@ type JoinScreenProps = {
     handleJoin:(name:string, id:string) => void;
 };
 
+//get endpoint from url
+
+//get api from endpoint
+const joinGame = async (endpointId: string, username: string) => {
+  console.log(await datex`${endpointId}.PlayerAPI.joinGame(${username})`)
+}
+
 export default function JoinScreen({handleJoin}:JoinScreenProps) {
     const id = $("");
     const name = $("");
@@ -13,7 +20,7 @@ export default function JoinScreen({handleJoin}:JoinScreenProps) {
             type="text"
             value={id.val}
             onchange={(e:any) => id.val = e.target.value}
-            placeholder="Game ID eingeben"
+            placeholder="Endpoint ID eingeben"
           />
           <label>Name:</label>
           <input
@@ -22,7 +29,7 @@ export default function JoinScreen({handleJoin}:JoinScreenProps) {
             onchange={(e:any) => name.val = e.target.value}
             placeholder="Name eingeben"
           />
-          <button onclick={() => handleJoin(name.val, id.val)}>Join</button>
+          <button onclick={() => joinGame(id.val, name.val)}>Join</button>
       </div>
     );
 }
