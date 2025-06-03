@@ -1,6 +1,5 @@
 import { Component, template } from "uix/components/Component.ts";
 import { qrcode } from "https://unyt.land/x/qrcode@v2.0.0/mod.ts";
-// import { qrcode } from "../../utils/mod.ts";
 
 @template(function () {
   return <img src={this.code} />;
