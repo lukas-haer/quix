@@ -39,9 +39,3 @@ export function getHostIdFromGamecode (gamecode: string): Endpoint {
 		throw new Error(`Lobby with gamecode ${gamecode} not found.`);
 	}
 }
-
-//TODO remove this function, it is only for testing purposes
-export function getLobbys() {
-	return lobbys;
-}
-
