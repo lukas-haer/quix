@@ -42,7 +42,7 @@ type UserGameState = {
   currentRound: Datex.Pointer<number>;
 }
 
-const testQuestions = [{question: "abcd?", answers: ["a","b","c","d"], correctAnswerId: 0, timeInSeconds: 30},{question: "abcd?", answers: ["a","b","c","d"], correctAnswerId: 2, timeInSeconds: 30}]
+const testQuestions = [{question: "Frage 1: abcd?", answers: ["a","b","c","d"], correctAnswerId: 0, timeInSeconds: 3},{question: "Frage 2: abcd?", answers: ["a","b","c","d"], correctAnswerId: 2, timeInSeconds: 3}]
 
 //TODO: this is supposed to be the gameState object
 //TODO: BUG?: how to save pointer to object and how to get reference to that pointer from object
@@ -55,17 +55,18 @@ const currentRound: Datex.Pointer<number> = $(0);
 type TestState = {
   currentDeadline: Date;
   questions: Question[];
-  players: Player[];
+  players: ObjectRef<Player[]>;
 }
 
 const test: ObjectRef<TestState> = $({
   currentDeadline: new Date(),
   questions: testQuestions,
-  players: []
+  players: $([]) //why does this not work without a pointer??? didn't it used to work?? why does it crash???? why does it not work in eternal mode/?????
 })
 
 grantPublicAccess(state);
 grantPublicAccess(currentRound);
+grantPublicAccess(test.players);
 
 //TODO: make gameState eternal?
 
@@ -83,25 +84,34 @@ const resetGame = () => {
   //currentRound.val = 0
 
   //TODO: How to set value of Object Pointers???
+  test.players = []
   test.currentDeadline = new Date()
   test.questions = testQuestions
 }
 
 const startGame = () => {
-    state.val = "playing"
-}
+    state.val = "playing";
+    updateDeadlineAndTimer()
+  }
 
 const nextRound = () => {
     if (currentRound.val + 1 === test.questions.length){
-        state.val = "finished"
+        state.val = "finished";
         return
     }
-    // Can you do this more smoothely?
-    const newDeadline = new Date();
-    newDeadline.setSeconds(newDeadline.getSeconds() + test.questions[currentRound.val].timeInSeconds);
-    test.currentDeadline = newDeadline;
-    //test.currentDeadline = new Date(new Date() + test.questions[currentRound.val].timeInSeconds * 1000)
+
+    updateDeadlineAndTimer()
     currentRound.val++;
+}
+
+const updateDeadlineAndTimer = () => {
+  // Can you do this more smoothely?
+  const newDeadline = new Date();
+  newDeadline.setSeconds(newDeadline.getSeconds() + test.questions[currentRound.val].timeInSeconds);
+  test.currentDeadline = newDeadline;
+  //test.currentDeadline = new Date(new Date() + test.questions[currentRound.val].timeInSeconds * 1000)
+
+  setTimeout(nextRound, test.currentDeadline - Date.now());
 }
 
 //Callable on host via e.g. 'PlayerAPI.joinGame("test")'
@@ -162,6 +172,19 @@ export default function HostDashboard() {
                 }
               </>
               <button onclick={() => startGame()}>Start Game</button>
+            </div>
+          }
+          {
+            state.val === "playing" && <div>
+              <h2>Current Question:</h2>
+              <p>{test.questions[currentRound.val].question}</p>
+              <h2>Current Deadline:</h2>
+              <p>{test.currentDeadline}</p>
+            </div>
+          }
+          {
+            state.val === "finished" && <div>
+              <h2>Game has finished.</h2>
             </div>
           }
           <button onclick={() => resetGame()}>Reset Game</button>
