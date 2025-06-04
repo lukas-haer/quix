@@ -7,6 +7,7 @@ import JoinScreen from "./src/components/player/JoinScreen/JoinScreen.tsx";
 
 export default {
     "/": () => <MainMenu />,
+    "/join/:id": (_:any, {id}:{id: string}) => <JoinScreen id={id} handleJoin={() => {}}/>,
     "/join": () => <JoinScreen handleJoin={() => {}} />,
     "/create": () => <HostDashboard />,
     "/test": () => <AnswerScreen
