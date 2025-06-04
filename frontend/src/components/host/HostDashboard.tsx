@@ -42,7 +42,7 @@ type UserGameState = {
   currentRound: Datex.Pointer<number>;
 }
 
-const testQuestions = [{question: "Frage 1: abcd?", answers: ["a","b","c","d"], correctAnswerId: 0, timeInSeconds: 3},{question: "Frage 2: abcd?", answers: ["a","b","c","d"], correctAnswerId: 2, timeInSeconds: 3}]
+const testQuestions = [{question: "Frage 1: abcd?", answers: ["a","b","c","d"], correctAnswerId: 0, timeInSeconds: 5},{question: "Frage 2: abcd?", answers: ["a","b","c","d"], correctAnswerId: 2, timeInSeconds: 5}]
 
 //TODO: this is supposed to be the gameState object
 //TODO: BUG?: how to save pointer to object and how to get reference to that pointer from object
@@ -66,7 +66,7 @@ const test: ObjectRef<TestState> = $({
 
 grantPublicAccess(state);
 grantPublicAccess(currentRound);
-grantPublicAccess(test.players);
+grantPublicAccess(test.players); // TODO: how can i remove this and have it still working??
 
 //TODO: make gameState eternal?
 
@@ -81,10 +81,10 @@ grantPublicAccess(test.players);
 const resetGame = () => {
   //TODO: resetting the pointer values multiple times breaks the page (with currentRound it breaks immediately)
   state.val = "waiting"
-  //currentRound.val = 0
+  currentRound.val = 0
 
   //TODO: How to set value of Object Pointers???
-  test.players = []
+  //test.players = []
   test.currentDeadline = new Date()
   test.questions = testQuestions
 }
@@ -111,7 +111,7 @@ const updateDeadlineAndTimer = () => {
   test.currentDeadline = newDeadline;
   //test.currentDeadline = new Date(new Date() + test.questions[currentRound.val].timeInSeconds * 1000)
 
-  setTimeout(nextRound, test.currentDeadline - Date.now());
+  setTimeout(nextRound, test.currentDeadline.getTime() - Date.now());
 }
 
 //Callable on host via e.g. 'PlayerAPI.joinGame("test")'
@@ -131,6 +131,7 @@ class PlayerAPI {
 
   @property static submitAnswer(answerId: number) {
     //TODO
+    //TODO: check if caller in players array -> switch to dict (keys = player endpoint ids)
     return
   }
 
@@ -160,34 +161,44 @@ export default function HostDashboard() {
     return (
       <div style={styles.container}>
           {
-            state.val === "waiting" && <div>
-              <h2 style={styles.heading}>Waiting for players to join...</h2>
-              <h2>Lobby:</h2>
-              {
-              // BUG: Lobby disappears without empty html tags
-              }
-              <>
-              { //TODO: BUG: find out why array length property not reactive 
-                test.players.map((player: Player) => <div>{player.name}</div>) 
-                }
-              </>
-              <button onclick={() => startGame()}>Start Game</button>
-            </div>
+            state.val === "waiting" && <HostWaitingView />
           }
           {
-            state.val === "playing" && <div>
-              <h2>Current Question:</h2>
-              <p>{test.questions[currentRound.val].question}</p>
-              <h2>Current Deadline:</h2>
-              <p>{test.currentDeadline}</p>
-            </div>
+            state.val === "playing" && <HostPlayingView />
           }
           {
-            state.val === "finished" && <div>
-              <h2>Game has finished.</h2>
-            </div>
+            state.val === "finished" && <h2>Game has finished.</h2>
           }
           <button onclick={() => resetGame()}>Reset Game</button>
       </div>
       )
+}
+
+function HostWaitingView() {
+  return (
+      <div>
+        <h2 style={styles.heading}>Waiting for players to join...</h2>
+        <h2>Lobby:</h2>
+        {
+        // BUG: Lobby disappears without empty html tags
+        }
+        <>
+        { //TODO: BUG: find out why array length property not reactive 
+          test.players.map((player: Player) => <div>{player.name}</div>) 
+          }
+        </>
+        <button onclick={() => startGame()}>Start Game</button>
+      </div>
+  )
+}
+
+function HostPlayingView() {
+  return (
+      <div>
+        <h2>Current Question:</h2>
+        <p>{test.questions[currentRound.val].question}</p>
+        <h2>Current Deadline:</h2>
+        <p>{test.currentDeadline.toString()}</p>
+      </div>
+  )
 }
