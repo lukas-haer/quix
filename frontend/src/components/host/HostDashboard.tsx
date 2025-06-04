@@ -175,6 +175,10 @@ export default function HostDashboard() {
 }
 
 function HostWaitingView() {
+  const {prefix, name, instance} = Datex.Runtime.endpoint;
+  const hostEndpointId = prefix + name + "/" + instance;
+  const appUrls = Datex.Unyt.endpointDomains();
+
   return (
       <div>
         <h2 style={styles.heading}>Waiting for players to join...</h2>
@@ -188,8 +192,23 @@ function HostWaitingView() {
           }
         </>
         <button onclick={() => startGame()}>Start Game</button>
+        <h2>Invite Links:</h2>
+        <>
+        {
+          appUrls?.map(url => <InviteLink linkUrl={url + "/join/" + encodeURIComponent(hostEndpointId)} /> )
+        }
+        </>
       </div>
   )
+}
+
+function InviteLink({linkUrl}:{linkUrl: string}) {
+  return (
+    <div style={{display: "flex", gap: "10px"}}>
+      <p>{ linkUrl }</p>
+      <button onclick={() => navigator.clipboard.writeText(linkUrl)}>Copy</button>
+    </div>
+    )
 }
 
 function HostPlayingView() {
