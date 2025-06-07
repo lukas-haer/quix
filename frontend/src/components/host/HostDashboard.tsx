@@ -131,10 +131,19 @@ class PlayerAPI {
     return { state, currentRound }
   }
 
-  @property static submitAnswer(answerId: number) {
-    //TODO
+  @property static submitAnswer(answerId: number): number {
+    if(state.val !== "playing") throw new Error("Game has not started yet.")
+
     //TODO: check if caller in players array -> switch to dict (keys = player endpoint ids)
-    return
+    const callerId = datex.meta?.caller
+    const playerIndex = test.players.findIndex((player: Player) => player.endpointId === callerId)
+    
+    if(playerIndex === -1) throw new Error("There is no player with that endpoint id.")
+    //TODO: cache answers and evaluate at the end of a round
+    if(answerId !== test.questions[currentRound.val].correctAnswerId) throw new Error("Wrong answer.")
+
+    test.players[playerIndex].points = test.players[playerIndex].points + 1
+    return test.players[playerIndex].points
   }
 
   @property static getCurrentQuestion(): GetCurrentQuestionReturn {

@@ -28,7 +28,8 @@ const joinGame = async (endpointId: string, username: string) => {
 //TODO: can this be pulled from PlayerAPI class?
 type PlayerAPIType = {
   joinGame: (name: string) => {state: Datex.Pointer<string>; currentRound: Datex.Pointer<number>};
-  getCurrentQuestion: () => {question: string; answers: string[], currentDeadline: Date;}
+  getCurrentQuestion: () => {question: string; answers: string[], currentDeadline: Date;};
+  submitAnswer: (answerId: number) => number;
 }
 
 const apiObj: ObjectRef<{playerApi?: PlayerAPIType}> = $({}); //encapsulate api to guarantee reactivity
@@ -74,6 +75,8 @@ async function Game() {
   const answers: Datex.Pointer<string> = $("");
   const currentDeadline: Datex.Pointer<string> = $("");
 
+  const points = $(0);
+
   async function updateQuestionAndAnswers(){
     if(!apiObj.playerApi) throw Error("PlayerAPI not defined.")
     const res: {question: string; answers: string[]; currentDeadline: Date;} = await apiObj.playerApi.getCurrentQuestion();
@@ -91,6 +94,13 @@ async function Game() {
   })
   currentRound.observe(() => { updateQuestionAndAnswers() })
 
+  async function submitAnswer(answerId: number){
+    const newPoints = await apiObj.playerApi.submitAnswer(answerId);
+    if(newPoints > points.val){
+      points.val = newPoints;
+    }
+  }
+
   return (
     <div>
       <h2>State: {state.val}</h2>
@@ -101,12 +111,14 @@ async function Game() {
       {
         state.val === "playing" && (
           <div>
+            <h2>Points: {points.val}</h2>
             { !submittedAnswer.val ? (
               <>
               <h2>{question.val}</h2>
               <div style={{display: "flex", gap: "10px"}}>
               {answers.val.split(";").map((answer, index) => <button style={{padding: "50px"}} onclick={() => {
                 //TODO: call submitAnswer with index
+                submitAnswer(index);
                 submittedAnswer.val = true;
                 }}>{answer}</button>)}
               </div>
@@ -119,7 +131,12 @@ async function Game() {
         )
       }
       {
-        state.val === "finished" && <h2>The game has finished.</h2>
+        state.val === "finished" && (
+          <>
+          <h2>The game has finished.</h2>
+          <h2>Final Score: {points.val}</h2>
+          </>
+        )
       }
     </div>
   )
