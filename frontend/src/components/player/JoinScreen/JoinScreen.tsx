@@ -9,28 +9,21 @@ type JoinScreenProps = {
 const stateId = $("");
 const currentRoundId = $("");
 
+//TODO: error handling, user feedback (snackbar/form), enforce policies on endpoint formats and username length
 
 //get api from endpoint
 const joinGame = async (endpointId: string, username: string) => {
-  console.log(endpointId)
-  console.log(username)
-  //console.log(`await datex`${endpointId}.PlayerAPI.joinGame(${username})``)
-  //const res = await datex`${endpointId}.PlayerAPI.joinGame(${username})`
-  if(!apiObj.playerApi) throw Error("Please fetch the hosts PlayerAPI first.")
-  const res: {state: Datex.Pointer<string>; currentRound: Datex.Pointer<number>;} = await apiObj.playerApi.joinGame(username)
+  
+  const api: PlayerAPIType = await datex.get(`${endpointId}.PlayerAPI`)
+  if(!api) throw Error("Couldn't get Player API")
 
-  console.log(res)
-  console.log(res.state.id)
-  console.log(res.currentRound.id)
+  const res: {state: Datex.Pointer<string>; currentRound: Datex.Pointer<number>;} = await api.joinGame(username)
+
+  apiObj.playerApi = api
+
   currentRoundId.val = res.currentRound.id;
   stateId.val = res.state.id;
-  //statePointer.val = res.state;
-  //currentRound = res.currentRound;
 }
-
-// const getApi = async (endpointId: string) => {
-
-// }
 
 //TODO: can this be pulled from PlayerAPI class?
 type PlayerAPIType = {
@@ -38,10 +31,7 @@ type PlayerAPIType = {
   getCurrentQuestion: () => {question: string; answers: string[], currentDeadline: Date;}
 }
 
-const apiObj: ObjectRef<{playerApi?: PlayerAPIType}> = $({});
-//const playerApi = $({})
-
-(globalThis as any).stateId = stateId;
+const apiObj: ObjectRef<{playerApi?: PlayerAPIType}> = $({}); //encapsulate api to guarantee reactivity
 
 export default function JoinScreen({handleJoin, id}:JoinScreenProps) {
 
@@ -50,6 +40,8 @@ export default function JoinScreen({handleJoin, id}:JoinScreenProps) {
 
     return (
       <div>
+          {stateId.val !== "" ? <Game /> : (
+          <>
           <label>ID:</label>
           <input
             type="text"
@@ -57,17 +49,6 @@ export default function JoinScreen({handleJoin, id}:JoinScreenProps) {
             onchange={(e:any) => gameId.val = e.target.value}
             placeholder="Endpoint ID eingeben"
           />
-          <button onclick={async () => {
-            const api: PlayerAPIType = await datex.get(`${gameId.val}.PlayerAPI`)
-            const hostState = await datex.get(`${gameId.val}.state`)
-            const hostCurrentRound = await datex.get(`${gameId.val}.currentRound`)
-            console.log(hostState)
-            console.log(hostCurrentRound)
-            if(!api) throw Error("Couldn't get Player API")
-            apiObj.playerApi = api
-            console.log(apiObj.playerApi ?? "")
-          }
-          }>Get API</button>
           <label>Name:</label>
           <input
             type="text"
@@ -76,16 +57,15 @@ export default function JoinScreen({handleJoin, id}:JoinScreenProps) {
             placeholder="Name eingeben"
           />
           <button onclick={() => joinGame(gameId.val, name.val)}>Join</button>
-          {
-            stateId.val !== "" && <Game />
-          }
+          </>
+          )}
       </div>
     );
 }
 
 async function Game() {
-  const state: Datex.Pointer<string> = await datex.get(`$${stateId}`)
-  const currentRound: Datex.Pointer<number> = await datex.get(`$${currentRoundId}`)
+  const state: Datex.Pointer<string> = await datex.get(`$${stateId.val}`)
+  const currentRound: Datex.Pointer<number> = await datex.get(`$${currentRoundId.val}`)
 
   const submittedAnswer: Datex.Pointer<boolean> = $(false); 
 
