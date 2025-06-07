@@ -122,6 +122,8 @@ class PlayerAPI {
   @property static joinGame(name: string): UserGameState {
     console.log(state.val)
     if (state.val !== "waiting") throw new Error("Cannot register users for a game that has already started.")
+    const registeredPlayerNames = test.players.map(player => player.name)
+    if (registeredPlayerNames.includes(name)) throw new Error("Username already taken.")
     const newPlayer = { name, endpointId: datex.meta?.caller, points: 0 }
     test.players.push(newPlayer);
     //return { state: state, currentRound: currentRound };
