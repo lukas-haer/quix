@@ -26,6 +26,7 @@ const styles = {
 
 
 export default function mainMenu() {
+
     function handleJoinGame() {
         window.location.href = `${window.location.origin}/join`;
     }
@@ -41,7 +42,6 @@ export default function mainMenu() {
               <button style={styles.button} onclick={handleJoinGame}>Spiel Beitreten</button>
               <button style={styles.button} onclick={handleCreateNewGame}>Neues Spiel Erstellen</button>
           </div>
-          <div>await Datex.Supranet.connect();</div>
       </div>
     );
 }
