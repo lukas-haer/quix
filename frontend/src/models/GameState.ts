@@ -1,5 +1,5 @@
 import { Datex } from "datex-core-legacy/datex.ts";
-import { Question } from "./Question.ts";
+import { Question, QuestionType } from "./Question.ts";
 
 export type StateOptions = "waiting" | "playing" | "finished" | "aborted";
 
@@ -10,13 +10,13 @@ export type GameState = {
 	state: Ref<StateOptions>;
 	currentRound: Ref<number>;
 	currentDeadline: Date;
-	questions: Question[];
+	questions: Question<QuestionType>[];
 	players: Player[];
 }
 
 //This structure is used instead, in combination with separate pointers for state and currentRound.
 export type GameStateObjects = {
   currentDeadline: Date;
-  questions: Question[];
+  questions: Question<QuestionType>[];
   players: Player[];
 }

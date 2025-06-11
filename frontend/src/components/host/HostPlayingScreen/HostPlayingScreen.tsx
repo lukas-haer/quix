@@ -11,7 +11,7 @@ export default function HostPlayingScreen({currentRound, gameStateObjects}: Host
   return (
       <div>
         <h2>Current Question:</h2>
-        <p>{gameStateObjects.questions[currentRound.val].questionText}</p>
+        <p>{gameStateObjects.questions[currentRound.val].content.questionText}</p>
         <h2>Current Deadline:</h2>
         <p>{gameStateObjects.currentDeadline.toString()}</p>
       </div>

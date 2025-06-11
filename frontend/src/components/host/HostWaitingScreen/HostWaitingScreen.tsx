@@ -32,7 +32,7 @@ export default function HostWaitingScreen({state, currentRound, gameStateObjects
   const updateDeadlineAndTimer = () => {
     // Can you do this more smoothly? an easy to understand one-liner perhaps?
     const newDeadline = new Date();
-    newDeadline.setSeconds(newDeadline.getSeconds() + gameStateObjects.questions[currentRound.val].timeInSeconds);
+    newDeadline.setSeconds(newDeadline.getSeconds() + gameStateObjects.questions[currentRound.val].content.timeInSeconds);
     gameStateObjects.currentDeadline = newDeadline;
 
     setTimeout(nextRound, gameStateObjects.currentDeadline.getTime() - Date.now());

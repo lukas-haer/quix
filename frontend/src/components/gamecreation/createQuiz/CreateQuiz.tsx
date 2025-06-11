@@ -1,6 +1,7 @@
 import { Component, template } from "uix/components/Component.ts";
-import { CreateSingleChoiseQuestion } from "./types/CreateSingleChoiseQuestion.tsx";
-import { Question } from "common/models/question/Question.ts";
+import { CreateSingleChoiceQuestion } from "./types/CreateSingleChoiceQuestion.tsx";
+//import { Question } from "common/models/question/Question.ts";
+import { Question, QuestionType, SingleChoiceQuestion } from "../../../models/Question.ts";
 
 /**
  * Example data for a quiz. In production, this would only contaion default values.
@@ -20,36 +21,18 @@ const quiz = $({
         name: "John Doe",
     },
     questions: [
-        {
-            id: crypto.randomUUID(),
-            position: 2,
-            type: "single-choice",
-            questionContent: {
+        new SingleChoiceQuestion({
                 questionText: "What is the best Frontend Framework?",
-                answers: {
-                    a: "React",
-                    b: "Vue",
-                    c: "Angular",
-                    d: "UIX",
-                },
-                correctAnswer: "d",
-            },
-        },
-        {
-            id: crypto.randomUUID(),
-            position: 1,
-            type: "single-choice",
-            questionContent: {
+                answers: ["React", "Vue", "Angular", "UIX"],
+                correctAnswerId: 3,
+                timeInSeconds: 5
+            }),
+        new SingleChoiceQuestion({
                 questionText: "Which technology does not exitst?",
-                answers: {
-                    a: "Reverse Hashing",
-                    b: "Reactivity",
-                    c: "Responsive Design",
-                    d: "Cross-Realm Functions",
-                },
-                correctAnswer: "a",
-            },
-        },
+                answers: ["Reverse Hashing", "Reactivity", "Responsive Design", "Cross-Realm Functions"],
+                correctAnswerId: 0,
+                timeInSeconds: 5
+            })
     ],
 });
 
@@ -65,22 +48,13 @@ const addQuestionType = $("");
 function addQuestion() {
     const type = addQuestionType.val;
     // First checks für Type of Question. Currently only 'single-choice' is supported.
-    if (type === "single-choise") {
-        quiz.questions.push({
-            id: crypto.randomUUID(),
-            type: "single-choice",
-            position: quiz.questions.length + 1,
-            questionContent: {
-                questionText: "",
-                answers: {
-                    a: "",
-                    b: "",
-                    c: "",
-                    d: "",
-                },
-                correctAnswer: "a",
-            },
-        });
+    if (type === "single-choice") {
+        quiz.questions.push(new SingleChoiceQuestion({
+            questionText: "",
+            answers: ["", "", "", ""],
+            correctAnswerId: 0,
+            timeInSeconds: 5
+        }));
     } else {
         alert("Unsupported question type");
         console.error("Unsupported question type:", type);
@@ -88,26 +62,21 @@ function addQuestion() {
     }
 }
 
+//TODO: this is an ugly workaround to make reactivity for answerId work. Get rid of this if possible.
+export function chooseCorrectAnswer(questionId: number, answerId: number) {
+    quiz.questions[questionId].content.correctAnswerId = answerId;
+    const question = quiz.questions[questionId];
+    quiz.questions.splice(questionId, 1, question)
+}
+
 /**
  * 
  * @param questionId - The ID of the question to remove.
  * This function removes a question from the quiz by its ID.
  */
-export function removeQuestionById(questionId: string) {
+export function removeQuestionById(questionId: number) {
     try {
-        const questionIndex = quiz.questions.findIndex(
-            (q) => q.id === questionId
-        );
-        const removedQuestion = quiz.questions.splice(questionIndex, 1);
-
-        const removedPosition = removedQuestion[0]?.position;
-        if (removedPosition !== undefined) {
-            quiz.questions.forEach((q) => {
-                if (q.position > removedPosition) {
-                    q.position -= 1;
-                }
-            });
-        }
+        const removedQuestion = quiz.questions.splice(questionId, 1);
 
         console.log("Removed question: ", removedQuestion[0].id);
     } catch (error) {
@@ -194,13 +163,13 @@ function exportQuestionSet() {
         </div>
         <div>
 			
-            {quiz.questions.sort((a, b) => a.position - b.position).map((question) => {
-                if (question.type === "single-choice") {
+            {quiz.questions.map((question: Question<QuestionType>, index: number) => {
+                if (question instanceof SingleChoiceQuestion) {
                     return (
                         <div>
-                            <CreateSingleChoiseQuestion
+                            <CreateSingleChoiceQuestion
                                 question={question}
-                                id={question.id}
+                                index={index}
                             />
                         </div>
                     );
@@ -217,7 +186,7 @@ function exportQuestionSet() {
                 <option selected disabled value="">
                     Select a Question-Type
                 </option>
-                <option value="single-choise">Single-Choise</option>
+                <option value="single-choice">Single-Choice</option>
             </select>
             <button type="button" class={"btn bgcolor-A"} onclick={addQuestion}>
                 Add

@@ -38,18 +38,6 @@ export default function HostDashboard() {
     gameStateObjects.questions = sampleQuestions
   }
 
-  const isCorrectAnswer = (answerId: number) => {
-    //TODO: adapt function argument to fit correct answer types for different question types
-
-    //TODO: change Question type to class, so we can use instanceof to check for a specific question type
-    const currentQuestion = gameStateObjects.questions[currentRound.val]
-    if(Object.keys(currentQuestion).includes("correctAnswerId")){
-      return answerId === (currentQuestion as SingleChoiceQuestion).correctAnswerId
-    }
-    //TODO:
-    throw Error("Multiple Choice submits currently not supported.")
-  }
-
   //TODO: can we move the api class out of here?
   @endpoint
   class PlayerAPI {
@@ -64,7 +52,7 @@ export default function HostDashboard() {
       return { state, currentRound }
     }
 
-    @property static submitAnswer(answerId: number): number {
+    @property static submitAnswer(answer: any): number {
       if(state.val !== "playing") throw new Error("Game has not started yet.")
 
       //TODO: change players object to dict? This would facilitate callerId, username check etc. (keys = player endpoint ids)
@@ -73,7 +61,8 @@ export default function HostDashboard() {
       
       if(playerIndex === -1) throw new Error("There is no player with that endpoint id.")
       //TODO: cache answers and evaluate at the end of a round
-      if(!isCorrectAnswer(answerId)) throw new Error("Wrong answer.")
+      const currentQuestion = gameStateObjects.questions[currentRound.val]
+      if(!currentQuestion.isCorrect(answer)) throw new Error("Wrong answer.")
 
       gameStateObjects.players[playerIndex].points = gameStateObjects.players[playerIndex].points + 1
       return gameStateObjects.players[playerIndex].points
@@ -81,7 +70,7 @@ export default function HostDashboard() {
 
     @property static getCurrentQuestion(): GetCurrentQuestionReturn {
       if (state.val !== "playing") throw new Error("Game has not started yet.")
-      const { questionText, answers } = gameStateObjects.questions[currentRound.val]
+      const { questionText, answers } = gameStateObjects.questions[currentRound.val].content
       return { questionText, answers, currentDeadline: gameStateObjects.currentDeadline }
     }
 

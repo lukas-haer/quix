@@ -1,35 +1,33 @@
 import { Component, template, style } from "uix/components/Component.ts";
-import { SingleChoiceQuestion } from "common/models/question/types/SingleChoiseQuestion.ts";
-import { removeQuestionById } from "frontend/src/components/gamecreation/createQuiz/CreateQuiz.tsx"
-import { Question } from "common/models/question/Question.ts";
+import { SingleChoiceQuestion, SingleChoiceQuestionType } from "../../../../models/Question.ts";
+import { removeQuestionById, chooseCorrectAnswer } from "frontend/src/components/gamecreation/createQuiz/CreateQuiz.tsx"
 
 @template((props) =>  {
 	
-	const question = props.question as Question<SingleChoiceQuestion>;
-	const questioncontent = question.questionContent as SingleChoiceQuestion;
-	const answers = questioncontent.answers;
+	const question = props.question as SingleChoiceQuestion;
+	const answers = question.content.answers;
 
 	return (
         <div class="game-creation-container">
-            <h3>Question {props.question.position}</h3>
+            <h3>Question {props.index + 1}</h3>
             <label for={`questionText-${question.id}`}>Question-Text:</label>
             <textarea
                 id={`questionText-${question.id}`}
                 placeholder="Add question Text here..."
             >
-                {questioncontent.questionText}
+                {question.content.questionText}
             </textarea>
             <div class="gc-row">
                 <div class="gc-col gc-col-6" >
 					<div class="input-group-container">
 						<p class="input-group-text bgcolor-A">A: </p>
-                		<input class="input-field" type="text" placeholder="Answer A" value={answers.a} />
+                		<input class="input-field" type="text" placeholder="Answer A" value={answers[0]} />
 					</div>
                 </div>
                 <div class="gc-col gc-col-6">
 					<div class="input-group-container">
 						<p class="input-group-text bgcolor-B" >B: </p>
-                		<input class="input-field" type="text" placeholder="Answer B" value={answers.b} />
+                		<input class="input-field" type="text" placeholder="Answer B" value={answers[1]} />
 					</div>               
                 </div>
             </div>
@@ -37,13 +35,13 @@ import { Question } from "common/models/question/Question.ts";
                 <div class="gc-col gc-col-6">
 					<div class="input-group-container">
 						<p class="input-group-text bgcolor-C">C: </p>
-                		<input class="input-field" type="text" placeholder="Answer C" value={answers.c} />
+                		<input class="input-field" type="text" placeholder="Answer C" value={answers[2]} />
 					</div>                
                 </div>
                 <div class="gc-col gc-col-6">
 					<div class="input-group-container">
 						<p class="input-group-text bgcolor-D">D: </p>
-                		<input class="input-field" type="text" placeholder="Answer D" value={answers.d} />
+                		<input class="input-field" type="text" placeholder="Answer D" value={answers[3]} />
 					</div>                
                 </div>
             </div>
@@ -52,44 +50,45 @@ import { Question } from "common/models/question/Question.ts";
                 <button
                     type="button"
                     class={
-                        questioncontent.correctAnswer == "a"
+                        question.content.correctAnswerId === 0
                             ? "btn bgcolor-A selected"
                             : "btn bgcolor-A"
                     }
-                    onclick={() => (questioncontent.correctAnswer = "a")}
+                    onclick={() => chooseCorrectAnswer(props.index, 0)
+                    }
                 >
                     A
                 </button>
                 <button
                     type="button"
                     class={
-                        questioncontent.correctAnswer == "b"
+                        (question.content.correctAnswerId === 1)
                             ? "btn bgcolor-B selected"
                             : "btn bgcolor-B"
                     }
-                    onclick={() => (questioncontent.correctAnswer = "b")}
+                    onclick={() => chooseCorrectAnswer(props.index, 1)}
                 >
                     B
                 </button>
                 <button
                     type="button"
                     class={
-                        questioncontent.correctAnswer == "c"
+                        question.content.correctAnswerId === 2
                             ? "btn bgcolor-C selected"
                             : "btn bgcolor-C"
                     }
-                    onclick={() => (questioncontent.correctAnswer = "c")}
+                    onclick={() => chooseCorrectAnswer(props.index, 2)}
                 >
                     C
                 </button>
                 <button
                     type="button"
                     class={
-                        questioncontent.correctAnswer == "d"
+                        question.content.correctAnswerId === 3
                             ? "btn bgcolor-D selected"
                             : "btn bgcolor-D"
                     }
-                    onclick={() => (questioncontent.correctAnswer = "d")}
+                    onclick={() => chooseCorrectAnswer(props.index, 3)}
                 >
                     D
                 </button>
@@ -97,7 +96,7 @@ import { Question } from "common/models/question/Question.ts";
             <button
                 type="button"
                 class={"btn bgcolor-D"}
-                onclick={() => removeQuestionById(props.id.toString())}
+                onclick={() => removeQuestionById(props.index)}
             >
                 Delete Question
             </button>
@@ -106,4 +105,4 @@ import { Question } from "common/models/question/Question.ts";
     );})
 
 
-export class CreateSingleChoiseQuestion extends Component<{ question: Question<SingleChoiceQuestion>, id:string }> {}
+export class CreateSingleChoiceQuestion extends Component<{ question: SingleChoiceQuestion, index: number }> {}
