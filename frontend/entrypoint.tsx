@@ -1,5 +1,5 @@
 import type { Entrypoint } from "uix/providers/entrypoints.ts"
-import { CreateQuiz } from './src/components/gamecreation/createQuiz/CreateQuiz.tsx';
+//import { CreateQuiz } from './src/components/gamecreation/createQuiz/CreateQuiz.tsx';
 import { authenticate } from "backend/data.ts";
 
 
