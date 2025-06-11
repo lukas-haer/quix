@@ -1,15 +1,25 @@
 import type { Entrypoint } from "uix/providers/entrypoints.ts"
 //import { CreateQuiz } from './src/components/gamecreation/createQuiz/CreateQuiz.tsx';
-import { authenticate } from "backend/data.ts";
-
+//import { authenticate } from "backend/data.ts";
+import { userLogin } from "./src/components/userAccounts/userLogin.tsx";
+import { userSignUp } from "./src/components/userAccounts/userSignUp.tsx";
 
 export default {
 		"/": <div>
 			<h1>Welcome to QUIX!</h1>
-			<a href="/auth"><button type="button" id="login-btn">Login</button></a>
+			<a href="/login"><button type="button" id="login-btn">Log into your existing account</button></a>
+			<a href="/signup"><button type="button" id="signup-btn">Create a new account</button></a>
 		</div>,
 
+		"/login": userLogin,
+		"/signup": userSignUp
 
+	//"/create-quiz": <CreateQuiz/>,
+} satisfies Entrypoint;
+
+//todo: 
+// Inhalte an Nutzer binden, 
+/*
 	"/auth": (ctx) => {
 		const url = new URL(ctx.request.url);
 		const error = url.searchParams.get("error");
@@ -28,11 +38,4 @@ export default {
 					</div>
 					</form>
 	}
-	//"/create-quiz": <CreateQuiz/>,
-} satisfies Entrypoint;
-
-//todo: 
-// Inhalte an Nutzer binden, 
-// Unterschiedliche Formulare für Login und Registrierung, 
-// bei Registierung wenn Nutzer schon vorhanden Fehler, 
-// bei Login wenn Nutzer noch nicht vorhanden Fehler
+*/
