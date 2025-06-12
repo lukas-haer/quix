@@ -10,7 +10,6 @@ type JoinScreenProps = {
 const stateId = $("");
 const currentRoundId = $("");
 
-const submittedAnswer: Datex.Pointer<boolean> = $(false); 
 
 //TODO: can this be pulled from PlayerAPI class?
 export type PlayerAPIType = {

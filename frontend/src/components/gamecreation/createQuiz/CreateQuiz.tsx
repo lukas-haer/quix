@@ -1,7 +1,7 @@
 import { Component, template } from "uix/components/Component.ts";
 import { CreateSingleChoiceQuestion } from "./types/CreateSingleChoiceQuestion.tsx";
-//import { Question } from "common/models/question/Question.ts";
 import { Question, QuestionType, SingleChoiceQuestion } from "../../../models/Question.ts";
+import { Datex } from "datex-core-legacy/mod.ts";
 
 /**
  * Example data for a quiz. In production, this would only contaion default values.
@@ -62,21 +62,17 @@ function addQuestion() {
     }
 }
 
-//TODO: this is an ugly workaround to make reactivity for answerId work. Get rid of this if possible.
-export function chooseCorrectAnswer(questionId: number, answerId: number) {
-    quiz.questions[questionId].content.correctAnswerId = answerId;
-    const question = quiz.questions[questionId];
-    quiz.questions.splice(questionId, 1, question)
-}
-
 /**
  * 
  * @param questionId - The ID of the question to remove.
  * This function removes a question from the quiz by its ID.
  */
-export function removeQuestionById(questionId: number) {
+export function removeQuestionById(questionId: string) {
     try {
-        const removedQuestion = quiz.questions.splice(questionId, 1);
+        const questionIndex = quiz.questions.findIndex(
+            (q) => q.id === questionId
+        );
+        const removedQuestion = quiz.questions.splice(questionIndex, 1);
 
         console.log("Removed question: ", removedQuestion[0].id);
     } catch (error) {
@@ -100,7 +96,6 @@ function exportQuestionSet() {
 	questionExportFeedback.val = "";
 
 	try {
-		// Sanitize title for export
 	const fileName = `quix-${quiz.title.replace(/\s+/g, "-").toLowerCase()}.json`;
 
     const jsonStr = JSON.stringify(quiz, null, 2);
@@ -128,6 +123,10 @@ function exportQuestionSet() {
 }
 
 @template(() => (
+
+
+    //TODO const submittedAnswer = $(false);
+// Datex.Pointer.getByValue(a).val = {json...}
     <section>
         <header class="gc-row">
             <div class="gc-col gc-col-9">
@@ -163,13 +162,12 @@ function exportQuestionSet() {
         </div>
         <div>
 			
-            {quiz.questions.map((question: Question<QuestionType>, index: number) => {
+            {quiz.questions.map((question: Question<QuestionType>) => {
                 if (question instanceof SingleChoiceQuestion) {
                     return (
                         <div>
                             <CreateSingleChoiceQuestion
                                 question={question}
-                                index={index}
                             />
                         </div>
                     );
@@ -192,14 +190,15 @@ function exportQuestionSet() {
                 Add
             </button>
         </div>
+
     </section>
+    
 ))
-export class CreateQuiz extends Component {}
+
 
 /*
-########### Debugging-Tools ###########
-
-       <hr />
+//########### Debugging-Tools ###########
+        <hr />
         <h1>Debug</h1>
 
         <textarea style={"height: 500px"} name="" id="">
@@ -210,7 +209,15 @@ export class CreateQuiz extends Component {}
             Log
         </button>
 
+        */
+export class CreateQuiz extends Component {}
 
 
 
-*/
+
+
+
+
+
+
+

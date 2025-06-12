@@ -1,21 +1,22 @@
-import { Component, template, style } from "uix/components/Component.ts";
-import { SingleChoiceQuestion, SingleChoiceQuestionType } from "../../../../models/Question.ts";
-import { removeQuestionById, chooseCorrectAnswer } from "frontend/src/components/gamecreation/createQuiz/CreateQuiz.tsx"
+import { Component, template } from "uix/components/Component.ts";
+import { SingleChoiceQuestion } from "../../../../models/Question.ts";
+import { removeQuestionById } from "frontend/src/components/gamecreation/createQuiz/CreateQuiz.tsx"
 
 @template((props) =>  {
 	
 	const question = props.question as SingleChoiceQuestion;
-	const answers = question.content.answers;
+    const questionContent = $(props.question.content);
+    const answers = questionContent.answers;
 
 	return (
         <div class="game-creation-container">
-            <h3>Question {props.index + 1}</h3>
+            <h3>Question </h3>
             <label for={`questionText-${question.id}`}>Question-Text:</label>
             <textarea
                 id={`questionText-${question.id}`}
                 placeholder="Add question Text here..."
             >
-                {question.content.questionText}
+                {questionContent.questionText}
             </textarea>
             <div class="gc-row">
                 <div class="gc-col gc-col-6" >
@@ -50,11 +51,11 @@ import { removeQuestionById, chooseCorrectAnswer } from "frontend/src/components
                 <button
                     type="button"
                     class={
-                        question.content.correctAnswerId === 0
+                        questionContent.correctAnswerId === 0
                             ? "btn bgcolor-A selected"
                             : "btn bgcolor-A"
                     }
-                    onclick={() => chooseCorrectAnswer(props.index, 0)
+                    onclick={() => questionContent.correctAnswerId = 0
                     }
                 >
                     A
@@ -62,33 +63,35 @@ import { removeQuestionById, chooseCorrectAnswer } from "frontend/src/components
                 <button
                     type="button"
                     class={
-                        (question.content.correctAnswerId === 1)
+                        (questionContent.correctAnswerId === 1)
                             ? "btn bgcolor-B selected"
                             : "btn bgcolor-B"
                     }
-                    onclick={() => chooseCorrectAnswer(props.index, 1)}
+                    onclick={() => {questionContent.correctAnswerId = 1}}
                 >
                     B
                 </button>
                 <button
                     type="button"
                     class={
-                        question.content.correctAnswerId === 2
+                        questionContent.correctAnswerId === 2
                             ? "btn bgcolor-C selected"
                             : "btn bgcolor-C"
                     }
-                    onclick={() => chooseCorrectAnswer(props.index, 2)}
+                    onclick={() => questionContent.correctAnswerId = 2
+                    }
                 >
                     C
                 </button>
                 <button
                     type="button"
                     class={
-                        question.content.correctAnswerId === 3
+                        questionContent.correctAnswerId === 3
                             ? "btn bgcolor-D selected"
                             : "btn bgcolor-D"
                     }
-                    onclick={() => chooseCorrectAnswer(props.index, 3)}
+                    onclick={() => questionContent.correctAnswerId = 3
+                    }
                 >
                     D
                 </button>
@@ -96,7 +99,7 @@ import { removeQuestionById, chooseCorrectAnswer } from "frontend/src/components
             <button
                 type="button"
                 class={"btn bgcolor-D"}
-                onclick={() => removeQuestionById(props.index)}
+                onclick={() => removeQuestionById(question.id)}
             >
                 Delete Question
             </button>
@@ -105,4 +108,4 @@ import { removeQuestionById, chooseCorrectAnswer } from "frontend/src/components
     );})
 
 
-export class CreateSingleChoiceQuestion extends Component<{ question: SingleChoiceQuestion, index: number }> {}
+export class CreateSingleChoiceQuestion extends Component<{ question: SingleChoiceQuestion}> {}
