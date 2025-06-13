@@ -1,35 +1,34 @@
-import { Component, template, style } from "uix/components/Component.ts";
-import { SingleChoiceQuestion } from "common/models/question/types/SingleChoiseQuestion.ts";
+import { Component, template } from "uix/components/Component.ts";
+import { SingleChoiceQuestion } from "../../../../models/Question.ts";
 import { removeQuestionById } from "frontend/src/components/gamecreation/createQuiz/CreateQuiz.tsx"
-import { Question } from "common/models/question/Question.ts";
 
 @template((props) =>  {
 	
-	const question = props.question as Question<SingleChoiceQuestion>;
-	const questioncontent = question.questionContent as SingleChoiceQuestion;
-	const answers = questioncontent.answers;
+	const question = props.question as SingleChoiceQuestion;
+    const questionContent = $(props.question.content);
+    const answers = questionContent.answers;
 
 	return (
         <div class="game-creation-container">
-            <h3>Question {props.question.position}</h3>
+            <h3>Question </h3>
             <label for={`questionText-${question.id}`}>Question-Text:</label>
             <textarea
                 id={`questionText-${question.id}`}
                 placeholder="Add question Text here..."
             >
-                {questioncontent.questionText}
+                {questionContent.questionText}
             </textarea>
             <div class="gc-row">
                 <div class="gc-col gc-col-6" >
 					<div class="input-group-container">
 						<p class="input-group-text bgcolor-A">A: </p>
-                		<input class="input-field" type="text" placeholder="Answer A" value={answers.a} />
+                		<input class="input-field" type="text" placeholder="Answer A" value={answers[0]} />
 					</div>
                 </div>
                 <div class="gc-col gc-col-6">
 					<div class="input-group-container">
 						<p class="input-group-text bgcolor-B" >B: </p>
-                		<input class="input-field" type="text" placeholder="Answer B" value={answers.b} />
+                		<input class="input-field" type="text" placeholder="Answer B" value={answers[1]} />
 					</div>               
                 </div>
             </div>
@@ -37,67 +36,70 @@ import { Question } from "common/models/question/Question.ts";
                 <div class="gc-col gc-col-6">
 					<div class="input-group-container">
 						<p class="input-group-text bgcolor-C">C: </p>
-                		<input class="input-field" type="text" placeholder="Answer C" value={answers.c} />
+                		<input class="input-field" type="text" placeholder="Answer C" value={answers[2]} />
 					</div>                
                 </div>
                 <div class="gc-col gc-col-6">
 					<div class="input-group-container">
 						<p class="input-group-text bgcolor-D">D: </p>
-                		<input class="input-field" type="text" placeholder="Answer D" value={answers.d} />
+                		<input class="input-field" type="text" placeholder="Answer D" value={answers[3]} />
 					</div>                
                 </div>
             </div>
             <div class="select-correct-answer">
-                <strong style={"margin-right: 10px"}>Correct Answer:</strong>
+                <strong style="margin-right: 10px">Correct Answer:</strong>
                 <button
                     type="button"
                     class={
-                        questioncontent.correctAnswer == "a"
+                        questionContent.correctAnswerId === 0
                             ? "btn bgcolor-A selected"
                             : "btn bgcolor-A"
                     }
-                    onclick={() => (questioncontent.correctAnswer = "a")}
+                    onclick={() => questionContent.correctAnswerId = 0
+                    }
                 >
                     A
                 </button>
                 <button
                     type="button"
                     class={
-                        questioncontent.correctAnswer == "b"
+                        (questionContent.correctAnswerId === 1)
                             ? "btn bgcolor-B selected"
                             : "btn bgcolor-B"
                     }
-                    onclick={() => (questioncontent.correctAnswer = "b")}
+                    onclick={() => {questionContent.correctAnswerId = 1}}
                 >
                     B
                 </button>
                 <button
                     type="button"
                     class={
-                        questioncontent.correctAnswer == "c"
+                        questionContent.correctAnswerId === 2
                             ? "btn bgcolor-C selected"
                             : "btn bgcolor-C"
                     }
-                    onclick={() => (questioncontent.correctAnswer = "c")}
+                    onclick={() => questionContent.correctAnswerId = 2
+                    }
                 >
                     C
                 </button>
                 <button
                     type="button"
                     class={
-                        questioncontent.correctAnswer == "d"
+                        questionContent.correctAnswerId === 3
                             ? "btn bgcolor-D selected"
                             : "btn bgcolor-D"
                     }
-                    onclick={() => (questioncontent.correctAnswer = "d")}
+                    onclick={() => questionContent.correctAnswerId = 3
+                    }
                 >
                     D
                 </button>
             </div>
             <button
                 type="button"
-                class={"btn bgcolor-D"}
-                onclick={() => removeQuestionById(props.id.toString())}
+                class="btn bgcolor-D"
+                onclick={() => removeQuestionById(question.id)}
             >
                 Delete Question
             </button>
@@ -106,4 +108,4 @@ import { Question } from "common/models/question/Question.ts";
     );})
 
 
-export class CreateSingleChoiseQuestion extends Component<{ question: Question<SingleChoiceQuestion>, id:string }> {}
+export class CreateSingleChoiceQuestion extends Component<{ question: SingleChoiceQuestion}> {}
