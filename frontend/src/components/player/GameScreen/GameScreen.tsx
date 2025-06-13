@@ -1,0 +1,77 @@
+import { Datex } from "datex-core-legacy/datex.ts";
+import { GetCurrentQuestionReturn } from "../../../models/PlayerApiReturns.ts";
+import { PlayerAPIType } from "../JoinScreen/JoinScreen.tsx";
+import QuestionScreen from "../QuestionScreen/QuestionScreen.tsx";
+import { ObjectRef } from "datex-core-legacy/runtime/pointers.ts";
+import WaitingForLobbyStartScreen from "../WaitingForLobbyStartScreen/WaitingForLobbyStartScreen.tsx";
+
+type GameScreenProps = {
+	stateId: string;
+	currentRoundId: string;
+	apiObj: ObjectRef<{playerApi?: PlayerAPIType}>;
+}
+
+export default async function GameScreen({stateId, currentRoundId, apiObj}: GameScreenProps) {
+  //TODO: error handling
+  const state: Datex.Pointer<string> = await datex.get(`$${stateId}`)
+  const currentRound: Datex.Pointer<number> = await datex.get(`$${currentRoundId}`)
+
+  //TODO: Maybe we can just grab the pointer references instead of manually calling the endpoint.
+  const question: Datex.Pointer<string> = $("");
+  const answers: Datex.Pointer<string> = $("");
+  const currentDeadline: Datex.Pointer<string> = $("");
+
+  const points = $(0);
+
+  const submittedAnswer = $(false);
+
+  async function updateQuestionAndAnswers(){
+    if(!apiObj.playerApi) throw Error("PlayerAPI not defined.")
+    const res: GetCurrentQuestionReturn = await apiObj.playerApi.getCurrentQuestion();
+
+    question.val = res.questionText;
+    answers.val = res.answers.join(";"); //To avoid using ObjectRef
+    currentDeadline.val = res.currentDeadline.toLocaleString(); //To avoid using ObjectRef
+
+    submittedAnswer.val = false;
+  }
+
+  state.observe((v) => {
+    if(v !== "playing") return;
+    updateQuestionAndAnswers();
+  })
+  currentRound.observe(() => { updateQuestionAndAnswers() })
+
+  async function submitAnswer(answerId: number){
+    if(!apiObj.playerApi) throw Error("PlayerAPI not defined.")
+    const newPoints = await apiObj.playerApi.submitAnswer(answerId);
+    if(newPoints > points.val){
+      points.val = newPoints;
+    }
+  }
+
+  return (
+    <div>
+      <h2>State: {state.val}</h2>
+      <h2>Round: {currentRound.val}</h2>
+      <h2>Points: {points.val}</h2>
+      {
+        state.val === "waiting" && <WaitingForLobbyStartScreen />
+      }
+      {
+        state.val === "playing" && (
+          <QuestionScreen 
+            questionText={""} 
+            answers={answers.val} 
+            currentDeadline={currentDeadline.val} 
+            submittedAnswer={submittedAnswer} 
+            submitAnswer={submitAnswer}
+          />
+        )
+      }
+      {
+        state.val === "finished" && <h2>The game has finished.</h2>
+      }
+    </div>
+  )
+}
