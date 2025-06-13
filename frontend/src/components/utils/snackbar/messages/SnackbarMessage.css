@@ -1,0 +1,60 @@
+.snackbar-message {
+  position: relative;
+  background-color: white;
+  color: black;
+  padding: 15px 20px 20px 20px;
+  border-radius: 7px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  transform: translateX(100%);
+  transition: transform 0.5s ease, opacity 0.5s ease;
+  min-width: 300px;
+  max-width: 400px;
+  overflow: hidden;
+}
+
+.snackbar-message.show {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.snackbar-message.fade-out {
+  opacity: 0;
+}
+
+.snackbar-message-title {
+  font-weight: bold;
+  margin-bottom: 5px;
+  font-size: 16px;
+  margin-top: 0;
+  color: #000;
+}
+
+.snackbar-message-text {
+  font-size: 14px;
+  line-height: 1.4;
+  color: #000;
+}
+
+.snackbar-message-timer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 4px;
+  border-bottom-left-radius: 7px;
+  border-bottom-right-radius: 7px;
+  animation-name: timerBar;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes timerBar {
+  from {
+    width: 0%;
+  }
+
+  to {
+    width: 100%;
+  }
+}
+
