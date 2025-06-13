@@ -2,6 +2,7 @@ import { Datex } from "datex-core-legacy/datex.ts";
 import { ObjectRef } from "datex-core-legacy/runtime/pointers.ts";
 import { Player, GameStateObjects, StateOptions } from "../../../models/GameState.ts";
 import { styles } from "../HostDashboard/HostDashboardStyles.ts";
+import { registerLobby } from "backend/lobbyManagement/LobbyManagement.tsx";
 
 type HostWaitingScreenProps = {
 	state: Datex.Pointer<StateOptions>;
@@ -9,10 +10,8 @@ type HostWaitingScreenProps = {
 	gameStateObjects: ObjectRef<GameStateObjects>;
 }
 
-export default function HostWaitingScreen({state, currentRound, gameStateObjects}: HostWaitingScreenProps) {
+export default async function HostWaitingScreen({state, currentRound, gameStateObjects}: HostWaitingScreenProps) {
   const {prefix, name, instance} = Datex.Runtime.endpoint;
-  const hostEndpointId = prefix + name + "/" + instance;
-  const appUrls = Datex.Unyt.endpointDomains();
 
   const startGame = () => {
       state.val = "playing";
@@ -38,6 +37,11 @@ export default function HostWaitingScreen({state, currentRound, gameStateObjects
     setTimeout(nextRound, gameStateObjects.currentDeadline.getTime() - Date.now());
   }
 
+
+  try {
+      const lobby = await registerLobby() //Registers a Lobby on the Backend
+      const gamecode = lobby.code
+
   return (
       <div>
         <h2 style={styles.heading}>Waiting for players to join...</h2>
@@ -50,23 +54,25 @@ export default function HostWaitingScreen({state, currentRound, gameStateObjects
           gameStateObjects.players.map((player: Player) => <p>{player.name}</p>) 
           }
         </div>
-        <button onclick={() => startGame()}>Start Game</button>
+        <button type="button" onclick={() => startGame()}>Start Game</button>
         <h2>Invite Links:</h2>
-        <>
-        {
-          //TODO: register game with backend and construct links with new game id instead of endpoint id
-          appUrls?.map(url => <InviteLink linkUrl={url + "/join/" + encodeURIComponent(hostEndpointId)} /> )
-        }
-        </>
+        <InviteLink linkUrl={"http://localhost/join/"+encodeURIComponent(gamecode)}/>
+        
       </div>
   )
+  } catch (error) {
+    console.error("An Error occured: "+error);
+    alert("Unable to load gamecode") //TODO Replace with snackbar
+  }
 }
 
 function InviteLink({linkUrl}:{linkUrl: string}) {
   return (
     <div style={{display: "flex", gap: "10px"}}>
       <p>{ linkUrl }</p>
-      <button onclick={() => navigator.clipboard.writeText(linkUrl)}>Copy</button>
+      <button type="button" onclick={() => navigator.clipboard.writeText(linkUrl)}>Copy</button>
+      <br />
+
     </div>
     )
 }

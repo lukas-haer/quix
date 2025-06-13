@@ -3,15 +3,21 @@ import { lobbys } from "./lobbys.eternal.ts";
 import { type Lobby } from "common/models/lobby/Lobby.ts"
 
 
-export function registerLobby() {		
+export async function registerLobby(code?: string) {		
 	try {
 		const callerID = datex.meta.caller		
 		if (!callerID) {
 			throw new Error("No caller ID found. Cannot register lobby.");
-		}	
+		}
 
 		// Generate a random 6-digit lobby code
 		const lobbyCode = Math.floor(100000 + Math.random() * 900000).toString();
+
+		//Checks if gamecode consists of exactly 6 numbers. This is currently pointless, but a safety feature, we may sometime appriciate
+		const gameCodeRegex = /^\d{6}$/; 
+        if (!gameCodeRegex.test(lobbyCode.toString())) {
+			throw new Error("Gamecode is not a 6 digit number")
+        }
 		
 		const newLobby: Lobby = {
 			id: crypto.randomUUID(),
@@ -24,6 +30,8 @@ export function registerLobby() {
 
 		lobbys.push(newLobby);
 		console.log("Lobby registered:", newLobby);
+
+		removeLobbiesOlderThan24h()
 		return newLobby;
 	} catch (error) {
 		console.error("Error registering lobby:", error);
@@ -31,7 +39,20 @@ export function registerLobby() {
 	}
 }
 
-export function getHostIdFromGamecode (gamecode: string): Endpoint {
+function removeLobbiesOlderThan24h() {
+	const now = Date.now();
+	for (let i = lobbys.length - 1; i >= 0; i--) {
+		const createdAt = new Date(lobbys[i].createdAt).getTime();
+		if (now - createdAt > 24 * 60 * 60 * 1000) {
+			console.log("Removed Lobby older than 24h with gamecode "+lobbys[i].code);
+			lobbys.splice(i, 1);
+			
+		}
+	}
+
+}
+
+export async function getHostIdFromGamecode (gamecode: string): Promise<Endpoint> {
 	const lobby = lobbys.find(lobby => lobby.code === gamecode);
 	if (lobby) {	
 		return lobby.host.endpointId;

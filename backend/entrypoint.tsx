@@ -1,2 +1,6 @@
 import { type Entrypoint } from "uix/providers/entrypoints.ts";
-export default {} satisfies Entrypoint;
+import { Lobbys } from "backend/lobbyManagement/Lobbys.tsx"
+
+export default {
+	    "/lobbys": () => <Lobbys /> //TODO REMOVE
+} satisfies Entrypoint;
