@@ -36,9 +36,10 @@ function showSnackbarMessage (
 		durationInMs = 5_000 // Default duration of 5 seconds
 	}
 
-    const newMessage = (
-        <SnackbarMessage type={type} title={title} text={text} durationInMs={durationInMs} />
-    );
+    /* Here we unfortunatly have to use good old JS getElementById and appendChild, because when using a reactive array
+    removing a SnackbarMessage triggers a rerender of the array and with that retriggers the entrance animation. 
+    An attempt with a reactive array can be found below*/
+    const newMessage = <SnackbarMessage type={type} title={title} text={text} durationInMs={durationInMs} />;
     const snackbar = document.getElementById("snackbar");
     snackbar?.appendChild(newMessage);
 
@@ -51,7 +52,6 @@ function showSnackbarMessage (
 @template(() => {
     return (
         <div class="snackbar" id="snackbar">
-
         </div>
     );
 })
