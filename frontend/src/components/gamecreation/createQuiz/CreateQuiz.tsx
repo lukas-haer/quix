@@ -1,7 +1,6 @@
 import { Component, template } from "uix/components/Component.ts";
 import { CreateSingleChoiceQuestion } from "./types/CreateSingleChoiceQuestion.tsx";
 import { Question, QuestionType, SingleChoiceQuestion } from "../../../models/Question.ts";
-import { Datex } from "datex-core-legacy/mod.ts";
 
 /**
  * Example data for a quiz. In production, this would only contaion default values.
@@ -38,12 +37,14 @@ const quiz = $({
 
 /**
  * A reactive selector for the add question type select.
+ * When calling addQuestion() (expanding the quix.questions-array) 
+ * the value of this var determines the type the appendet question will have.
  */
 const addQuestionType = $("");
 
 /**
  * A function to add a question to the currently edited quiz.
- * @param type - The type of question to add. Currently only supports 'single-choice'.
+ * The type of question to add. Currently only supports 'single-choice'.
  */
 function addQuestion() {
     const type = addQuestionType.val;
@@ -69,9 +70,16 @@ function addQuestion() {
  */
 export function removeQuestionById(questionId: string) {
     try {
+        //Find question index by id
         const questionIndex = quiz.questions.findIndex(
             (q) => q.id === questionId
         );
+
+        if(questionIndex == -1) {
+            throw new Error(`The question with the id ${questionId} could not be found, and therefore was not removed`)
+        }
+ 
+        //remove that index
         const removedQuestion = quiz.questions.splice(questionIndex, 1);
 
         console.log("Removed question: ", removedQuestion[0].id);
@@ -85,6 +93,7 @@ export function removeQuestionById(questionId: string) {
 
 /**
  * Feedback field for the Question Export. 
+ * TODO: Replace with snackbar
  */
 const questionExportFeedback = $("");
 
@@ -123,10 +132,6 @@ function exportQuestionSet() {
 }
 
 @template(() => (
-
-
-    //TODO const submittedAnswer = $(false);
-// Datex.Pointer.getByValue(a).val = {json...}
     <section>
         <header class="gc-row">
             <div class="gc-col gc-col-9">
@@ -186,7 +191,7 @@ function exportQuestionSet() {
                 </option>
                 <option value="single-choice">Single-Choice</option>
             </select>
-            <button type="button" class={"btn bgcolor-A"} onclick={addQuestion}>
+            <button type="button" class="btn bgcolor-A" onclick={addQuestion}>
                 Add
             </button>
         </div>

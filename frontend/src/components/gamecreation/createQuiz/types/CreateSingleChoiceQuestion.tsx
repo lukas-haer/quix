@@ -47,7 +47,7 @@ import { removeQuestionById } from "frontend/src/components/gamecreation/createQ
                 </div>
             </div>
             <div class="select-correct-answer">
-                <strong style={"margin-right: 10px"}>Correct Answer:</strong>
+                <strong style="margin-right: 10px">Correct Answer:</strong>
                 <button
                     type="button"
                     class={
@@ -98,7 +98,7 @@ import { removeQuestionById } from "frontend/src/components/gamecreation/createQ
             </div>
             <button
                 type="button"
-                class={"btn bgcolor-D"}
+                class="btn bgcolor-D"
                 onclick={() => removeQuestionById(question.id)}
             >
                 Delete Question

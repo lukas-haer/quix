@@ -46,20 +46,18 @@ export default function JoinScreen({id}:JoinScreenProps) {
         <label>ID:</label>
         <input
           type="text"
-          value={gameId.val}
-          onchange={(e:any) => gameId.val = e.target.value}
+          value={gameId}
           placeholder="Endpoint ID eingeben"
           required
         />
         <label>Name:</label>
         <input
           type="text"
-          value={name.val}
-          onchange={(e:any) => name.val = e.target.value}
+          value={name}
           placeholder="Name eingeben"
           required
         />
-        <button onclick={() => joinGame(gameId.val, name.val)}>Join</button>
+        <button type="button" onclick={() => joinGame(gameId.val, name.val)}>Join</button>
         </>
         )}
     </div>
