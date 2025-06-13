@@ -1,17 +1,66 @@
 import { Component, template } from "uix/components/Component.ts";
-import { SnackbarMessage } from "frontend/src/components/utils/snackbar/messages/SnackbarMessage.tsx";
+import { SnackbarMessage } from "./messages/SnackbarMessage.tsx";
 
-type Message = {
-    id: string;
-	type: "success" | "failure";
-    title: string;
-    text: string;
-    duration: number;
-};
+/**
+ * This functions spawns a Snackbar-Message / Toast in the bottom right corner.
+ * It is success-themed.
+ * @param title Bold title at the top of the toast
+ * @param text Text content of the toast
+ * @param durationInMs Duration in miliseconds of how long the toast is shown. Defaults to 5_000ms (5 seconds)
+ */
+export function successSnackbarMessage(title: string, text: string, durationInMs?: number) { showSnackbarMessage("success",title,text,durationInMs)}
+
+/**
+ * This functions spawns a Snackbar-Message / Toast in the bottom right corner.
+ * It is failure-themed.
+ * @param title Bold title at the top of the toast
+ * @param text Text content of the toast
+ * @param durationInMs Duration in miliseconds of how long the toast is shown. Defaults to 5_000ms (5 seconds)
+ */
+export function failureSnackbarMessage(title: string, text: string, durationInMs?: number) { showSnackbarMessage("failure",title,text,durationInMs)}
+
+/**
+ * Spawns the actual Message and is not meant to be called directly!
+ * @param type success or failure
+ * @param title Bold title at the top of the toast
+ * @param text Text content of the toast
+ * @param durationInMs Duration in miliseconds of how long the toast is shown. Defaults to 5_000ms (5 seconds)
+ */
+function showSnackbarMessage (
+	type: "success" | "failure",
+	title: string,
+    text: string,
+    durationInMs?: number
+) {
+	if (!durationInMs) {
+		durationInMs = 5_000 // Default duration of 5 seconds
+	}
+
+    const newMessage = (
+        <SnackbarMessage type={type} title={title} text={text} durationInMs={durationInMs} />
+    );
+    const snackbar = document.getElementById("snackbar");
+    snackbar?.appendChild(newMessage);
+
+	//Delete the message after set duration
+    setTimeout(() => {
+        snackbar?.removeChild(newMessage);
+    }, durationInMs + 500);
+}
+
+@template(() => {
+    return (
+        <div class="snackbar" id="snackbar">
+
+        </div>
+    );
+})
+export class Snackbar extends Component {}
+
+/* Currently unsupported, may use later
 
 const messages = $([] as Message[]);
 
-/* Currently unsupported, may use later
 function showSnackbarMessage(title:string, text: string, duration:number) {
 	const id = crypto.randomUUID()
 	const newMessage: Message = {
@@ -28,40 +77,17 @@ function showSnackbarMessage(title:string, text: string, duration:number) {
 		messages.splice(index,1)
 	},duration)
 }
-	*/
 
-export function showSnackbarMessage(
-	type: "success" | "failure",
-    title: string,
-    text: string,
-    duration: number
-) {	
-    const newMessage = (
-        <SnackbarMessage type={type} title={title} text={text} duration={duration} />
-    );
-    const snackbar = document.getElementById("snackbar");
-	
-    snackbar?.appendChild(newMessage);
 
-    setTimeout(() => {
-        snackbar?.removeChild(newMessage);
-    }, duration + 500);
-}
-
-@template(() => {
-    return (
-        <div class="snackbar" id="snackbar">
+HTML-Code:
             {messages.map((msg: Message) => {
                 return (
                     <SnackbarMessage
 						type={msg.type}
                         title={msg.title}
                         text={msg.text}
-                        duration={msg.duration}
+                        durationInMs={msg.durationInMs}
                     />
                 );
             })}
-        </div>
-    );
-})
-export class Snackbar extends Component {}
+	*/

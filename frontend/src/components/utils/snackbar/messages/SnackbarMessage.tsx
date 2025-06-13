@@ -1,18 +1,21 @@
 import { Component, template } from "uix/components/Component.ts";
 
 @template((props) => {
+	//Default styling
     const styleClasses = $("snackbar-message");
 
+	//Entrance animation
     setTimeout(() => {
         styleClasses.val = "snackbar-message show";
-    }, 100);
+    }, 200);
 
+	//Exit animation
     setTimeout(() => {
         styleClasses.val = "snackbar-message fade-out";
-    }, props.duration);
+    }, props.durationInMs);
 
+	//Diffent color depending on the type
     let bgColor = "#8e0000";
-
     if (props.type === "success") bgColor = "#4caf50";
 
     return (
@@ -20,19 +23,19 @@ import { Component, template } from "uix/components/Component.ts";
             <div
                 class="snackbar-message-timer"
                 style={{
-                    "animation-duration": `${props.duration}ms`,
+                    "animation-duration": `${props.durationInMs}ms`,
                     "background-color": bgColor,
                 }}
-            ></div>
-
+            />
             <div class="snackbar-message-title">{props.title}</div>
             <div class="snackbar-message-text">{props.text}</div>
         </div>
     );
 })
+
 export class SnackbarMessage extends Component<{
     type: "success" | "failure";
     title: string;
     text: string;
-    duration: number;
+    durationInMs: number;
 }> {}
