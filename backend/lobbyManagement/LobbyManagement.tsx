@@ -1,5 +1,5 @@
 import { Endpoint } from "datex-core-legacy/datex_all.ts";
-import { lobbys } from "./lobbys.eternal.ts";
+import { lobbies } from "./lobbies.eternal.ts";
 import { type Lobby } from "common/models/lobby/Lobby.ts"
 
 
@@ -28,7 +28,7 @@ export async function registerLobby(code?: string) {
 			createdAt: new Date().toISOString()
 		};
 
-		lobbys.push(newLobby);
+		lobbies.push(newLobby);
 		console.log("Lobby registered:", newLobby);
 
 		removeLobbiesOlderThan24h()
@@ -41,11 +41,11 @@ export async function registerLobby(code?: string) {
 
 function removeLobbiesOlderThan24h() {
 	const now = Date.now();
-	for (let i = lobbys.length - 1; i >= 0; i--) {
-		const createdAt = new Date(lobbys[i].createdAt).getTime();
+	for (let i = lobbies.length - 1; i >= 0; i--) {
+		const createdAt = new Date(lobbies[i].createdAt).getTime();
 		if (now - createdAt > 24 * 60 * 60 * 1000) {
-			console.log("Removed Lobby older than 24h with gamecode "+lobbys[i].code);
-			lobbys.splice(i, 1);
+			console.log("Removed Lobby older than 24h with gamecode "+lobbies[i].code);
+			lobbies.splice(i, 1);
 			
 		}
 	}
@@ -53,7 +53,7 @@ function removeLobbiesOlderThan24h() {
 }
 
 export async function getHostIdFromGamecode (gamecode: string): Promise<Endpoint> {
-	const lobby = lobbys.find(lobby => lobby.code === gamecode);
+	const lobby = lobbies.find(lobby => lobby.code === gamecode);
 	if (lobby) {	
 		return lobby.host.endpointId;
 	} else {

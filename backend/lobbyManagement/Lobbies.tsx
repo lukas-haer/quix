@@ -1,5 +1,5 @@
 import { Component, template } from "uix/components/Component.ts";
-import { lobbys } from "./lobbys.eternal.ts";
+import { lobbies } from "./lobbies.eternal.ts";
 import { type Lobby } from "common/models/lobby/Lobby.ts";
 
 @template(() => (
@@ -12,7 +12,7 @@ import { type Lobby } from "common/models/lobby/Lobby.ts";
 				<th>Created At</th>
 			</thead>
             {
-				lobbys.map((lobby) => {
+				lobbies.map((lobby) => {
                 	return (
 						<tr>
 							<td>{lobby.id}</td>
@@ -26,4 +26,4 @@ import { type Lobby } from "common/models/lobby/Lobby.ts";
         </table>
     </div>
 ))
-export class Lobbys extends Component{}
+export class Lobbies extends Component{}
