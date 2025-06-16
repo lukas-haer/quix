@@ -7,6 +7,7 @@ import {
 } from "../../../models/GameState.ts";
 import { styles } from "../HostDashboard/HostDashboardStyles.ts";
 import { registerLobby } from "backend/lobbyManagement/LobbyManagement.tsx";
+import { QrCode } from "frontend/src/components/utils/qrcode/qrcode.tsx";
 
 type HostWaitingScreenProps = {
   state: Datex.Pointer<StateOptions>;
@@ -52,12 +53,13 @@ export default async function HostWaitingScreen(
   let gamecode : string = "";
   try {
     const lobby = await registerLobby(); //Registers a Lobby on the Backend
-    gamecode = lobby.code;
-    
+    gamecode = lobby.code;    
   } catch (error) {
     console.error("An Error occured: " + error);
     alert("Unable to load gamecode"); //TODO Replace with snackbar
   }
+
+  const invitelink = "http://localhost/join/" + encodeURIComponent(gamecode)
 
   return (
     <div>
@@ -73,9 +75,12 @@ export default async function HostWaitingScreen(
         }
       </div>
       <button type="button" onclick={() => startGame()}>Start Game</button>
+
+      
       <h2>Invite Links:</h2>
+      <QrCode url={invitelink}></QrCode>
       <InviteLink
-        linkUrl={"http://localhost/join/" + encodeURIComponent(gamecode)}
+        linkUrl={invitelink}
       />
     </div>
   );
