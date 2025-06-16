@@ -1,8 +1,8 @@
 import type { Entrypoint } from "uix/providers/entrypoints.ts"
 //import { CreateQuiz } from './src/components/gamecreation/createQuiz/CreateQuiz.tsx';
 //import { authenticate } from "backend/data.ts";
-import { userLogin } from "./src/components/userAccounts/userLogin.tsx";
-import { userSignUp } from "./src/components/userAccounts/userSignUp.tsx";
+import { userLogin } from "./src/components/UserAccounts/UserLogin.tsx";
+import { userSignUp } from "./src/components/UserAccounts/UserSignUp.tsx";
 
 export default {
 		"/": <div>
