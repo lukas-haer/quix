@@ -1,31 +1,9 @@
-const styles = {
-    container: {
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-        margin: 0,
-    },
-    title: {
-        fontSize: '3rem',
-        fontWeight: 'bold',
-        marginBottom: '20px',
-    },
-    buttonContainer: {
-        gap: '10px',
-        display: 'flex',
-        flexDirection: 'column',
-    },
-    button: {
-        border: 'none',
-        backgroundColor: '#4CAF50',
-        color: 'white',
-    },
-};
+import { Component, template } from "uix/components/Component.ts";
+import {UIX} from "uix"
 
+@template(() => {
 
-export default function mainMenu() {
+    UIX.Theme.useTheme("uix-light-plain")
 
     function handleJoinGame() {
         window.location.href = `${window.location.origin}/join`;
@@ -36,17 +14,31 @@ export default function mainMenu() {
     }
 
     return (
-      <div style={styles.container}>
-          <h1 style={styles.title}>QUIX</h1>
-          <div style={styles.buttonContainer}>
-              <button style={styles.button} onclick={handleJoinGame}>Spiel Beitreten</button>
-              <button style={styles.button} onclick={handleCreateNewGame}>Neues Spiel Erstellen</button>
-          </div>
-      </div>
+        <main>
+            <div class="section" id="section1">
+                <h1 class="sticky-top pt-30">JOIN QUIX</h1>
+                <div id="code-input-container" class="code-input-container">
+                    <input type="text" class="code-input" maxlength="1" />
+                    <input type="text" class="code-input" maxlength="1" />
+                    <input type="text" class="code-input" maxlength="1" />
+                    <input type="text" class="code-input" maxlength="1" />
+                    <input type="text" class="code-input" maxlength="1" />
+                    <input type="text" class="code-input" maxlength="1" />
+                </div>
+            </div>
+
+            <div class="section" id="section2">
+                <h1 class="section-text sticky-top pb-30">HOST QUIX</h1>
+                <button
+                    type="button"
+                    id="openGameEditorButton"
+                    class="button"
+                    onclick={handleCreateNewGame}
+                >
+                    Open Game Editor
+                </button>
+            </div>
+        </main>
     );
-}
-
-
-
-
-
+})
+export class MainMenu extends Component {}
