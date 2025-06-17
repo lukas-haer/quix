@@ -2,6 +2,7 @@ import { Datex } from "datex-core-legacy/datex.ts";
 import { ObjectRef } from "datex-core-legacy/runtime/pointers.ts";
 import { JoinGameReturn, GetCurrentQuestionReturn } from "../../../models/PlayerApiReturns.ts";
 import GameScreen from "../GameScreen/GameScreen.tsx";
+import { Component, template } from 'uix/components/Component.ts';
 
 type JoinScreenProps = {
     id?:string;
@@ -20,10 +21,13 @@ export type PlayerAPIType = {
 
 const apiObj: ObjectRef<{playerApi?: PlayerAPIType}> = $({}); //encapsulate api in ObjectRef to guarantee reactivity
 
-export default function JoinScreen({id}:JoinScreenProps) {
+@template<JoinScreenProps>(({id}) =>{
+/* export default function JoinScreen({id}:JoinScreenProps) { */
   //TODO: error handling, user feedback (snackbar/form), form validation for endpoint format and username length
 
-  const gameId = $(id ? decodeURIComponent(id) : "");
+  //const gameId = $(id ? decodeURIComponent(id) : "");
+  const gameId = $(decodeURIComponent(id ?? ""));
+
   const name = $("");
 
   const joinGame = async (endpointId: string, username: string) => {
@@ -39,7 +43,7 @@ export default function JoinScreen({id}:JoinScreenProps) {
     stateId.val = res.state.id;
   }
 
-  return (
+  /* return (
     <div>
         {stateId.val !== "" ? <GameScreen stateId={stateId.val} currentRoundId={currentRoundId.val} apiObj={apiObj}/> : (
         <>
@@ -61,5 +65,26 @@ export default function JoinScreen({id}:JoinScreenProps) {
         </>
         )}
     </div>
+  ); */
+  return(
+    <div class="section">
+      {stateId.val !== "" ? <GameScreen stateId={stateId.val} currentRoundId={currentRoundId.val} apiObj={apiObj}/> : (
+        <>
+        <h1>WHAT SHOULD WE CALL YOU?</h1>
+        <div class="name-input-container">
+            <input  type="text" 
+                    class="name-input" 
+                    id="nameInput" 
+                    value={name}
+                    maxlength="12" 
+                    placeholder="Enter your name"
+                    required />
+            <div class="glowing-line" id="glowingLine"></div>
+        </div>
+        <button type="button" class="button" onclick={() => joinGame(gameId.val, name.val)}>JOIN</button>
+        </>
+      )}  
+    </div>
   );
-}
+})
+export default class JoinScreen extends Component<JoinScreenProps> {}
