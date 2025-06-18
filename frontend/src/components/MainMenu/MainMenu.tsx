@@ -7,9 +7,15 @@ import { UIX } from 'uix';
 
     const activeSection = $("joinSection" as "joinSection" | "hostSection")
 
-    
-    const codeInputFields = Array.from(document.querySelectorAll('.code-input')) as HTMLInputElement[];
-    const codeInputValues = $(['', '', '', '', '', '']);        
+    const codeInputValues = $(["", "", "", "", "", ""]);    
+    const codeInputFields = [
+        <input id="codeField1" type="text" class="code-input" maxlength="1" value={codeInputValues[0]} autofocus />,
+        <input id="codeField2" type="text" class="code-input" maxlength="1" value={codeInputValues[1]} />,
+        <input id="codeField3" type="text" class="code-input" maxlength="1" value={codeInputValues[2]} />,
+        <input id="codeField4" type="text" class="code-input" maxlength="1" value={codeInputValues[3]} />,
+        <input id="codeField5" type="text" class="code-input" maxlength="1" value={codeInputValues[4]} />,
+        <input id="codeField6" type="text" class="code-input" maxlength="1" value={codeInputValues[5]} />
+    ]
 
     /**
      * Adds Event-Listener for input and key down on all Code-Input-Fields
@@ -21,19 +27,33 @@ import { UIX } from 'uix';
          */
         input.addEventListener('input', () => {            
             if ((input as HTMLInputElement).value.length === 1 && index < codeInputValues.length - 1) {
-                codeInputFields[index + 1].focus();
+                (codeInputFields[index + 1] as HTMLInputElement).focus();
             }
-            joinGame();
+            findLobby();
         });
 
         /**
          * If "backspace" is pressed in any Codeinput-Field value will be set to empty and the preivous Codeinput-Field gets focused
          */
-        input.addEventListener('keydown', event => {
-            if (event.key === 'Backspace' && input.value === '' && index > 0) {
-                codeInputFields[index - 1].focus();
+        input.addEventListener('keydown', event => {                                                 
+            if ((event as KeyboardEvent).key == 'Backspace' && (input as HTMLInputElement).value === '' && index > 0) {
+                codeInputValues[index] = "";
+                (codeInputFields[index - 1] as HTMLInputElement).focus()
             }
         });
+    });
+
+    /**
+     * EventListener for changing sections between joinGame and hostGame
+     */
+    globalThis.addEventListener('wheel', event => {
+        const scrollY = event.deltaY;
+
+        if (activeSection.val == 'joinSection' && scrollY > 0) {
+            activeSection.val = 'hostSection';
+        } else if (activeSection == 'hostSection' && scrollY < 0) {
+            activeSection.val = 'joinSection';
+        }
     });
 
     /**
@@ -43,6 +63,7 @@ import { UIX } from 'uix';
         if (!codeInputFields) {
             return;
         }
+        (codeInputFields[0] as HTMLElement).focus()
         codeInputFields.forEach((input, index) => {
             setTimeout(() => {
                 (input as HTMLElement).style.animation = 'bounce 0.5s ease-in-out';
@@ -57,7 +78,7 @@ import { UIX } from 'uix';
      * If all CodeInput-Fields have a value, the player will be redirected to join the lobby
      * @returns void
      */
-    function joinGame() {
+    function findLobby() {
         // Check if there is a Code-Part where the value ist not yet set
         if (codeInputValues.some(codeChar => codeChar === '')) {
             return;
@@ -66,54 +87,25 @@ import { UIX } from 'uix';
         redirect(`${globalThis.location.origin}/join/${code}`);
     }
 
-    //** Redirects to Create game Page */
-    function handleHostNewGame() {
-        redirect(`${globalThis.location.origin}/create`);
-    }
-
-    globalThis.addEventListener('wheel', (event) => {
-    const scrollY = event.deltaY;    
-    
-    if (activeSection.val == "joinSection" && scrollY > 0) {
-        console.log("join");
-        
-        activeSection.val = "hostSection";
-
-      //  codeInputContainer.style.opacity = '0';
-       // openGameEditorButton.style.opacity = '1';
-            
-    } else if (activeSection == "hostSection" && scrollY < 0) {
-        console.log("host");
-        
-        activeSection.val = "joinSection";
-
-      //  openGameEditorButton.style.opacity = '0';
-       // codeInputContainer.style.opacity = '1';
-
-    }
-});
-
     return (
         <main>
             <section class={{ "section": true, "live": activeSection.val == "joinSection" }} id="joinSection">
                 <h1 class="sticky-top pt-30">JOIN QUIX</h1>
-                <div id="code-input-container" class={{"live": activeSection.val == "joinSection" }}>
-                    <input id="codeField1" type="text" class="code-input" maxlength="1" value={codeInputValues[0]} autofocus />
-                    <input id="codeField2" type="text" class="code-input" maxlength="1" value={codeInputValues[1]} />
-                    <input id="codeField3" type="text" class="code-input" maxlength="1" value={codeInputValues[2]} />
-                    <input id="codeField4" type="text" class="code-input" maxlength="1" value={codeInputValues[3]} />
-                    <input id="codeField5" type="text" class="code-input" maxlength="1" value={codeInputValues[4]} />
-                    <input id="codeField6" type="text" class="code-input" maxlength="1" value={codeInputValues[5]} />
+                <div id="code-input-container" class={{ "code-input-container": true, "live": activeSection.val == "joinSection" }}>
+                    {
+                        codeInputFields.map((inputfield) => inputfield)
+                    }
                 </div>
             </section>
 
             <section class={{ "section": true, "live": activeSection.val == "hostSection" }} id="hostSection">
                 <h1 class="section-text sticky-top pb-30">HOST QUIX</h1>
-                <button type="button" id="openGameEditorButton" class={{ "button": true, "live": activeSection.val == "hostSection" }} onclick={handleHostNewGame}>
+                <button type="button" id="openGameEditorButton" class={{ "button": true, "live": activeSection.val == "hostSection" }} onclick={() => redirect(`${globalThis.location.origin}/create`)}>
                     Open Game Editor
                 </button>
             </section>
         </main>
     );
 })
+
 export class MainMenu extends Component {}
