@@ -5,6 +5,7 @@ deno.lock
 *.swp
 *.log
 .env
+.prettierrc
 
 /.cargo_home/
 /.idea/
