@@ -1,9 +1,9 @@
 import { Endpoint } from "datex-core-legacy/datex_all.ts";
-import { lobbies } from "./lobbies.eternal.ts";
+import { lobbies } from "../../.datex-cache/eternal/backend/lobbyManagement/lobbies.eternal.ts";
 import { type Lobby } from "common/models/lobby/Lobby.ts"
 
 
-export async function registerLobby(code?: string) {		
+export async function registerLobby() {		
 	try {
 		const callerID = datex.meta.caller		
 		if (!callerID) {
@@ -29,7 +29,6 @@ export async function registerLobby(code?: string) {
 		};
 
 		lobbies.push(newLobby);
-		console.log("Lobby registered:", newLobby);
 
 		removeLobbiesOlderThan24h()
 		return newLobby;
@@ -53,10 +52,11 @@ function removeLobbiesOlderThan24h() {
 }
 
 export async function getHostIdFromGamecode (gamecode: string): Promise<Endpoint> {
-	const lobby = lobbies.find(lobby => lobby.code === gamecode);
+	//TODO: Investigate why === does not work
+	const lobby = lobbies.find(lobby => lobby.code == gamecode);	
 	if (lobby) {	
 		return lobby.host.endpointId;
 	} else {
 		throw new Error(`Lobby with gamecode ${gamecode} not found.`);
-	}
+	}	
 }
