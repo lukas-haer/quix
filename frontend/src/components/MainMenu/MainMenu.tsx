@@ -1,3 +1,5 @@
+import {Snackbar, successSnackbarMessage, failureSnackbarMessage} from "frontend/src/components/utils/snackbar/Snackbar.tsx"
+
 const styles = {
     container: {
         display: 'flex',
@@ -41,8 +43,14 @@ export default function mainMenu() {
           <div style={styles.buttonContainer}>
               <button style={styles.button} onclick={handleJoinGame}>Spiel Beitreten</button>
               <button style={styles.button} onclick={handleCreateNewGame}>Neues Spiel Erstellen</button>
-          </div>
+
       </div>
+
+          <Snackbar/>
+
+      </div>
+
+
     );
 }
 
