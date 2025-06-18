@@ -8,7 +8,7 @@ type JoinScreenProps = {
     id?:string;
 };
 
-const stateId = $("");
+const stateId = $("loading");
 const currentRoundId = $("");
 
 
@@ -27,11 +27,12 @@ const apiObj: ObjectRef<{playerApi?: PlayerAPIType}> = $({}); //encapsulate api 
 
   //const gameId = $(id ? decodeURIComponent(id) : "");
   const gameId = $(decodeURIComponent(id ?? ""));
-
+  const activeComponent = $("loading")
   const name = $("");
 
   const joinGame = async (endpointId: string, username: string) => {
-    
+    activeComponent.val = "loading"
+
     const api: PlayerAPIType = await datex.get(`${endpointId}.PlayerAPI`)
     if(!api) throw Error("Couldn't get Player API")
 
@@ -43,34 +44,13 @@ const apiObj: ObjectRef<{playerApi?: PlayerAPIType}> = $({}); //encapsulate api 
     stateId.val = res.state.id;
   }
 
-  /* return (
-    <div>
-        {stateId.val !== "" ? <GameScreen stateId={stateId.val} currentRoundId={currentRoundId.val} apiObj={apiObj}/> : (
-        <>
-        <label>ID:</label>
-        <input
-          type="text"
-          value={gameId}
-          placeholder="Endpoint ID eingeben"
-          required
-        />
-        <label>Name:</label>
-        <input
-          type="text"
-          value={name}
-          placeholder="Name eingeben"
-          required
-        />
-        <button type="button" onclick={() => joinGame(gameId.val, name.val)}>Join</button>
-        </>
-        )}
-    </div>
-  ); */
-  return(
-    <div class="section">
-      {stateId.val !== "" ? <GameScreen stateId={stateId.val} currentRoundId={currentRoundId.val} apiObj={apiObj}/> : (
-        <>
-        <h1>WHAT SHOULD WE CALL YOU?</h1>
+  const renderComponent = () => {
+    switch (activeComponent.val) {
+      case 'liveGame':
+        return <div>Fehler noch nicht implementiert<GameScreen stateId={stateId.val} currentRoundId={currentRoundId.val} apiObj={apiObj} /></div>;
+      case 'nameSelection':
+        return <div>
+          <h1>WHAT SHOULD WE CALL YOU?</h1>
         <div class="name-input-container">
             <input  type="text" 
                     class="name-input" 
@@ -82,9 +62,23 @@ const apiObj: ObjectRef<{playerApi?: PlayerAPIType}> = $({}); //encapsulate api 
             <div class="glowing-line" id="glowingLine"></div>
         </div>
         <button type="button" class="button" onclick={() => joinGame(gameId.val, name.val)}>JOIN</button>
-        </>
-      )}  
-    </div>
+          
+        </div>;
+      case 'loading':
+        return <div>Loading <button onclick={() => {activeComponent.val = "nameSelection"; console.log(activeComponent.val);}
+        }>Wechsel</button></div>;
+      default:
+        return <div>Es ist ein Fehler aufgetreten.</div>;
+    }
+
+    
+  };  
+
+  return (
+      <div class="section">
+        <button onclick={() =>     console.log(activeComponent.val)}>log</button>
+         {renderComponent()}
+      </div>
   );
 })
 export default class JoinScreen extends Component<JoinScreenProps> {}
