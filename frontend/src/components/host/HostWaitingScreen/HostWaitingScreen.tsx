@@ -1,72 +1,102 @@
 import { Datex } from "datex-core-legacy/datex.ts";
 import { ObjectRef } from "datex-core-legacy/runtime/pointers.ts";
-import { Player, GameStateObjects, StateOptions } from "../../../models/GameState.ts";
+import {
+  GameStateObjects,
+  Player,
+  StateOptions,
+} from "../../../models/GameState.ts";
 import { styles } from "../HostDashboard/HostDashboardStyles.ts";
+import { registerLobby } from "backend/lobbyManagement/LobbyManagement.tsx";
+import { QrCode } from "frontend/src/components/utils/qrcode/qrcode.tsx";
 
 type HostWaitingScreenProps = {
-	state: Datex.Pointer<StateOptions>;
-	currentRound: Datex.Pointer<number>;
-	gameStateObjects: ObjectRef<GameStateObjects>;
-}
+  state: Datex.Pointer<StateOptions>;
+  currentRound: Datex.Pointer<number>;
+  gameStateObjects: ObjectRef<GameStateObjects>;
+};
 
-export default function HostWaitingScreen({state, currentRound, gameStateObjects}: HostWaitingScreenProps) {
-  const {prefix, name, instance} = Datex.Runtime.endpoint;
-  const hostEndpointId = prefix + name + "/" + instance;
-  const appUrls = Datex.Unyt.endpointDomains();
+export default async function HostWaitingScreen(
+  { state, currentRound, gameStateObjects }: HostWaitingScreenProps,
+) {
+  const { prefix, name, instance } = Datex.Runtime.endpoint;
 
   const startGame = () => {
-      state.val = "playing";
-      updateDeadlineAndTimer()
-    }
+    state.val = "playing";
+    updateDeadlineAndTimer();
+  };
 
   const nextRound = () => {
-      if (currentRound.val + 1 === gameStateObjects.questions.length){
-          state.val = "finished";
-          return
-      }
+    if (currentRound.val + 1 === gameStateObjects.questions.length) {
+      state.val = "finished";
+      return;
+    }
 
-      updateDeadlineAndTimer()
-      currentRound.val++;
-  }
+    updateDeadlineAndTimer();
+    currentRound.val++;
+  };
 
   const updateDeadlineAndTimer = () => {
     // Can you do this more smoothly? an easy to understand one-liner perhaps?
     const newDeadline = new Date();
-    newDeadline.setSeconds(newDeadline.getSeconds() + gameStateObjects.questions[currentRound.val].content.timeInSeconds);
+    newDeadline.setSeconds(
+      newDeadline.getSeconds() +
+        gameStateObjects.questions[currentRound.val].content.timeInSeconds,
+    );
     gameStateObjects.currentDeadline = newDeadline;
 
-    setTimeout(nextRound, gameStateObjects.currentDeadline.getTime() - Date.now());
+    setTimeout(
+      nextRound,
+      gameStateObjects.currentDeadline.getTime() - Date.now(),
+    );
+  };
+
+  let gamecode : string = "";
+  try {
+    const lobby = await registerLobby(); //Registers a Lobby on the Backend
+    gamecode = lobby.code;    
+  } catch (error) {
+    console.error("An Error occured: " + error);
+    alert("Unable to load gamecode"); //TODO Replace with snackbar
   }
 
+  const invitelink = "http://localhost/join/" + encodeURIComponent(gamecode)
+
   return (
-      <div>
-        <h2 style={styles.heading}>Waiting for players to join...</h2>
-        <h2>Lobby:</h2>
-        {
+    <div>
+      <h2 style={styles.heading}>Waiting for players to join...</h2>
+      <h2>Lobby:</h2>
+      {
         // BUG: Lobby disappears without empty html tags
-        }
-        <div>
-        { //TODO: BUG: find out why array length property not reactive 
-          gameStateObjects.players.map((player: Player) => <p>{player.name}</p>) 
-          }
-        </div>
-        <button onclick={() => startGame()}>Start Game</button>
-        <h2>Invite Links:</h2>
-        <>
+      }
+      <div>
         {
-          //TODO: register game with backend and construct links with new game id instead of endpoint id
-          appUrls?.map(url => <InviteLink linkUrl={url + "/join/" + encodeURIComponent(hostEndpointId)} /> )
+          //TODO: BUG: find out why array length property not reactive
+          gameStateObjects.players.map((player: Player) => <p>{player.name}</p>)
         }
-        </>
       </div>
-  )
+      <button type="button" onclick={() => startGame()}>Start Game</button>
+
+      
+      <h2>Invite Links:</h2>
+      <QrCode url={invitelink}></QrCode>
+      <InviteLink
+        linkUrl={invitelink}
+      />
+    </div>
+  );
 }
 
-function InviteLink({linkUrl}:{linkUrl: string}) {
+function InviteLink({ linkUrl }: { linkUrl: string }) {
   return (
-    <div style={{display: "flex", gap: "10px"}}>
-      <p>{ linkUrl }</p>
-      <button onclick={() => navigator.clipboard.writeText(linkUrl)}>Copy</button>
+    <div style={{ display: "flex", gap: "10px" }}>
+      <p>{linkUrl}</p>
+      <button
+        type="button"
+        onclick={() => navigator.clipboard.writeText(linkUrl)}
+      >
+        Copy
+      </button>
+      <br />
     </div>
-    )
+  );
 }
