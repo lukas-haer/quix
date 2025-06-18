@@ -1,9 +1,10 @@
 import { Datex } from "datex-core-legacy/datex.ts";
 import { ObjectRef } from "datex-core-legacy/runtime/pointers.ts";
 import { JoinGameReturn, GetCurrentQuestionReturn } from "../../../models/PlayerApiReturns.ts";
-import { getHostIdFromGamecode } from "backend/lobbyManagement/LobbyManagement.tsx"
+import { getHostIdFromGamecode } from "backend/lobbyManagement/LobbyManagement.ts"
 import GameScreen from "../GameScreen/GameScreen.tsx";
 import { Component, template } from 'uix/components/Component.ts';
+import { Snackbar, successSnackbarMessage, failureSnackbarMessage} from "frontend/src/components/utils/snackbar/Snackbar.tsx"
 
 type JoinScreenProps = {
     id?:string;
@@ -11,7 +12,6 @@ type JoinScreenProps = {
 
 const stateId = $("loading");
 const currentRoundId = $("");
-
 
 //TODO: can this be pulled from PlayerAPI class?
 export type PlayerAPIType = {
@@ -22,76 +22,61 @@ export type PlayerAPIType = {
 
 const apiObj: ObjectRef<{playerApi?: PlayerAPIType}> = $({}); //encapsulate api in ObjectRef to guarantee reactivity
 
+//TODO: error handling, user feedback (snackbar/form), form validation for endpoint format and username length
 @template<JoinScreenProps>(({id}) =>{
-/* export default function JoinScreen({id}:JoinScreenProps) { */
-  //TODO: error handling, user feedback (snackbar/form), form validation for endpoint format and username length
 
-  //const gameId = $(id ? decodeURIComponent(id) : "");
-  const gameId = $(decodeURIComponent(id ?? ""));
+  const gamecode = $(decodeURIComponent(id ?? ""));
+  const endpointId = $("")
   const activeComponent = $("loading")
   const name = $("");
 
-  async function getEndpointByGamecode(gamecode:string) {
+  async function getEndpointByGamecode() {
           try {
           const gameCodeRegex = /^\d{6}$/; //Checks if gamecode consists of exactly 6 numbers
 
+            if(!gamecode.val || gamecode.val == "") {
+              failureSnackbarMessage("No Gamecode provided", "Was unable to find Gamecode in queryparameter. Please try again.")
+            }
+
           if (!gameCodeRegex.test(gamecode)) {
-            //TODO add snackbar
+            failureSnackbarMessage("Error: Gamecode","The provided gamecode does not consist of 6 numbers.")
             return;
           }
           try {
-            const endpointId = await getHostIdFromGamecode(gamecode);
-            console.log("ENDPOINT: "+endpointId);
-            
-            joinGame(endpointId.toString(), username)
-
+            const recievedEndpointId = await getHostIdFromGamecode(gamecode);    
+            console.log("ENDPOINT: "+recievedEndpointId);
+            endpointId.val = recievedEndpointId.toString();
           } catch (error) {
-            alert("Konnte game id nicht finden"+error)
+            console.error("Error when attempting to find Lobby: "+error)
+            failureSnackbarMessage("Lobby not found", "There is no lobby for this gamecode.")
           }
 
+          successSnackbarMessage("Lobby joined","Joined Lobby successfully")
+          activeComponent.val = "nameSelection";
 
       } catch (error) {
           console.error("ERROR (joinGameByGamecode): " + error);
           failureSnackbarMessage("Unable to Join","An error occured and it was not possible to join the game. Please try again later")
       }
   }
+  getEndpointByGamecode()
 
-  async function joinGameByGamecode (gamecode: string, username: string) {
-      try {
-          const gameCodeRegex = /^\d{6}$/; //Checks if gamecode consists of exactly 6 numbers
-
-          if (!gameCodeRegex.test(gamecode)) {
-            //TODO add snackbar
-            return;
-          }
-          try {
-            const endpointId = await getHostIdFromGamecode(gamecode);
-            console.log("ENDPOINT: "+endpointId);
-            
-            joinGame(endpointId.toString(), username)
-
-          } catch (error) {
-            alert("Konnte game id nicht finden"+error)
-          }
-
-
-      } catch (error) {
-          console.error("ERROR (joinGameByGamecode): " + error);
-          //failureSnackbarMessage("Unable to Join","An error occured and it was not possible to join the game. Please try again later")
-      }
-  };
-
-  const joinGame = async (endpointId: string, username: string) => {
+  const joinGame = async () => {
     activeComponent.val = "loading"
 
-    const api: PlayerAPIType = await datex.get(`${endpointId}.PlayerAPI`)
+    if (!gamecode || !gamecode.val || gamecode.val == "") {
+      return;
+    }
+
+    const api: PlayerAPIType = await datex.get(`${endpointId.val}.PlayerAPI`)
     if(!api) throw Error("Couldn't get Player API")
 
-    const res: {state: Datex.Pointer<string>; currentRound: Datex.Pointer<number>;} = await api.joinGame(username)
+    const res: {state: Datex.Pointer<string>; currentRound: Datex.Pointer<number>;} = await api.joinGame(name.val)
 
     apiObj.playerApi = api
 
     currentRoundId.val = res.currentRound.id;
+    activeComponent.val = "liveGame";
     stateId.val = res.state.id;
   }
 
@@ -112,7 +97,7 @@ const apiObj: ObjectRef<{playerApi?: PlayerAPIType}> = $({}); //encapsulate api 
                     required />
             <div class="glowing-line" id="glowingLine"></div>
         </div>
-        <button type="button" class="button" onclick={() => joinGameByGamecode(gameId.val, name.val)}>JOIN</button>
+        <button type="button" class="button" onclick={() => joinGame()}>JOIN</button>
           
         </div>;
       case 'loading':
@@ -126,10 +111,10 @@ const apiObj: ObjectRef<{playerApi?: PlayerAPIType}> = $({}); //encapsulate api 
   };  
 
   return (
-      <div class="section">
-        <button onclick={() =>     console.log(activeComponent.val)}>log</button>
+      <main class="section">
          {renderComponent()}
-      </div>
+        <Snackbar/>
+      </main>
   );
 })
 export default class JoinScreen extends Component<JoinScreenProps> {}
