@@ -2,9 +2,11 @@
   position: relative;
   background-color: white;
   color: black;
+  font-family: var(--sans-font);
+  text-align: left;
   padding: 15px 20px 20px 20px;
   border-radius: 7px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   opacity: 0;
   transform: translateX(100%);
   transition: transform 0.5s ease, opacity 0.5s ease;
