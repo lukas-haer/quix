@@ -5,6 +5,7 @@ import { getHostIdFromGamecode } from "backend/lobbyManagement/LobbyManagement.t
 import GameScreen from "../GameScreen/GameScreen.tsx";
 import { Component, template } from 'uix/components/Component.ts';
 import { Snackbar, successSnackbarMessage, failureSnackbarMessage} from "frontend/src/components/utils/snackbar/Snackbar.tsx"
+import { LoadingScreen } from "frontend/src/components/utils/loadingscreen/LoadingScreen.tsx";
 
 type JoinScreenProps = {
     id?:string;
@@ -46,13 +47,13 @@ const apiObj: ObjectRef<{playerApi?: PlayerAPIType}> = $({}); //encapsulate api 
             const recievedEndpointId = await getHostIdFromGamecode(gamecode);    
             console.log("ENDPOINT: "+recievedEndpointId);
             endpointId.val = recievedEndpointId.toString();
+
+            successSnackbarMessage("Lobby joined","Joined Lobby successfully")
+            activeComponent.val = "nameSelection";
           } catch (error) {
             console.error("Error when attempting to find Lobby: "+error)
             failureSnackbarMessage("Lobby not found", "There is no lobby for this gamecode.")
           }
-
-          successSnackbarMessage("Lobby joined","Joined Lobby successfully")
-          activeComponent.val = "nameSelection";
 
       } catch (error) {
           console.error("ERROR (joinGameByGamecode): " + error);
@@ -101,8 +102,7 @@ const apiObj: ObjectRef<{playerApi?: PlayerAPIType}> = $({}); //encapsulate api 
           
         </div>;
       case 'loading':
-        return <div>Loading <button onclick={() => {activeComponent.val = "nameSelection"; console.log(activeComponent.val);}
-        }>Wechsel</button></div>;
+        return <LoadingScreen text={"Loading..."}/>;
       default:
         return <div>Es ist ein Fehler aufgetreten.</div>;
     }
