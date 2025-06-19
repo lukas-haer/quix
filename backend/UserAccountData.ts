@@ -64,6 +64,7 @@ export async function register(ctx: Context) {
 	}
 
 }
+
 //Password validation
 function PasswordIsValid (password: string) : boolean {
 

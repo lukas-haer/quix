@@ -1,4 +1,4 @@
-import { register } from "backend/data.ts";
+import { register } from "backend/UserAccountData.ts";
 import { Context } from "uix/routing/context.ts";
 
 export function userSignUp (ctx: Context) {
