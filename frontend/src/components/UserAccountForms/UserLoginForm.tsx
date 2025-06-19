@@ -1,7 +1,13 @@
 import { authenticate } from "backend/UserAccountData.ts";
 import { Context } from "uix/routing/context.ts";
 
+/**
+ * 
+ * @param ctx context of the request, for authentication
+ * @returns references authentication function, errors if no existing user or wrong password
+ */
 export function userLogin (ctx: Context) {
+	
 	const url = new URL(ctx.request.url);
 	const error = url.searchParams.get("error");
 
