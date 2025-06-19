@@ -3,21 +3,24 @@ import HostDashboard from "./src/components/host/HostDashboard/HostDashboard.tsx
 import JoinScreen from "./src/components/player/JoinScreen/JoinScreen.tsx";
 import { CreateQuiz } from './src/components/gamecreation/createQuiz/CreateQuiz.tsx';
 
+//import type { Entrypoint } from "uix/providers/entrypoints.ts"
+//import { authenticate } from "backend/data.ts";
+import { userLogin } from "./src/components/UserAccountForms/UserLoginForm.tsx";
+import { userSignUp } from "./src/components/UserAccountForms/UserSignUpForm.tsx";
+
+
 export default {
     "/": () => <MainMenu />,
     "/join/:id": (_: any, { id }:{ id: string }) => <JoinScreen id={ id } />,
     "/join": () => <JoinScreen />,
     "/create": () => <HostDashboard />,
-    "/quiz": () => <CreateQuiz />
+    "/quiz": () => <CreateQuiz />,
+	"/login": userLogin,
+	"/signup": userSignUp
 };
 
 
-import type { Entrypoint } from "uix/providers/entrypoints.ts"
-//import { CreateQuiz } from './src/components/gamecreation/createQuiz/CreateQuiz.tsx';
-//import { authenticate } from "backend/data.ts";
-import { userLogin } from "./src/components/UserAccountForms/UserLoginForm.tsx";
-import { userSignUp } from "./src/components/UserAccountForms/UserSignUpForm.tsx";
-
+/*
 export default {
 		"/": <div>
 			<h1>Welcome to QUIX!</h1>
@@ -30,32 +33,4 @@ export default {
 
 	//"/create-quiz": <CreateQuiz/>,
 } satisfies Entrypoint;
-
-/*
-	"/auth": (ctx) => {
-		const url = new URL(ctx.request.url);
-		const error = url.searchParams.get("error");
-		return <form action={authenticate} method="post">
-					<h2>Login / Sign Up</h2>
-					<div style={{ display: "flex", alignItems: "flex-start", gap: "0.5rem" }}>
-						<input type="text" name="user" placeholder="enter your name" required />
-						
-						<div style={{ position: "relative" }}>
-							<input type="password" name="password" placeholder="enter your password" required />
-							{error === "invalid_password" && (
-								<p style={{color: "red", fontSize: "0.75rem", position: "absolute", top: "100%", left: 0, margin: 0}}>Wrong Password</p>
-							)}
-						</div>
-						<button type="submit">Authenticate</button>
-					</div>
-					</form>
-	}
-*/
-
-
-
-
-
-
-
-
+ */

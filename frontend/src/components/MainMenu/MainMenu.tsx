@@ -43,6 +43,8 @@ export default function mainMenu() {
           <div style={styles.buttonContainer}>
               <button style={styles.button} onclick={handleJoinGame}>Spiel Beitreten</button>
               <button style={styles.button} onclick={handleCreateNewGame}>Neues Spiel Erstellen</button>
+              <a href="/login"><button type="button" id="login-btn">Log into your existing account</button></a>
+			  <a href="/signup"><button type="button" id="signup-btn">Create a new account</button></a>
             <button onclick={() => successSnackbarMessage("TEST","dies ist ein test")}></button>
       </div>
 
