@@ -4,7 +4,8 @@ import { User } from "../common/userCredentials.ts";
 import * as argon2 from "jsr:@felix/argon2";
 import { provideRedirect } from "uix/providers/common.tsx";
 
-export const users = $({} as Record<string, User>);
+//export const users = $({} as Record<string, User>);
+export const users = eternal ?? $({} as Record<string, User>);
 
 declare global {
 	interface PrivateData {
