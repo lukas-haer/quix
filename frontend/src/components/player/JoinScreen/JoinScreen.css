@@ -1,15 +1,6 @@
-* {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
+        .section {
             font-family: Arial, sans-serif;
             overflow: hidden; /* Disable default scrolling */
-        }
-
-        .section {
             height: 100vh;
             display: flex;
             flex-direction: column;
