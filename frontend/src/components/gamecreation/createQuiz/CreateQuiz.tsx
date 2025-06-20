@@ -1,7 +1,9 @@
 import { UIX } from "uix"
 import { Component, template } from "uix/components/Component.ts";
 import { CreateSingleChoiceQuestion } from "./types/CreateSingleChoiceQuestion.tsx";
-import { Question, QuestionType, SingleChoiceQuestion } from "../../../models/Question.ts";
+import { Question, QuestionType, SingleChoiceQuestion } from "frontend/src/models/Question.ts";
+import { Quiz } from "frontend/src/models/Quiz.ts";
+import { failureSnackbarMessage, Snackbar, successSnackbarMessage } from "frontend/src/components/utils/snackbar/Snackbar.tsx";
 
 /**
  * Example data for a quiz. In production, this would only contaion default values.
@@ -17,8 +19,7 @@ const quiz = $({
     title: "My first Quix",
     description: "This is a quiz about frontend development.",
     madeby: {
-        accountId: "account-1",
-        name: "John Doe",
+        endpointId: ""
     },
     questions: [
         new SingleChoiceQuestion({
@@ -71,10 +72,13 @@ function addQuestion() {
  */
 export function removeQuestionById(questionId: string) {
     try {
+        console.log("called");
+        
         //Find question index by id
         const questionIndex = quiz.questions.findIndex(
             (q) => q.id === questionId
         );
+        console.log("removoed: "+questionIndex);
 
         if(questionIndex == -1) {
             throw new Error(`The question with the id ${questionId} could not be found, and therefore was not removed`)
@@ -93,18 +97,10 @@ export function removeQuestionById(questionId: string) {
 }
 
 /**
- * Feedback field for the Question Export. 
- * TODO: Replace with snackbar
- */
-const questionExportFeedback = $("");
-
-/**
  * Exports the current quiz as a JSON file.
  * The file will be named `quiz-{quiz.id}.json`.
  */
 function exportQuestionSet() {
-	questionExportFeedback.val = "";
-
 	try {
 	const fileName = `quix-${quiz.title.replace(/\s+/g, "-").toLowerCase()}.json`;
 
@@ -119,17 +115,109 @@ function exportQuestionSet() {
 
     URL.revokeObjectURL(url);
 
-	questionExportFeedback.val = "Quiz exported successfully!";
+	successSnackbarMessage("Export successful","The Quix was exported successfully.");
 
-	setTimeout(() => {
-		questionExportFeedback.val = "";
-	}, 5000);
 	} catch (error) {
 		console.error("Error exporting quiz:", error);
-		questionExportFeedback.val = "An error occurred while exporting the quiz.";
-
+		failureSnackbarMessage("Export failed","An error occurred while exporting the quiz.");
 		return;
 	}
+}
+
+/**
+ * Setter for quiz var. Has to be done this way, since replacing the quiz directly impacts the reactivity.
+ * @param newQuiz Replaces values of the current quiz with new quiz. 
+ * @throws Error if newQuiz is invalid or required properties are missing.
+ */
+function setQuiz(newQuiz: Quiz) {
+    try {
+        if (!newQuiz || typeof newQuiz !== "object") {
+            throw new Error("Invalid quiz object provided.");
+        }
+        if (!newQuiz.title || !Array.isArray(newQuiz.questions)) {
+            throw new Error("Quiz object is missing required properties.");
+        }
+
+        quiz.title = newQuiz.title;
+        quiz.description = newQuiz.description;
+        quiz.madeby = {
+            endpointId: datex.meta.caller.toString() //TODO replace with accounts
+        };
+        const questions = quiz.questions;
+        questions.length = 0;
+
+        newQuiz.questions.forEach((q) => {
+            if (q.content && typeof q.content === "object") {
+                questions.push(
+                    //Currently only supports Singlechoise questions
+                    //TODO Add handeling for other question types
+                    new SingleChoiceQuestion({
+                        questionText: q.content.questionText,
+                        answers: q.content.answers,
+                        correctAnswerId: q.content.correctAnswerId,
+                        timeInSeconds: q.content.timeInSeconds,
+                    })
+                );
+                return;
+            }
+        });
+    } catch (error) {
+        throw error;
+    }
+}
+
+/**
+ * This inputfield will be injected below and is created here to preserve the reference
+ */
+const importInputField = (
+    <input
+        type="file"
+        accept="application/json"
+        style="display: none"
+        onchange={handleFileUpload}
+    ></input>
+);
+
+/**
+ * Called after importing the quiz from the InputButton / importInputField.
+ * Turns JSON-File into an object and calls setQuiz()
+ * @returns 
+ */
+async function handleFileUpload() {
+    const input = importInputField as HTMLInputElement;
+    if (!input || !input.files || !input.files[0]) {
+        failureSnackbarMessage("Import failed", "No file selected.");
+        return;
+    }
+
+    const file = input.files[0];
+    if (file.type !== "application/json") {
+        failureSnackbarMessage("Import failed", "Wrong file type. Please select a JSON file.");
+        return;
+    }
+
+    try {
+        const text = await file.text();
+        let importedQuizJson;
+        try {
+            importedQuizJson = JSON.parse(text);
+        } catch (parseError) {
+            failureSnackbarMessage("Import failed", "Invalid JSON format.");
+            console.error("JSON parse error:", parseError);
+            return;
+        }
+
+        if (!importedQuizJson || typeof importedQuizJson !== "object" || !importedQuizJson.questions) {
+            failureSnackbarMessage("Import failed", "The file does not contain a valid quiz object.");
+            return;
+        }
+
+        setQuiz(importedQuizJson);
+        successSnackbarMessage("Import successful", "The quiz was successfully imported.");
+    } catch (error) {
+        failureSnackbarMessage("Import failed", "Failed to read the file.");
+        console.error("File read error:", error);
+    }
 }
 
 @template(() => {
@@ -145,6 +233,14 @@ function exportQuestionSet() {
             <div class="gc-col gc-col-3 vertically-centered align-right">
 				<div>
 
+                    <button
+                	    type="button"
+                	    id="import-btn"
+                	    onclick={() => (importInputField as HTMLInputElement).click()}
+						>
+                        Import
+                        { importInputField }
+                    </button>
                 	<button
                 	    type="button"
                 	    id="export-btn"
@@ -152,7 +248,6 @@ function exportQuestionSet() {
 						>
                 	    Export
                 	</button>
-					<p class="margin0" id="export-feedback"> {questionExportFeedback} </p>
 				</div>
             </div>
         </header>
@@ -200,15 +295,7 @@ function exportQuestionSet() {
             </button>
         </div>
 
-    </section>
-    )
-    
-})
-
-
-/*
-//########### Debugging-Tools ###########
-        <hr />
+                <hr />
         <h1>Debug</h1>
 
         <textarea style={"height: 500px"} name="" id="">
@@ -218,6 +305,16 @@ function exportQuestionSet() {
         <button type="button" onclick={() => console.log(quiz)}>
             Log
         </button>
+            <Snackbar/>
+    </section>
+    )
+    
+})
+
+
+/*
+//########### Debugging-Tools ###########
+
 
         */
 export class CreateQuiz extends Component {}
