@@ -1,7 +1,8 @@
 import { Endpoint } from "datex-core-legacy/datex_all.ts";
-import { lobbies } from "../../.datex-cache/eternal/backend/lobbyManagement/lobbies.eternal.ts";
+//import { lobbies } from "backend/lobbyManagement/lobbies.eternal.ts";
 import { type Lobby } from "common/models/lobby/Lobby.ts"
 
+const lobbies = []as Lobby []
 
 export async function registerLobby() {		
 	try {

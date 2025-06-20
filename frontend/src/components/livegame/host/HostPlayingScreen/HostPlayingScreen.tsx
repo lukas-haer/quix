@@ -1,6 +1,6 @@
 import { Datex } from "datex-core-legacy/datex.ts";
 import { ObjectRef } from "datex-core-legacy/runtime/pointers.ts";
-import { GameStateObjects } from "../../../models/GameState.ts";
+import { GameStateObjects } from "frontend/src/models/GameState.ts";
 import { Component, template } from 'uix/components/Component.ts';
 
 type HostPlayingScreenProps = {
@@ -19,7 +19,7 @@ export default function HostPlayingScreen({currentRound, gameStateObjects}: Host
   )
 }
 
-//Error:/quix/frontend/src/components/host/HostDashboard/HostDashboard.tsx: Could not find type for attribute currentRound={currentRound}
+//Error:/quix/frontend/src/components/host/HostMain/HostMain.tsx: Could not find type for attribute currentRound={currentRound}
 /* @template<HostPlayingScreenProps>(({currentRound, gameStateObjects})=>{
 
 return (

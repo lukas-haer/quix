@@ -1,16 +1,16 @@
 import { Datex } from "datex-core-legacy/datex.ts";
 import { ObjectRef } from "datex-core-legacy/runtime/pointers.ts";
+import HostWaitingScreen from "./HostWaitingScreen/HostWaitingScreen.tsx";
+import HostPlayingScreen from "./HostPlayingScreen/HostPlayingScreen.tsx";
 import { sampleQuestions, SingleChoiceQuestion, MultipleChoiceQuestion } from "../../../models/Question.ts";
 import { Player, GameStateObjects, StateOptions } from "../../../models/GameState.ts";
 import { JoinGameReturn, GetCurrentQuestionReturn } from "../../../models/PlayerApiReturns.ts";
-import HostWaitingScreen from "../HostWaitingScreen/HostWaitingScreen.tsx";
-import HostPlayingScreen from "../HostPlayingScreen/HostPlayingScreen.tsx";
-import { styles } from "./HostDashboardStyles.ts";
+import { styles } from "./HostStyles.ts";
 
 //TODO: Does it make any difference having the pointers and api outside vs inside of a component?
 //TODO: pause/reset timeout
 
-export default function HostDashboard() {
+export default function HostMain() {
 
   //TODO: Do we want these as eternal variables? -> If yes, how do we handle recovery of the next question timer and api calls while host is offline.
   const state: Datex.Pointer<StateOptions> = $("waiting");

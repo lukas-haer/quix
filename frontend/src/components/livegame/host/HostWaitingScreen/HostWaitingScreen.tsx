@@ -4,8 +4,8 @@ import {
   GameStateObjects,
   Player,
   StateOptions,
-} from "../../../models/GameState.ts";
-import { styles } from "../HostDashboard/HostDashboardStyles.ts";
+} from "frontend/src/models/GameState.ts";;
+import { styles } from "../HostStyles.ts";
 import { registerLobby } from "backend/lobbyManagement/LobbyManagement.ts";
 import { QrCode } from "frontend/src/components/utils/qrcode/qrcode.tsx";
 

@@ -1,13 +1,18 @@
+//UIX tooling
 import { Datex } from 'datex-core-legacy/datex.ts';
 import { ObjectRef } from 'datex-core-legacy/runtime/pointers.ts';
-import { JoinGameReturn, GetCurrentQuestionReturn } from '../../../models/PlayerApiReturns.ts';
-import { getHostIdFromGamecode } from 'backend/lobbyManagement/LobbyManagement.ts';
-import GameScreen from '../GameScreen/GameScreen.tsx';
 import { Component, template } from 'uix/components/Component.ts';
-import { Snackbar, successSnackbarMessage, failureSnackbarMessage } from 'frontend/src/components/utils/snackbar/Snackbar.tsx';
+//Components and Type imports
+import GameScreen from './GameScreen/GameScreen.tsx';
+import { JoinGameReturn, GetCurrentQuestionReturn } from '../../../models/PlayerApiReturns.ts';
+//Utils
 import { LoadingScreen } from 'frontend/src/components/utils/loadingscreen/LoadingScreen.tsx';
+import { Snackbar, successSnackbarMessage, failureSnackbarMessage } from 'frontend/src/components/utils/snackbar/Snackbar.tsx';
+//Backendfunctions
+import { getHostIdFromGamecode } from 'backend/lobbyManagement/LobbyManagement.ts';
 
-type JoinScreenProps = {
+
+type PlayerMainProps = {
     id?: string;
 };
 
@@ -24,7 +29,7 @@ export type PlayerAPIType = {
 const apiObj: ObjectRef<{ playerApi?: PlayerAPIType }> = $({}); //encapsulate api in ObjectRef to guarantee reactivity
 
 //TODO: error handling, user feedback (snackbar/form), form validation for endpoint format and username length
-@template<JoinScreenProps>(({ id }) => {
+@template<PlayerMainProps>(({ id }) => {
     const gamecode = $(decodeURIComponent(id ?? ''));
     const endpointId = $('');
     const activeComponent = $('asdf');
@@ -64,7 +69,7 @@ const apiObj: ObjectRef<{ playerApi?: PlayerAPIType }> = $({}); //encapsulate ap
             );
         }
     }
-    //getEndpointByGamecode();
+    getEndpointByGamecode();
 
     const joinGame = async () => {
         try {
@@ -85,7 +90,7 @@ const apiObj: ObjectRef<{ playerApi?: PlayerAPIType }> = $({}); //encapsulate ap
             activeComponent.val = 'liveGame';
             stateId.val = res.state.id;
         } catch (error) {
-            console.error('ERROR: JoinScreen/joinGame: ' + error);
+            console.error('ERROR: PlayerMain/joinGame: ' + error);
             failureSnackbarMessage(
                 'Error when loading Lobby',
                 'Could not join the Lobby. Please make sure the Host is connected.'
@@ -132,4 +137,4 @@ const apiObj: ObjectRef<{ playerApi?: PlayerAPIType }> = $({}); //encapsulate ap
         </main>
     );
 })
-export default class JoinScreen extends Component<JoinScreenProps> {}
+export default class PlayerMain extends Component<PlayerMainProps> {}
