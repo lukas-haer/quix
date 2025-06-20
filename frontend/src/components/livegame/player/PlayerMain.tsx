@@ -32,7 +32,7 @@ const apiObj: ObjectRef<{ playerApi?: PlayerAPIType }> = $({}); //encapsulate ap
 @template<PlayerMainProps>(({ id }) => {
     const gamecode = $(decodeURIComponent(id ?? ''));
     const endpointId = $('');
-    const activeComponent = $('asdf');
+    const activeComponent = $('loading');
     const name = $('');
 
     async function getEndpointByGamecode() {

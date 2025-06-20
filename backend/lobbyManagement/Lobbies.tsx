@@ -1,8 +1,6 @@
 import { Component, template } from "uix/components/Component.ts";
-//import { lobbies } from "./lobbies.eternal.ts";
+import { lobbies } from "./lobbies.eternal.ts";
 import { type Lobby } from "common/models/lobby/Lobby.ts";
-
-const lobbies = [] as Lobby[]
 
 @template(() => (
     <div>

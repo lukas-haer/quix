@@ -6,7 +6,7 @@ import { CreateQuiz } from './src/components/gamecreation/createQuiz/CreateQuiz.
 export default {
     "/": () => <MainMenu />,
     "/join/:id": (_: any, { id }:{ id: string }) => <PlayerMain id={ id } />,
-    "/join": () => <PlayerMain />,
-    "/create": () => <HostMain />,
-    "/quiz": () => <CreateQuiz />
+    "/join": () => redirect('/'),
+    "/host": () => <HostMain />,
+    "/create": () => <CreateQuiz />
 };
