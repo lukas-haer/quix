@@ -1,94 +1,135 @@
-import { Datex } from "datex-core-legacy/datex.ts";
-import { ObjectRef } from "datex-core-legacy/runtime/pointers.ts";
-import { JoinGameReturn, GetCurrentQuestionReturn } from "../../../models/PlayerApiReturns.ts";
-import { getHostIdFromGamecode } from "backend/lobbyManagement/LobbyManagement.tsx"
-import GameScreen from "../GameScreen/GameScreen.tsx";
-
+import { Datex } from 'datex-core-legacy/datex.ts';
+import { ObjectRef } from 'datex-core-legacy/runtime/pointers.ts';
+import { JoinGameReturn, GetCurrentQuestionReturn } from '../../../models/PlayerApiReturns.ts';
+import { getHostIdFromGamecode } from 'backend/lobbyManagement/LobbyManagement.ts';
+import GameScreen from '../GameScreen/GameScreen.tsx';
+import { Component, template } from 'uix/components/Component.ts';
+import { Snackbar, successSnackbarMessage, failureSnackbarMessage } from 'frontend/src/components/utils/snackbar/Snackbar.tsx';
+import { LoadingScreen } from 'frontend/src/components/utils/loadingscreen/LoadingScreen.tsx';
 
 type JoinScreenProps = {
-    id?:string;
+    id?: string;
 };
 
-const stateId = $("");
-const currentRoundId = $("");
-
+const stateId = $('loading');
+const currentRoundId = $('');
 
 //TODO: can this be pulled from PlayerAPI class?
 export type PlayerAPIType = {
-  joinGame: (name: string) => JoinGameReturn;
-  getCurrentQuestion: () => GetCurrentQuestionReturn;
-  submitAnswer: (answerId: number) => number;
-}
+    joinGame: (name: string) => JoinGameReturn;
+    getCurrentQuestion: () => GetCurrentQuestionReturn;
+    submitAnswer: (answerId: number) => number;
+};
 
-const apiObj: ObjectRef<{playerApi?: PlayerAPIType}> = $({}); //encapsulate api in ObjectRef to guarantee reactivity
+const apiObj: ObjectRef<{ playerApi?: PlayerAPIType }> = $({}); //encapsulate api in ObjectRef to guarantee reactivity
 
-export default function JoinScreen({id}:JoinScreenProps) {
-  //TODO: error handling, user feedback (snackbar/form), form validation for endpoint format and username length
+//TODO: error handling, user feedback (snackbar/form), form validation for endpoint format and username length
+@template<JoinScreenProps>(({ id }) => {
+    const gamecode = $(decodeURIComponent(id ?? ''));
+    const endpointId = $('');
+    const activeComponent = $('asdf');
+    const name = $('');
 
-  const gamecode = $(id ? decodeURIComponent(id) : "");
-  const name = $("");
+    async function getEndpointByGamecode() {
+        try {
+            const gameCodeRegex = /^\d{6}$/; //Checks if gamecode consists of exactly 6 numbers
 
-  async function joinGameByGamecode (gamecode: string, username: string) {
-      try {
-          const gameCodeRegex = /^\d{6}$/; //Checks if gamecode consists of exactly 6 numbers
+            if (!gamecode.val || gamecode.val == '') {
+                failureSnackbarMessage(
+                    'No Gamecode provided',
+                    'Was unable to find Gamecode in queryparameter. Please try again.'
+                );
+            }
 
-          if (!gameCodeRegex.test(gamecode)) {
-            //TODO add snackbar
-            return;
-          }
-          try {
-            const endpointId = await getHostIdFromGamecode(gamecode);
-            console.log("ENDPOINT: "+endpointId);
-            
-            joinGame(endpointId.toString(), username)
+            if (!gameCodeRegex.test(gamecode)) {
+                failureSnackbarMessage('Error: Gamecode', 'The provided gamecode does not consist of 6 numbers.');
+                return;
+            }
+            try {
+                const recievedEndpointId = await getHostIdFromGamecode(gamecode);
+                console.log('ENDPOINT: ' + recievedEndpointId);
+                endpointId.val = recievedEndpointId.toString();
 
-          } catch (error) {
-            alert("Konnte game id nicht finden"+error)
-          }
+                successSnackbarMessage('Lobby joined', 'Joined Lobby successfully');
+                activeComponent.val = 'nameSelection';
+            } catch (error) {
+                console.error('Error when attempting to find Lobby: ' + error);
+                failureSnackbarMessage('Lobby not found', 'There is no lobby for this gamecode.');
+            }
+        } catch (error) {
+            console.error('ERROR (joinGameByGamecode): ' + error);
+            failureSnackbarMessage(
+                'Unable to Join',
+                'An error occured and it was not possible to join the game. Please try again later'
+            );
+        }
+    }
+    //getEndpointByGamecode();
 
+    const joinGame = async () => {
+        try {
+            activeComponent.val = 'loading';
 
-      } catch (error) {
-          console.error("ERROR (joinGameByGamecode): " + error);
-          //failureSnackbarMessage("Unable to Join","An error occured and it was not possible to join the game. Please try again later")
-      }
-  };
+            if (!gamecode || !gamecode.val || gamecode.val == '') {
+                return;
+            }
 
-  const joinGame = async (endpointId: string, username: string) => {
-    
-    const api: PlayerAPIType = await datex.get(`${endpointId}.PlayerAPI`)
-    if(!api) throw Error("Couldn't get Player API")
+            const api: PlayerAPIType = await datex.get(`${endpointId.val}.PlayerAPI`);
+            if (!api) throw Error("Couldn't get Player API");
 
-    const res: {state: Datex.Pointer<string>; currentRound: Datex.Pointer<number>;} = await api.joinGame(username)
+            const res: { state: Datex.Pointer<string>; currentRound: Datex.Pointer<number> } = await api.joinGame(name.val);
 
-    apiObj.playerApi = api
+            apiObj.playerApi = api;
 
-    currentRoundId.val = res.currentRound.id;
-    stateId.val = res.state.id;
-  }
+            currentRoundId.val = res.currentRound.id;
+            activeComponent.val = 'liveGame';
+            stateId.val = res.state.id;
+        } catch (error) {
+            console.error('ERROR: JoinScreen/joinGame: ' + error);
+            failureSnackbarMessage(
+                'Error when loading Lobby',
+                'Could not join the Lobby. Please make sure the Host is connected.'
+            );
+        }
+    };
 
-  return (
+    const renderComponent = () => {
+        switch (activeComponent.val) {
+            case 'liveGame':
+                return <GameScreen stateId={stateId.val} currentRoundId={currentRoundId.val} apiObj={apiObj} />
+            case 'nameSelection':
+                return (
+                    <div>
+                        <h1>WHAT SHOULD WE CALL YOU?</h1>
+                        <div class="name-input-container">
+                            <input
+                                type="text"
+                                class="name-input"
+                                id="nameInput"
+                                value={name}
+                                maxlength="12"
+                                placeholder="Enter your name"
+                                required
+                            />
+                            <div class="glowing-line" id="glowingLine"></div>
+                        </div>
+                        <button type="button" class="button" onclick={() => joinGame()}>
+                            JOIN
+                        </button>
+                    </div>
+                );
+            case 'loading':
+                return <LoadingScreen text={'Loading...'} />;
+            default:
+                return <div> <p>We're sorry, something happend that was not supposed to happen. </p><button type="button" class="button" onclick={() => redirect('/')}>Go Back</button></div>;
+        }
+    };
 
-    <div>
-        {stateId.val !== "" ? <GameScreen stateId={stateId.val} currentRoundId={currentRoundId.val} apiObj={apiObj}/> : (
-        <>
-        <label>ID:</label>
-        <input
-          type="text"
-          value={gamecode}
-          placeholder="Endpoint ID eingeben"
-          required
-        />
-        <label>Name:</label>
-        <input
-          type="text"
-          value={name}
-          placeholder="Name eingeben"
-          required
-        />
-        <button type="button" onclick={() => joinGameByGamecode(gamecode.val, name.val)}>Join</button>
-        </>
-        )}
-
-      </div>
-  );
-}
+    return (
+        <main class="section">
+            {renderComponent()}
+            <Snackbar />
+        </main>
+    );
+})
+export default class JoinScreen extends Component<JoinScreenProps> {}

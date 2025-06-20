@@ -1,3 +1,4 @@
+import { UIX } from "uix"
 import { Component, template } from "uix/components/Component.ts";
 import { CreateSingleChoiceQuestion } from "./types/CreateSingleChoiceQuestion.tsx";
 import { Question, QuestionType, SingleChoiceQuestion } from "../../../models/Question.ts";
@@ -131,7 +132,10 @@ function exportQuestionSet() {
 	}
 }
 
-@template(() => (
+@template(() => {
+    UIX.Theme.useTheme("uix-light")
+
+    return(
     <section>
         <header class="gc-row">
             <div class="gc-col gc-col-9">
@@ -197,8 +201,9 @@ function exportQuestionSet() {
         </div>
 
     </section>
+    )
     
-))
+})
 
 
 /*

@@ -1,0 +1,164 @@
+/*@import url('https://fonts.googleapis.com/css2?family=Avenir+Next:wght@700&display=swap');*/
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    overflow: hidden;
+    /* Disable default scrolling */
+}
+
+.section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 15vh;
+    justify-content: center;
+    text-align: center;
+    transition: height 0.6s ease-in-out;
+    overflow: hidden;
+}
+
+.section.live {
+    height: 85vh !important;
+}
+
+#joinSection {
+    background: #ffffff;
+    color: #000;
+}
+
+#hostSection {
+    background: #000;
+    color: #fff;
+}
+
+#openGameEditorButton,
+#code-input-container {
+    opacity: 0;
+    transition: opacity 0.9s ease;
+}
+
+#code-input-container {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+#code-input-container.live {
+    opacity: 1;
+}
+
+#openGameEditorButton.live {
+    opacity: 1;
+}
+
+h1 {
+    font-family: 'Avenir Next', Arial, sans-serif;
+    font-size: 4rem;
+    font-weight: bold;
+    font-style: italic;
+}
+
+
+.code-input {
+    width: 50px;
+    height: 70px;
+    border: 2px solid rgba(0, 123, 255, 1);
+    border-radius: 5px;
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.code-input.pulsing {
+    animation: pulse 1.5s infinite;
+}
+
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+
+    50% {
+        box-shadow: 0 0 20px rgba(0, 123, 255, 1);
+    }
+
+    100% {
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+}
+
+.code-input:focus {
+    outline: none;
+    caret-color: transparent;
+    /* Hide the cursor */
+    animation: bounce 0.5s ease-in-out;
+    /* Bounce animation on focus */
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+
+.section-text {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    padding-top: 2rem;
+    background: #000;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+
+.button {
+    margin-top: 2rem;
+    padding: 1rem 2rem;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #fff;
+    background-color: #007BFF;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: #0056b3;
+}
+
+.sticky-top {
+    position: sticky;
+    top: 0;
+}
+
+.pt-30 {
+    padding-top: 30px;
+}
+
+.sticky-bottom {
+    position: sticky;
+    top: 0;
+}
+
+.pb-30 {
+    padding-bottom: 30px;
+}
