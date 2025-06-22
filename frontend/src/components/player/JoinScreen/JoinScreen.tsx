@@ -1,8 +1,8 @@
 import { Datex } from "datex-core-legacy/datex.ts";
 import { ObjectRef } from "datex-core-legacy/runtime/pointers.ts";
 import { JoinGameReturn, GetCurrentQuestionReturn } from "../../../models/PlayerApiReturns.ts";
-import { getHostIdFromGamecode } from "backend/lobbyManagement/LobbyManagement.tsx"
 import GameScreen from "../GameScreen/GameScreen.tsx";
+import { getHostIdFromGamecode } from "backend/lobbyManagement/LobbyManagement.tsx";
 
 
 type JoinScreenProps = {
