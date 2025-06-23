@@ -59,7 +59,7 @@ function addQuestion() {
             timeInSeconds: 5
         }));
     } else {
-        alert("Unsupported question type");
+        failureSnackbarMessage("Unsupported Question Type","Please select a valid Question Type")
         console.error("Unsupported question type:", type);
         return;
     }
@@ -71,14 +71,11 @@ function addQuestion() {
  * This function removes a question from the quiz by its ID.
  */
 export function removeQuestionById(questionId: string) {
-    try {
-        console.log("called");
-        
+    try {        
         //Find question index by id
         const questionIndex = quiz.questions.findIndex(
             (q) => q.id === questionId
         );
-        console.log("removoed: "+questionIndex);
 
         if(questionIndex == -1) {
             throw new Error(`The question with the id ${questionId} could not be found, and therefore was not removed`)
@@ -86,13 +83,9 @@ export function removeQuestionById(questionId: string) {
  
         //remove that index
         const removedQuestion = quiz.questions.splice(questionIndex, 1);
-
-        console.log("Removed question: ", removedQuestion[0].id);
     } catch (error) {
         console.error("Error removing question:", error);
-        alert(
-            "An error occurred while removing the question. Please try again."
-        );
+        failureSnackbarMessage("Error when removing a question","An unexprected error occured")
     }
 }
 
@@ -295,6 +288,17 @@ async function handleFileUpload() {
             </button>
         </div>
 
+
+ 
+            <Snackbar/>
+    </section>
+    )
+    
+})
+
+
+/*
+//########### Debugging-Tools ###########
                 <hr />
         <h1>Debug</h1>
 
@@ -305,17 +309,6 @@ async function handleFileUpload() {
         <button type="button" onclick={() => console.log(quiz)}>
             Log
         </button>
-            <Snackbar/>
-    </section>
-    )
-    
-})
-
-
-/*
-//########### Debugging-Tools ###########
-
-
         */
 export class CreateQuiz extends Component {}
 
