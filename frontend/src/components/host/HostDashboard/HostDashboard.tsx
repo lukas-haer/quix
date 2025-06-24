@@ -5,6 +5,7 @@ import { Player, GameStateObjects, StateOptions } from "../../../models/GameStat
 import { JoinGameReturn, GetCurrentQuestionReturn } from "../../../models/PlayerApiReturns.ts";
 import HostWaitingScreen from "../HostWaitingScreen/HostWaitingScreen.tsx";
 import HostPlayingScreen from "../HostPlayingScreen/HostPlayingScreen.tsx";
+import { HostFinishedScreen } from "../HostFinishedScreen/HostFinishedScreen.tsx";
 import { styles } from "./HostDashboardStyles.ts";
 
 //TODO: Does it make any difference having the pointers and api outside vs inside of a component?
@@ -93,7 +94,7 @@ export default function HostDashboard() {
           state.val === "playing" && <HostPlayingScreen currentRound={currentRound} gameStateObjects={gameStateObjects} />
         }
         {
-          state.val === "finished" && <h2>Game has finished.</h2>
+          state.val === "finished" && <HostFinishedScreen state={state} currentRound={currentRound} />
         }
     </div>
     )
