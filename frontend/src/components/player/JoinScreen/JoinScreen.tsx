@@ -2,7 +2,7 @@ import { Datex } from 'datex-core-legacy/datex.ts';
 import { ObjectRef } from 'datex-core-legacy/runtime/pointers.ts';
 import { JoinGameReturn, GetCurrentQuestionReturn } from '../../../models/PlayerApiReturns.ts';
 import { getHostIdFromGamecode } from 'backend/lobbyManagement/LobbyManagement.ts';
-import GameScreen from '../GameScreen/GameScreen.tsx';
+import { GameScreen } from '../GameScreen/GameScreen.tsx';
 import { Component, template } from 'uix/components/Component.ts';
 import { Snackbar, successSnackbarMessage, failureSnackbarMessage } from 'frontend/src/components/utils/snackbar/Snackbar.tsx';
 import { LoadingScreen } from 'frontend/src/components/utils/loadingscreen/LoadingScreen.tsx';

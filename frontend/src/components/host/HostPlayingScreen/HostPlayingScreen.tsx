@@ -8,20 +8,7 @@ type HostPlayingScreenProps = {
 	gameStateObjects: ObjectRef<GameStateObjects>;
 }
 
-export default function HostPlayingScreen({currentRound, gameStateObjects}: HostPlayingScreenProps) {
-  return (
-      <div>
-        <h2>Current Question:</h2>
-        <p>{gameStateObjects.questions[currentRound.val].content.questionText}</p>
-        <h2>Current Deadline:</h2>
-        <p>{gameStateObjects.currentDeadline.toString()}</p>
-      </div>
-  )
-}
-
-//Error:/quix/frontend/src/components/host/HostDashboard/HostDashboard.tsx: Could not find type for attribute currentRound={currentRound}
-/* @template<HostPlayingScreenProps>(({currentRound, gameStateObjects})=>{
-
+@template(({currentRound, gameStateObjects}: HostPlayingScreenProps) => {
 return (
       <div>
         <h2>Current Question:</h2>
@@ -30,6 +17,5 @@ return (
         <p>{gameStateObjects.currentDeadline.toString()}</p>
       </div>
   )
-
 })
-export class HostPlayingScreen extends Component<HostPlayingScreenProps> {} */
+export class HostPlayingScreen extends Component<{currentRound: Datex.Pointer; gameStateObjects: ObjectRef<GameStateObjects>;}> {}

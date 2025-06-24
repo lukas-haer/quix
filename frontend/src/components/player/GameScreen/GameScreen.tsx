@@ -1,9 +1,10 @@
 import { Datex } from "datex-core-legacy/datex.ts";
+import { Component, template } from 'uix/components/Component.ts';
 import { GetCurrentQuestionReturn } from "../../../models/PlayerApiReturns.ts";
 import { PlayerAPIType } from "../JoinScreen/JoinScreen.tsx";
-import QuestionScreen from "../QuestionScreen/QuestionScreen.tsx";
+import { QuestionScreen } from "../QuestionScreen/QuestionScreen.tsx";
 import { ObjectRef } from "datex-core-legacy/runtime/pointers.ts";
-import WaitingForLobbyStartScreen from "../WaitingForLobbyStartScreen/WaitingForLobbyStartScreen.tsx";
+import { WaitingForLobbyStartScreen } from "../WaitingForLobbyStartScreen/WaitingForLobbyStartScreen.tsx";
 
 type GameScreenProps = {
 	stateId: string;
@@ -11,7 +12,7 @@ type GameScreenProps = {
 	apiObj: ObjectRef<{playerApi?: PlayerAPIType}>;
 }
 
-export default async function GameScreen({stateId, currentRoundId, apiObj}: GameScreenProps) {
+@template(async ({stateId, currentRoundId, apiObj}: GameScreenProps) => {
   //TODO: error handling
   const state: Datex.Pointer<string> = await datex.get(`$${stateId}`)
   const currentRound: Datex.Pointer<number> = await datex.get(`$${currentRoundId}`)
@@ -74,4 +75,5 @@ export default async function GameScreen({stateId, currentRoundId, apiObj}: Game
       }
     </div>
   )
-}
+})
+export class GameScreen extends Component<GameScreenProps> {}
