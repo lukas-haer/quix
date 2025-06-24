@@ -93,7 +93,7 @@ class PlayerAPI {
           state.val === "playing" && <HostPlayingScreen gameStateObjects={gameStateObjects} currentRound={currentRound} />
         }
         {
-          state.val === "waiting" && <h2>Game has finished.</h2>
+          state.val === "finished" && <h2>Game has finished.</h2>
         }
     </div>
     )
