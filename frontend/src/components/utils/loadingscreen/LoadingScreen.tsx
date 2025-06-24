@@ -11,9 +11,12 @@ import { UIX } from "uix"
 	}
 
     return (
-        <section class="loading-screen">
-            <div class="spinner"></div>
-            <div class="loading-text">{text.val}</div>
+          <section class="loading-screen">
+    <div class="loading-text">Loading...</div>
+    <div class="shape rectangle"></div>
+    <div class="shape circle"></div>
+    <div class="shape triangle"></div>
+    <div class="shape star"></div>
         </section>
     );
 })
