@@ -1,5 +1,6 @@
 import { Component, template } from 'uix/components/Component.ts';
 import { UIX } from 'uix';
+import { successSnackbarMessage, Snackbar } from "frontend/src/components/utils/snackbar/Snackbar.tsx";
 
 @template(() => {
     /** Remove default UIX styling */
@@ -16,6 +17,7 @@ import { UIX } from 'uix';
         <input id="codeField5" type="text" class="code-input" maxlength="1" value={codeInputValues[4]} />,
         <input id="codeField6" type="text" class="code-input" maxlength="1" value={codeInputValues[5]} />
     ]
+
 
     /**
      * Adds Event-Listener for input and key down on all Code-Input-Fields
@@ -89,6 +91,7 @@ import { UIX } from 'uix';
 
     return (
         <main>
+            <Snackbar/>
             <section class={{ "section": true, "live": activeSection.val == "joinSection" }} id="joinSection">
                 <h1 class="sticky-top pt-30">JOIN QUIX</h1>
                 <div id="code-input-container" class={{ "code-input-container": true, "live": activeSection.val == "joinSection" }}>
@@ -96,6 +99,7 @@ import { UIX } from 'uix';
                         codeInputFields.map((inputfield) => inputfield)
                     }
                 </div>
+                <button onclick={ () =>   successSnackbarMessage("TEST","Dies ist ein beispielhafter snack",100_000)}>Message</button>
             </section>
 
             <section class={{ "section": true, "live": activeSection.val == "hostSection" }} id="hostSection">

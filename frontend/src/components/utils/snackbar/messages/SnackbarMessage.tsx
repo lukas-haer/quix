@@ -16,7 +16,11 @@ import { Component, template } from "uix/components/Component.ts";
 
 	//Diffent color depending on the type
     let bgColor = "#8e0000";
-    if (props.type === "success") bgColor = "#4caf50";
+    let imgSource = 'common/public/img/failure.svg'
+    if (props.type === "success") {
+        bgColor = "#4caf50";
+        imgSource = 'common/public/img/success.svg'
+    }
 
     return (
         <div class={styleClasses} role="alert">
@@ -27,7 +31,10 @@ import { Component, template } from "uix/components/Component.ts";
                     "background-color": bgColor,
                 }}
             />
-            <div class="snackbar-message-title">{props.title}</div>
+            <div class="snackbar-header">   
+                <img class="snackbar-icon" src={imgSource}/>
+                <div class="snackbar-message-title">{props.title}</div>
+            </div>            
             <div class="snackbar-message-text">{props.text}</div>
         </div>
     );
