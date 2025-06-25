@@ -5,7 +5,7 @@ import {
   GameStateObjects,
   Player,
   StateOptions,
-} from "../../../models/GameState.ts";
+} from "frontend/src/models/GameState.ts";
 import { registerLobby } from "backend/lobbyManagement/LobbyManagement.ts";
 import { QrCode } from "frontend/src/components/utils/qrcode/qrcode.tsx";
 
@@ -15,7 +15,7 @@ type HostWaitingScreenProps = {
   gameStateObjects: ObjectRef<GameStateObjects>;
 };
 
-@style("../HostDashboard/HostDashboard.css") //TODO: replace and delete me
+@style("../HostMain.css") //TODO: replace and delete me
 @template(async ({ state, currentRound, gameStateObjects }: HostWaitingScreenProps) => {
   const { prefix, name, instance } = Datex.Runtime.endpoint;
 

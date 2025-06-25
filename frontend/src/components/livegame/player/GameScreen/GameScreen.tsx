@@ -1,10 +1,10 @@
 import { Datex } from "datex-core-legacy/datex.ts";
 import { Component, template } from 'uix/components/Component.ts';
-import { GetCurrentQuestionReturn } from "../../../models/PlayerApiReturns.ts";
-import { PlayerAPIType } from "../JoinScreen/JoinScreen.tsx";
-import { QuestionScreen } from "../QuestionScreen/QuestionScreen.tsx";
 import { ObjectRef } from "datex-core-legacy/runtime/pointers.ts";
-import { WaitingForLobbyStartScreen } from "../WaitingForLobbyStartScreen/WaitingForLobbyStartScreen.tsx";
+import { GetCurrentQuestionReturn } from "../../../../models/PlayerApiReturns.ts";
+import { PlayerAPIType } from "../PlayerMain.tsx";
+import { QuestionScreen } from "./QuestionScreen/QuestionScreen.tsx";
+import { WaitingForLobbyStartScreen } from "./WaitingForLobbyStartScreen/WaitingForLobbyStartScreen.tsx";
 
 type GameScreenProps = {
 	stateId: string;

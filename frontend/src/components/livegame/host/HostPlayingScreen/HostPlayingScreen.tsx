@@ -1,6 +1,6 @@
 import { Datex } from "datex-core-legacy/datex.ts";
 import { ObjectRef } from "datex-core-legacy/runtime/pointers.ts";
-import { GameStateObjects } from "../../../models/GameState.ts";
+import { GameStateObjects } from "frontend/src/models/GameState.ts";
 import { Component, template } from 'uix/components/Component.ts';
 
 

@@ -3,8 +3,8 @@ import { ObjectRef } from "datex-core-legacy/runtime/pointers.ts";
 import { sampleQuestions, SingleChoiceQuestion, MultipleChoiceQuestion } from "../../../models/Question.ts";
 import { Player, GameStateObjects, StateOptions } from "../../../models/GameState.ts";
 import { JoinGameReturn, GetCurrentQuestionReturn } from "../../../models/PlayerApiReturns.ts";
-import { HostWaitingScreen } from "../HostWaitingScreen/HostWaitingScreen.tsx";
-import { HostPlayingScreen } from "../HostPlayingScreen/HostPlayingScreen.tsx";
+import { HostWaitingScreen } from "./HostWaitingScreen/HostWaitingScreen.tsx";
+import { HostPlayingScreen } from "./HostPlayingScreen/HostPlayingScreen.tsx";
 import { Component, template } from "uix/components/Component.ts";
 
 //TODO: Does it make any difference having the pointers and api outside vs inside of a component?
@@ -98,4 +98,4 @@ class PlayerAPI {
     </div>
     )
 })
-export class HostDashboard extends Component {}
+export class HostMain extends Component {}

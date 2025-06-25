@@ -1,6 +1,5 @@
 import { Datex } from "datex-core-legacy/datex.ts";
-import { Component, template } from 'uix/components/Component.ts';
-import { Question } from "../../../models/Question.ts";
+import { Component, template } from "uix/components/Component.ts";
 
 type DefaultQuestionScreenProps = {
     questionText: string;
