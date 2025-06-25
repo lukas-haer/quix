@@ -1,0 +1,17 @@
+.container {
+	display: 'flex';
+	flex-direction: 'column';
+	justify-content: 'center';
+	align-items: 'center';
+	text-align: 'center';
+	font-family: 'sans-serif';
+}
+
+.heading {
+	font-size: '2rem';
+	margin-bottom: '10px';
+}
+
+.text {
+	font-size: '1.2rem';
+}

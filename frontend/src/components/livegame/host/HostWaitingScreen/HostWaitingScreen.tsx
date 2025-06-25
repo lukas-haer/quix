@@ -1,11 +1,11 @@
 import { Datex } from "datex-core-legacy/datex.ts";
+import { Component, template, style } from 'uix/components/Component.ts';
 import { ObjectRef } from "datex-core-legacy/runtime/pointers.ts";
 import {
   GameStateObjects,
   Player,
   StateOptions,
-} from "frontend/src/models/GameState.ts";;
-import { styles } from "../HostStyles.ts";
+} from "frontend/src/models/GameState.ts";
 import { registerLobby } from "backend/lobbyManagement/LobbyManagement.ts";
 import { QrCode } from "frontend/src/components/utils/qrcode/qrcode.tsx";
 
@@ -15,9 +15,8 @@ type HostWaitingScreenProps = {
   gameStateObjects: ObjectRef<GameStateObjects>;
 };
 
-export default async function HostWaitingScreen(
-  { state, currentRound, gameStateObjects }: HostWaitingScreenProps,
-) {
+@style("../HostMain.css") //TODO: replace and delete me
+@template(async ({ state, currentRound, gameStateObjects }: HostWaitingScreenProps) => {
   const { prefix, name, instance } = Datex.Runtime.endpoint;
 
   const startGame = () => {
@@ -63,7 +62,7 @@ export default async function HostWaitingScreen(
 
   return (
     <div>
-      <h2 style={styles.heading}>Waiting for players to join...</h2>
+      <h2 class="heading">Waiting for players to join...</h2>
       <h2>Lobby:</h2>
       {
         // BUG: Lobby disappears without empty html tags
@@ -84,7 +83,9 @@ export default async function HostWaitingScreen(
       />
     </div>
   );
-}
+})
+export class HostWaitingScreen extends Component<{ state: Datex.Pointer; currentRound: Datex.Pointer; gameStateObjects: ObjectRef<GameStateObjects> }> {}
+//BUG?: Component has issues if we use typed Datex.Pointer Type (e.g. Datex.Pointer<StateOptions>)
 
 function InviteLink({ linkUrl }: { linkUrl: string }) {
   return (
