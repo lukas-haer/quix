@@ -31,11 +31,14 @@ import { Component, template } from "uix/components/Component.ts";
                     "background-color": bgColor,
                 }}
             />
-            <div class="snackbar-header">   
+            <div class="snackbar-body">   
+                <div>
+                    <div class="snackbar-message-title">{props.title}</div>
+                    <div class="snackbar-message-text">{props.text}</div>
+                </div>
                 <img class="snackbar-icon" src={imgSource}/>
-                <div class="snackbar-message-title">{props.title}</div>
             </div>            
-            <div class="snackbar-message-text">{props.text}</div>
+
         </div>
     );
 })

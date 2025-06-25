@@ -24,14 +24,15 @@
   opacity: 0;
 }
 
-.snackbar-header {
+.snackbar-body {
   display: flex;    
   align-items: center; 
+  justify-content: space-between; /* Pushes the logo to the right */
   gap: 10px; 
 }
 
 .snackbar-icon {
-  height: 1em; /* Matches the height of the text */
+  height: 25px; /* Matches the height of the text */
   width: auto; /* Maintains the aspect ratio of the image */
 }
 
