@@ -1,6 +1,6 @@
 import { Component, template } from 'uix/components/Component.ts';
 import { UIX } from 'uix';
-import { successSnackbarMessage, Snackbar } from "frontend/src/components/utils/snackbar/Snackbar.tsx";
+import { Snackbar } from "frontend/src/components/utils/snackbar/Snackbar.tsx";
 
 @template(() => {
     /** Remove default UIX styling */
@@ -99,7 +99,6 @@ import { successSnackbarMessage, Snackbar } from "frontend/src/components/utils/
                         codeInputFields.map((inputfield) => inputfield)
                     }
                 </div>
-                <button onclick={ () =>   successSnackbarMessage("TEST","Dies ist ein beispielhafter snack",100_000)}>Message</button>
             </section>
 
             <section class={{ "section": true, "live": activeSection.val == "hostSection" }} id="hostSection">
