@@ -1,14 +1,17 @@
 import { Datex } from "datex-core-legacy/datex.ts";
+import { Component, template } from "uix/components/Component.ts";
 
-type QuestionScreenProps = {
+type DefaultQuestionScreenProps = {
     questionText: string;
     answers: string;
     currentDeadline: string;
-    submittedAnswer: Datex.Pointer<boolean>;
     submitAnswer: (answerIndex: number) => void;
 };
 
-export default function QuestionScreen({ questionText, answers, currentDeadline, submittedAnswer, submitAnswer }: QuestionScreenProps) {
+type FunctionQuestionScreenProps = DefaultQuestionScreenProps & { submittedAnswer: Datex.Pointer<boolean>; }
+type ComponentQuestionScreenProps = DefaultQuestionScreenProps & { submittedAnswer: Datex.Pointer; }
+
+@template(({ questionText, answers, currentDeadline, submittedAnswer, submitAnswer }: FunctionQuestionScreenProps) => {
 
   function handleAnswerClick(answerId: number) {
     //TODO: error handling
@@ -34,7 +37,8 @@ export default function QuestionScreen({ questionText, answers, currentDeadline,
           }
         </div>
   );
-}
+})
+export class QuestionScreen extends Component<ComponentQuestionScreenProps> {}
 
 type AnswerButtonProps = {
   answerText: string;
@@ -42,7 +46,7 @@ type AnswerButtonProps = {
   handleSubmit: () => void;
 }
 
-function AnswerButton({answerText, answerId, handleSubmit}: AnswerButtonProps){
+@template(({answerText, answerId, handleSubmit}: AnswerButtonProps) => {
   const buttonColors = ['green', 'blue', 'red', 'yellow'];
   return(
     <button 
@@ -57,4 +61,5 @@ function AnswerButton({answerText, answerId, handleSubmit}: AnswerButtonProps){
       {answerText}
     </button>
     )
-}
+})
+export class AnswerButton extends Component<AnswerButtonProps> {}

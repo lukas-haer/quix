@@ -3,7 +3,7 @@ import { Datex } from 'datex-core-legacy/datex.ts';
 import { ObjectRef } from 'datex-core-legacy/runtime/pointers.ts';
 import { Component, template } from 'uix/components/Component.ts';
 //Components and Type imports
-import GameScreen from './GameScreen/GameScreen.tsx';
+import { GameScreen } from './GameScreen/GameScreen.tsx';
 import { JoinGameReturn, GetCurrentQuestionReturn } from '../../../models/PlayerApiReturns.ts';
 //Utils
 import { LoadingScreen } from 'frontend/src/components/utils/loadingscreen/LoadingScreen.tsx';
@@ -138,4 +138,4 @@ const apiObj: ObjectRef<{ playerApi?: PlayerAPIType }> = $({}); //encapsulate ap
         </main>
     );
 })
-export default class PlayerMain extends Component<PlayerMainProps> {}
+export class PlayerMain extends Component<PlayerMainProps> {}
