@@ -2,7 +2,7 @@ import { Datex } from "datex-core-legacy/datex.ts";
 import { ObjectRef } from "datex-core-legacy/runtime/pointers.ts";
 import HostWaitingScreen from "./HostWaitingScreen/HostWaitingScreen.tsx";
 import HostPlayingScreen from "./HostPlayingScreen/HostPlayingScreen.tsx";
-import { sampleQuestions, SingleChoiceQuestion, MultipleChoiceQuestion } from "../../../models/Question.ts";
+import { sampleQuestions } from "../../../models/Question.ts";
 import { Player, GameStateObjects, StateOptions } from "../../../models/GameState.ts";
 import { JoinGameReturn, GetCurrentQuestionReturn } from "../../../models/PlayerApiReturns.ts";
 import { styles } from "./HostStyles.ts";

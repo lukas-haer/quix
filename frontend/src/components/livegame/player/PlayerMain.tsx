@@ -59,7 +59,8 @@ const apiObj: ObjectRef<{ playerApi?: PlayerAPIType }> = $({}); //encapsulate ap
                 activeComponent.val = 'nameSelection';
             } catch (error) {
                 console.error('Error when attempting to find Lobby: ' + error);
-                failureSnackbarMessage('Lobby not found', 'There is no lobby for this gamecode.');
+                failureSnackbarMessage('Lobby not found', 'There is no lobby for this gamecode.',30_000);
+                return;
             }
         } catch (error) {
             console.error('ERROR (joinGameByGamecode): ' + error);
@@ -114,6 +115,7 @@ const apiObj: ObjectRef<{ playerApi?: PlayerAPIType }> = $({}); //encapsulate ap
                                 value={name}
                                 maxlength="12"
                                 placeholder="Enter your name"
+                                autofocus
                                 required
                             />
                             <div class="glowing-line" id="glowingLine"></div>
@@ -124,7 +126,7 @@ const apiObj: ObjectRef<{ playerApi?: PlayerAPIType }> = $({}); //encapsulate ap
                     </div>
                 );
             case 'loading':
-                return <LoadingScreen text={'Loading...'} />;
+                return <LoadingScreen text="Loading..." />;
             default:
                 return <div> <p>We're sorry, something happend that was not supposed to happen. </p><button type="button" class="button" onclick={() => redirect('/')}>Go Back</button></div>;
         }
@@ -133,7 +135,6 @@ const apiObj: ObjectRef<{ playerApi?: PlayerAPIType }> = $({}); //encapsulate ap
     return (
         <main class="section">
             {renderComponent()}
-            <Snackbar />
         </main>
     );
 })

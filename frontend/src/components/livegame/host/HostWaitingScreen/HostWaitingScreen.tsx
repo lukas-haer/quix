@@ -52,37 +52,39 @@ export default async function HostWaitingScreen(
 
   let gamecode : string = "";
   try {
-    const lobby = await registerLobby(); //Registers a Lobby on the Backend
-    gamecode = lobby.code;    
+    //const lobby = await registerLobby(); //Registers a Lobby on the Backend
+    gamecode = "123456"//lobby.code;    
   } catch (error) {
     console.error("An Error occured: " + error);
     alert("Unable to load gamecode"); //TODO Replace with snackbar
   }
 
-  const invitelink = "http://localhost/join/" + encodeURIComponent(gamecode)
+ 
+  const invitelink = `${globalThis.location.origin}/join/${encodeURIComponent(gamecode)}` 
 
   return (
-    <div>
-      <h2 style={styles.heading}>Waiting for players to join...</h2>
-      <h2>Lobby:</h2>
-      {
-        // BUG: Lobby disappears without empty html tags
-      }
-      <div>
-        {
-          //TODO: BUG: find out why array length property not reactive
-          gameStateObjects.players.map((player: Player) => <p>{player.name}</p>)
-        }
-      </div>
-      <button type="button" onclick={() => startGame()}>Start Game</button>
-
-      
-      <h2>Invite Links:</h2>
-      <QrCode url={invitelink}></QrCode>
-      <InviteLink
-        linkUrl={invitelink}
-      />
-    </div>
+      <section class="row">
+        <div class="col-6">
+          <h2 style={styles.heading}>Waiting for players to join...</h2>
+              <h2>Lobby:</h2>
+                          <div>
+                  {
+                      //TODO: BUG: find out why array length property not reactive
+                      gameStateObjects.players.map((player: Player) => (
+                          <p>{player.name}</p>
+                      ))
+                  }
+              </div>
+        </div>
+        <div class="col-6">
+                                <QrCode url={invitelink}></QrCode>
+              <InviteLink linkUrl={invitelink} />
+              
+              <button type="button" onclick={() => startGame()}>
+                  Start Game
+              </button>
+        </div>
+      </section>
   );
 }
 

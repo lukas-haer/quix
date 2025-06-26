@@ -74,7 +74,7 @@ import { Snackbar } from "frontend/src/components/utils/snackbar/Snackbar.tsx";
                 }, 500);
             }, index * 200);
         });
-    });
+    }); 
 
     /**
      * If all CodeInput-Fields have a value, the player will be redirected to join the lobby
