@@ -44,8 +44,8 @@ type HostWaitingScreenProps = {
 
     let gamecode: string = '';
     try {
-        //const lobby = await registerLobby(); //Registers a Lobby on the Backend
-        gamecode = '123456'; //lobby.code;
+        const lobby = await registerLobby(); //Registers a Lobby on the Backend
+        gamecode = lobby.code;
     } catch (error) {
         console.error('An Error occured: ' + error);
         alert('Unable to load gamecode'); //TODO Replace with snackbar
@@ -54,6 +54,7 @@ type HostWaitingScreenProps = {
     const hostname = globalThis.location.hostname
     const invitelink = `${globalThis.location.origin}/join/${encodeURIComponent(gamecode)}`;
 
+    const players = gameStateObjects.players
     return (
         <section class="l-row flex">
           <div class="host-bg-shape-main"></div>
@@ -61,15 +62,14 @@ type HostWaitingScreenProps = {
             <div class="l-col l-col-6 block">
                 <h1>Lobby</h1>
                 <div class="player-list player-list-centered player-list-grid">
-                    {gameStateObjects.players.length === 0 ? (
-                        <div class="player-placeholder player-placeholder-centered">Waiting for players to join...</div>
-                    ) : (
-                        gameStateObjects.players.map((player: Player, idx: number) => (
+                  <div class="player-placeholder player-placeholder-centered">Waiting for players to join...</div>
+                    {
+                        players.map((player: Player, idx: number) => (
                             <div class="player-item player-item-card" style={{ animationDelay: `${idx * 80}ms` }}>
                                 <span class="player-name" style={{ display: 'block', width: '100%', textAlign: 'center' }}>{player.name}</span>
                             </div>
                         ))
-                    )}
+                    }
                 </div>
             </div>
             <div class="l-col l-col-6 center-vertically">
