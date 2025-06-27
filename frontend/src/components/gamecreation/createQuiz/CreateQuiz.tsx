@@ -5,35 +5,21 @@ import { Question, QuestionType, SingleChoiceQuestion } from "../../../models/Qu
 /**
  * Example data for a quiz. In production, this would only contaion default values.
  *
- * @property {string} id - Unique identifier for the quiz.
+ * @property {string} quizId - Unique identifier for the quiz.
  * @property {string} title - Title of the quiz.
- * @property {Object} madeby - Information about the creator of the quiz.
+ * @property {string} description - Description of the quiz.
+ * @property {Object} accountId - Information about the creator of the quiz.
  * @property {Array<Question>} questions - Array of questions in the quiz.
  *
  */
 const quiz = $({
-    id: crypto.randomUUID(),
-    title: "My first Quix",
-    description: "This is a quiz about frontend development.",
-    madeby: {
-        accountId: "account-1",
-        name: "John Doe",
-    },
-    questions: [
-        new SingleChoiceQuestion({
-                questionText: "What is the best Frontend Framework?",
-                answers: ["React", "Vue", "Angular", "UIX"],
-                correctAnswerId: 3,
-                timeInSeconds: 5
-            }),
-        new SingleChoiceQuestion({
-                questionText: "Which technology does not exitst?",
-                answers: ["Reverse Hashing", "Reactivity", "Responsive Design", "Cross-Realm Functions"],
-                correctAnswerId: 0,
-                timeInSeconds: 5
-            })
-    ],
+    quizId: crypto.randomUUID(),
+    title: "",
+    description: "",
+    accountId: "", //beim backend speichern gesetzt
+    questions: [] as SingleChoiceQuestion[] //später noch um weitere Typen erweitern
 });
+
 
 /**
  * A reactive selector for the add question type select.
@@ -161,7 +147,7 @@ function exportQuestionSet() {
                 </div>
                 <div class="gc-col-6">
                     <label for="quizId">Quiz-ID</label>
-                    <input type="text" id="quizId" value={quiz.id} disabled />
+                    <input type="text" id="quizId" value={quiz.quizId} disabled />
                 </div>
             </div>
         </div>
