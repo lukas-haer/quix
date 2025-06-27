@@ -6,6 +6,7 @@ import { JoinGameReturn, GetCurrentQuestionReturn } from "../../../models/Player
 import { HostWaitingScreen } from "./HostWaitingScreen/HostWaitingScreen.tsx";
 import { HostPlayingScreen } from "./HostPlayingScreen/HostPlayingScreen.tsx";
 import { Component, template } from "uix/components/Component.ts";
+import { Snackbar } from "frontend/src/components/utils/snackbar/Snackbar.tsx";
 
 //TODO: Does it make any difference having the pointers and api outside vs inside of a component?
 //TODO: pause/reset timeout
@@ -86,6 +87,7 @@ class PlayerAPI {
 
   return (
     <div class="container">
+      <Snackbar></Snackbar>
         {
           state.val === "waiting" && <HostWaitingScreen state={state} currentRound={currentRound} gameStateObjects={gameStateObjects} />
         }

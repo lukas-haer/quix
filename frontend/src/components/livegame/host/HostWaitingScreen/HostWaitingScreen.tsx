@@ -5,6 +5,7 @@ import { GameStateObjects, Player, StateOptions } from 'frontend/src/models/Game
 import { registerLobby } from 'backend/lobbyManagement/LobbyManagement.ts';
 import { QrCode } from 'frontend/src/components/utils/qrcode/qrcode.tsx';
 import { UIX } from 'uix';
+import { successSnackbarMessage } from "frontend/src/components/utils/snackbar/Snackbar.tsx";
 
 type HostWaitingScreenProps = {
     state: Datex.Pointer<StateOptions>;
@@ -77,7 +78,23 @@ type HostWaitingScreenProps = {
                 <div class="separator">
                     <span>or join via {hostname}</span>
                 </div>
-                <p class="gamecode">{gamecode}</p>
+                <p class="gamecode">{gamecode}
+                  <span
+                    class="copy-invite-link"
+                    title="Copy invite link"
+                    onclick={() => {
+                      navigator.clipboard.writeText(invitelink);
+                      successSnackbarMessage("Link coppied!","The Link has been coppied successfully",2_000)
+                    }}
+                    style={{ cursor: 'pointer', marginLeft: '0.5rem', fontSize: '1.5rem', verticalAlign: 'middle', userSelect: 'none' }}
+                  >
+                    🔗
+                  </span>
+                </p>
+                <p class="invitelink"                     onclick={() => {
+                      navigator.clipboard.writeText(invitelink);
+                      successSnackbarMessage("Link coppied!","The Link has been coppied successfully",2_000)
+                    }}>{invitelink}</p>
                 <button class="button" type="button" onclick={() => startGame()}>
                     Start Game 🚀
                 </button>
