@@ -285,7 +285,7 @@ section>*:not(.host-bg-shape-main):not(.host-bg-shape-circle) {
 	align-items: center;
 	gap: 0.7rem;
 	background: rgba(0, 123, 255, 0.08);
-	border-radius: 1.2rem;
+	border-radius: 10px;
 	padding: 0.5rem 1.2rem 0.5rem 0.7rem;
 	font-size: 1.2rem;
 	font-weight: 500;
@@ -296,7 +296,7 @@ section>*:not(.host-bg-shape-main):not(.host-bg-shape-circle) {
 
 .player-item-card {
 	background: #fff;
-	border-radius: 1.2rem;
+	border-radius: 10px;
 	box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.07);
 	padding: 0.7rem 2.2rem;
 	margin: 0.2rem 0;
@@ -345,10 +345,11 @@ section>*:not(.host-bg-shape-main):not(.host-bg-shape-circle) {
 
 .player-placeholder-centered {
 	background: #fff;
-	border-radius: 1.2rem;
+	border-radius: 10px;
 	box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.07);
 	padding: 0.7rem 2.2rem;
-	min-width: 180px;
+	--min-width: 180px;
+	width: 100%;
 	text-align: center;
 	color: #aaa;
 	font-style: italic;
@@ -406,5 +407,4 @@ section>*:not(.host-bg-shape-main):not(.host-bg-shape-circle) {
 		grid-template-columns: 1fr;
 		max-width: 100%;
 	}
-
 }

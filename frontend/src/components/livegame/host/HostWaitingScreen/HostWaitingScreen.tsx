@@ -62,8 +62,8 @@ type HostWaitingScreenProps = {
 <div class="host-bg-shape-circle"></div>
             <div class="l-col l-col-6 block">
                 <h1>Lobby</h1>
+                <div class="waiting to join">Waiting for players to join...</div>
                 <div class="player-list player-list-centered player-list-grid">
-                  <div class="player-placeholder player-placeholder-centered">Waiting for players to join...</div>
                     {
                         players.map((player: Player, idx: number) => (
                             <div class="player-item player-item-card" style={{ animationDelay: `${idx * 80}ms` }}>
