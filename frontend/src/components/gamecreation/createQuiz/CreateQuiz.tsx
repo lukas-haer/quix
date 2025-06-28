@@ -1,6 +1,8 @@
 import { Component, template } from "uix/components/Component.ts";
 import { CreateSingleChoiceQuestion } from "./types/CreateSingleChoiceQuestion.tsx";
-import { Question, QuestionType, SingleChoiceQuestion } from "../../../models/Question.ts";
+import { Question, QuestionType, SingleChoiceQuestion } from "../../../../../common/Question.ts";
+import { saveQuiz } from "backend/SaveQuiz.ts";
+import { Quiz } from "common/Quiz.tsx";
 
 /**
  * Example data for a quiz. In production, this would only contaion default values.
@@ -12,13 +14,13 @@ import { Question, QuestionType, SingleChoiceQuestion } from "../../../models/Qu
  * @property {Array<Question>} questions - Array of questions in the quiz.
  *
  */
-const quiz = $({
+let quiz = $(Quiz ({
     quizId: crypto.randomUUID(),
     title: "",
     description: "",
     accountId: "", //beim backend speichern gesetzt
-    questions: [] as SingleChoiceQuestion[] //später noch um weitere Typen erweitern
-});
+    questions: [] //as SingleChoiceQuestion[] //später noch um weitere Typen erweitern
+}));
 
 
 /**
@@ -49,6 +51,10 @@ function addQuestion() {
     }
 }
 
+function refresh() {
+    quiz.questions = [...quiz.questions];
+}
+
 /**
  * 
  * @param questionId - The ID of the question to remove.
@@ -76,6 +82,8 @@ export function removeQuestionById(questionId: string) {
         );
     }
 }
+
+
 
 /**
  * Feedback field for the Question Export. 
@@ -119,6 +127,7 @@ function exportQuestionSet() {
 
 @template(() => (
     <section>
+    <form action={saveQuiz} method="post">
         <header class="gc-row">
             <div class="gc-col gc-col-9">
                 <h2>Create a Quiz</h2>
@@ -126,12 +135,7 @@ function exportQuestionSet() {
             </div>
             <div class="gc-col gc-col-3 vertically-centered align-right">
 				<div>
-
-                	<button
-                	    type="button"
-                	    id="export-btn"
-                	    onclick={exportQuestionSet}
-						>
+                	<button type="button" id="export-btn" onclick={exportQuestionSet}>
                 	    Export
                 	</button>
 					<p class="margin0" id="export-feedback"> {questionExportFeedback} </p>
@@ -143,23 +147,24 @@ function exportQuestionSet() {
             <div class="gc-row">
                 <div class="gc-col gc-col-6">
                     <label for="quizTitle">Quiz Title</label>
-                    <input type="text" id="quizTitle" value={quiz.title} />
+                    <input type="text" id="quizTitle" name="title" value={quiz.title} />
                 </div>
                 <div class="gc-col-6">
                     <label for="quizId">Quiz-ID</label>
-                    <input type="text" id="quizId" value={quiz.quizId} disabled />
+                    <input type="text" id="quizId" name="quizId" value={quiz.quizId} readonly/>
                 </div>
+            </div>
+            <div>
+                <label for="quizDescription">Quiz Description</label>
+                <input type="text" id="quizDescription" name="description" value={quiz.description} />
             </div>
         </div>
         <div>
-			
             {quiz.questions.map((question: Question<QuestionType>) => {
                 if (question instanceof SingleChoiceQuestion) {
                     return (
                         <div>
-                            <CreateSingleChoiceQuestion
-                                question={question}
-                            />
+                            <CreateSingleChoiceQuestion question={question}/>
                         </div>
                     );
                 }
@@ -167,11 +172,7 @@ function exportQuestionSet() {
             })}
         </div>
         <div>
-            <select
-                name="AddQuestion"
-                id="addQuestion-select"
-                value={addQuestionType}
-            >
+            <select name="AddQuestion" id="addQuestion-select" value={addQuestionType}>
                 <option selected disabled value="">
                     Select a Question-Type
                 </option>
@@ -181,12 +182,16 @@ function exportQuestionSet() {
                 Add
             </button>
         </div>
-
-    </section>
-    
+        <input type="hidden" name="questions" value={JSON.stringify(quiz.questions.map((q) => ({
+                id: q.id,
+                type: "single-choice",
+                content: q.content
+            })))}
+        />
+        <button type="submit" onclick={refresh}>Save Quiz</button>
+    </form>
+    </section>  
 ))
-
-
 /*
 //########### Debugging-Tools ###########
         <hr />
@@ -202,13 +207,3 @@ function exportQuestionSet() {
 
         */
 export class CreateQuiz extends Component {}
-
-
-
-
-
-
-
-
-
-

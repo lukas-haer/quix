@@ -1,5 +1,5 @@
 import { Datex } from "datex-core-legacy/datex.ts";
-import { Question, QuestionType } from "./Question.ts";
+import { Question, QuestionType } from "../../../common/Question.ts";
 
 export type StateOptions = "waiting" | "playing" | "finished" | "aborted";
 

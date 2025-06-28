@@ -4,7 +4,6 @@ import { User } from "../common/userCredentials.ts";
 import * as argon2 from "jsr:@felix/argon2";
 import { provideRedirect } from "uix/providers/common.tsx";
 
-//export const users = $({} as Record<string, User>);
 export const users = eternal ?? $({} as Record<string, User>);
 
 declare global {
@@ -15,6 +14,9 @@ declare global {
 
 //Login
 export async function authenticate(ctx: Context) {
+
+	console.log("LOGGING ALLE USER users:", users);
+
 	//receives context with credentials from userLogin function
 	const data = await ctx.request.formData();
 	const user = data.get("user") as string;
@@ -35,12 +37,15 @@ export async function authenticate(ctx: Context) {
 	//if login successful, setting session
 	const session = await ctx.getPrivateData();
 	session.userId = user;
-	return provideRedirect("/");
+	return provideRedirect("/");//sollte irgendwann auf Account Startseite weiterleiten
 }
 
 
 //Signup
 export async function register(ctx: Context) {
+
+	console.log("LOGGING ALLE USER users:", users);
+
 	//receives context with credentials from userSignUp function
 	const data = await ctx.request.formData();
 	const user = data.get("user") as string;
@@ -63,20 +68,23 @@ export async function register(ctx: Context) {
 	users[user] = User({
 		id: user,
 		password: await argon2.hash(password),
+		quizzes: [] // oder mit {}
 	});
 	console.log("Registering new user successful:", user);
 
 	//if signup successful, setting session
 	const session = await ctx.getPrivateData();
 	session.userId = user;
-	return provideRedirect("/");
+	return provideRedirect("/");//sollte irgendwann auf Account Startseite weiterleiten
 	}
 
 }
 
 //Password validation
 function PasswordIsValid (password: string) : boolean {
-
 	const regex = /^(?=.*[0-9])(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-])[A-Za-z\d!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]{8,}$/;
 	return regex.test(password);
 }
+
+//more logging
+console.log("LOGGING ALLE USER users:", users);

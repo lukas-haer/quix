@@ -1,6 +1,6 @@
 import { Datex } from "datex-core-legacy/datex.ts";
 import { ObjectRef } from "datex-core-legacy/runtime/pointers.ts";
-import { sampleQuestions, SingleChoiceQuestion, MultipleChoiceQuestion } from "../../../models/Question.ts";
+import { sampleQuestions, SingleChoiceQuestion, MultipleChoiceQuestion } from "../../../../../common/Question.ts";
 import { Player, GameStateObjects, StateOptions } from "../../../models/GameState.ts";
 import { JoinGameReturn, GetCurrentQuestionReturn } from "../../../models/PlayerApiReturns.ts";
 import HostWaitingScreen from "../HostWaitingScreen/HostWaitingScreen.tsx";
