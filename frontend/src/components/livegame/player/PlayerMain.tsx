@@ -1,4 +1,5 @@
 //UIX tooling
+import { UIX } from 'uix';
 import { Datex } from 'datex-core-legacy/datex.ts';
 import { ObjectRef } from 'datex-core-legacy/runtime/pointers.ts';
 import { Component, template } from 'uix/components/Component.ts';
@@ -34,6 +35,8 @@ const apiObj: ObjectRef<{ playerApi?: PlayerAPIType }> = $({}); //encapsulate ap
     const endpointId = $('');
     const activeComponent = $('loading');
     const name = $('');
+
+    UIX.Theme.useTheme("uix-light-plain")
 
     async function getEndpointByGamecode() {
         try {
@@ -105,7 +108,7 @@ const apiObj: ObjectRef<{ playerApi?: PlayerAPIType }> = $({}); //encapsulate ap
                 return <GameScreen stateId={stateId.val} currentRoundId={currentRoundId.val} apiObj={apiObj} />
             case 'nameSelection':
                 return (
-                    <div>
+                    <div class="nameselection-container">
                         <h1>WHAT SHOULD WE CALL YOU?</h1>
                         <div class="name-input-container">
                             <input
@@ -134,7 +137,9 @@ const apiObj: ObjectRef<{ playerApi?: PlayerAPIType }> = $({}); //encapsulate ap
 
     return (
         <main class="section">
+
             {renderComponent()}
+            <Snackbar/>
         </main>
     );
 })

@@ -1,7 +1,6 @@
 section {
     font-family: Arial, sans-serif;
     overflow: hidden;
-    /* Disable default scrolling */
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -19,6 +18,15 @@ h1 {
     font-size: 4rem;
     font-weight: bold;
     font-style: italic;
+}
+
+.nameselection-container{
+    display: flex;
+    height: 100vh;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
 }
 
 .name-input-container {
