@@ -84,7 +84,6 @@ export function removeQuestionById(questionId: string) {
 }
 
 
-
 /**
  * Feedback field for the Question Export. 
  * TODO: Replace with snackbar
@@ -188,7 +187,7 @@ function exportQuestionSet() {
                 content: q.content
             })))}
         />
-        <button type="submit" onclick={refresh}>Save Quiz</button>
+        <button type="submit">Save Quiz</button>
     </form>
     </section>  
 ))
@@ -207,3 +206,6 @@ function exportQuestionSet() {
 
         */
 export class CreateQuiz extends Component {}
+
+
+//        <button type="submit" onclick={refresh}>Save Quiz</button>

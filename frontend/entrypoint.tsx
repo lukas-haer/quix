@@ -3,15 +3,15 @@ import HostDashboard from "./src/components/host/HostDashboard/HostDashboard.tsx
 import JoinScreen from "./src/components/player/JoinScreen/JoinScreen.tsx";
 import { CreateQuiz } from './src/components/gamecreation/createQuiz/CreateQuiz.tsx';
 
-import { userLogin } from "./src/components/UserAccountForms/UserLoginForm.tsx";
-import { userSignUp } from "./src/components/UserAccountForms/UserSignUpForm.tsx";
+import { userLoginForm } from "./src/components/UserAccountForms/UserLoginForm.tsx";
+import { userSignUpForm } from "./src/components/UserAccountForms/UserSignUpForm.tsx";
 
 export default {
     "/": () => <MainMenu />,
     "/join/:id": (_: any, { id }:{ id: string }) => <JoinScreen id={ id } />,
     "/join": () => <JoinScreen />,
     "/create": () => <HostDashboard />,
-    "/quiz": () => <CreateQuiz />,
-	"/login": userLogin,
-	"/signup": userSignUp
+    "/createQuiz": () => <CreateQuiz />,
+	"/login": userLoginForm,
+	"/signup": userSignUpForm
 };

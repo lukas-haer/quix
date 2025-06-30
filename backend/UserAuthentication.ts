@@ -13,9 +13,8 @@ declare global {
 };
 
 //Login
-export async function authenticate(ctx: Context) {
+export async function userLogin(ctx: Context) {
 
-	console.log("LOGGING ALLE USER users:", users);
 
 	//receives context with credentials from userLogin function
 	const data = await ctx.request.formData();
@@ -34,15 +33,34 @@ export async function authenticate(ctx: Context) {
 
 	console.log(`Logging in user ${user}`);
 
+
 	//if login successful, setting session
 	const session = await ctx.getPrivateData();
 	session.userId = user;
-	return provideRedirect("/");//sollte irgendwann auf Account Startseite weiterleiten
+
+
+	//////////////////////////LOGGING///////////////////////////////////////
+	for (const quiz in users[user].quizzes) {
+		console.log("-----------ALL Quizzes of user: ----------------", user)
+		console.log("");
+		console.log("Quiz ID:", quiz)
+		console.log("Quiz Title:", users[user].quizzes[quiz].title);
+		console.log("Quiz Description:", users[user].quizzes[quiz].description);
+		console.log("Quiz Questions:", users[user].quizzes[quiz].questions);
+		console.log("");
+		console.log("----------------------------------------------------------");
+	}
+	console.log("users:", users);
+	console.log("userObj:", users[user]);
+		//////////////////////////LOGGING///////////////////////////////////////
+
+
+	return provideRedirect("/account");
 }
 
 
 //Signup
-export async function register(ctx: Context) {
+export async function userSignUp(ctx: Context) {
 
 	console.log("LOGGING ALLE USER users:", users);
 
@@ -75,9 +93,8 @@ export async function register(ctx: Context) {
 	//if signup successful, setting session
 	const session = await ctx.getPrivateData();
 	session.userId = user;
-	return provideRedirect("/");//sollte irgendwann auf Account Startseite weiterleiten
+	return provideRedirect("/account");//sollte irgendwann auf Account Startseite weiterleiten
 	}
-
 }
 
 //Password validation
@@ -85,6 +102,3 @@ function PasswordIsValid (password: string) : boolean {
 	const regex = /^(?=.*[0-9])(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-])[A-Za-z\d!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]{8,}$/;
 	return regex.test(password);
 }
-
-//more logging
-console.log("LOGGING ALLE USER users:", users);

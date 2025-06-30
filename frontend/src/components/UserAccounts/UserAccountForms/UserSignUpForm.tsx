@@ -1,4 +1,4 @@
-import { userSignUp } from "../../../../backend/UserAuthentication.ts";
+import { userSignUp } from "../../../../../backend/UserAuthentication.ts";
 import { Context } from "uix/routing/context.ts";
 
 
@@ -6,7 +6,7 @@ import { Context } from "uix/routing/context.ts";
  * @param ctx context of the request, for registration
  * @returns references registration function, hint about password requirements, error if user already exists or invalid password
  */
-export function userSignUpForm (ctx: Context) {
+export function userSignUpFormmmmm (ctx: Context) {
 	const url = new URL(ctx.request.url);
 	const error = url.searchParams.get("error");
 

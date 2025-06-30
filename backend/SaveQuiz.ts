@@ -10,8 +10,9 @@ export async function saveQuiz (ctx: Context) {
 
 	if(!userId || !(userId in users)) {
 		console.error("User not found or not logged in."); //braucht funktionalen Error
-		return;
+		return provideRedirect("/"); //hier snackbar fehler bitte melde dich erst an
 	}
+
 
 	const data = await ctx.request.formData();
 
@@ -33,6 +34,11 @@ export async function saveQuiz (ctx: Context) {
         //questions: JSON.parse(data.get("questions") as string),
 		questions: mappedQuestions
     };
+
+
+
+
+
 
 	console.log("LOG -------------Quiz data received:-------------", quiz);
 	console.log("LOG -------------Quiz data received ENDE -------------");
@@ -61,12 +67,23 @@ export async function saveQuiz (ctx: Context) {
 
 
 	users[userId].quizzes[quiz.quizId] = quiz;
+	users.val = { ...users.val }; //ist das so die ideale Methode?
 
 	console.log("Quiz saved for user:", userId);
 	console.log("LOG NACH SAVE -------------------------")
 	console.log("Updated user quizzes:", users[userId].quizzes);
-	console.log("users:", users);
-	//console.log("userObj:", users[userId]);
 
-    return provideRedirect("/");
+	for (const quiz in users[userId].quizzes) {
+		console.log("Quizzes of user:", userId)
+		console.log("Quiz ID:", quiz)
+		console.log("Quiz Title:", users[userId].quizzes[quiz].title);
+		console.log("Quiz Description:", users[userId].quizzes[quiz].description);
+		console.log("Quiz Questions:", users[userId].quizzes[quiz].questions);
+	}
+
+
+	console.log("users:", users);
+	console.log("userObj:", users[userId]);
+
+    return provideRedirect("/account");
 }
