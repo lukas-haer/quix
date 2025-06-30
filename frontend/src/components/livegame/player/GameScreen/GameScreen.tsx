@@ -55,7 +55,7 @@ type GameScreenProps = {
 
   async function getScoreboard(){
     if(!apiObj.playerApi) throw Error("PlayerAPI not defined.")
-    const scoreboard = await apiObj.playerApi.getScorebaord();
+    const scoreboard = await apiObj.playerApi.getScoreboard();
     return scoreboard
   }
 
@@ -85,8 +85,9 @@ type GameScreenProps = {
         )
       }
       {
-        state.val === "finished" && <PlayerFinishedScreen getScoreboard={getScoreboard} />
+          state.val === "finished" && <button onclick={()=>console.log(getScoreboard())}> test </button>
       }
+
     </div>
   )
 })

@@ -24,6 +24,7 @@ export type PlayerAPIType = {
     joinGame: (name: string) => JoinGameReturn;
     getCurrentQuestion: () => GetCurrentQuestionReturn;
     submitAnswer: (answerId: number) => number;
+    getScoreboard: () => { name: string; points: number }[];
 };
 
 const apiObj: ObjectRef<{ playerApi?: PlayerAPIType }> = $({}); //encapsulate api in ObjectRef to guarantee reactivity
