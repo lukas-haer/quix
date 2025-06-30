@@ -66,6 +66,12 @@ class PlayerAPI {
     return gameStateObjects.players;
   }
 
+  @property static getScoreboard(): { name: string; points: number }[] {
+    if (state.val == "waiting") throw new Error("Cannot get scoreboard before the game started.");
+    const scorebaord = gameStateObjects.players.map((player: Player) => ({ name: player.name, points: player.points }));
+    return scorebaord
+  }
+
   @property static version = "0.0.1";
 }
 

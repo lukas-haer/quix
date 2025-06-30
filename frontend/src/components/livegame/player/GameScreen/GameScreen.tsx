@@ -5,6 +5,7 @@ import { GetCurrentQuestionReturn } from "../../../../models/PlayerApiReturns.ts
 import { PlayerAPIType } from "../PlayerMain.tsx";
 import { QuestionScreen } from "./QuestionScreen/QuestionScreen.tsx";
 import { LoadingScreen } from "frontend/src/components/utils/loadingscreen/LoadingScreen.tsx";
+import {PlayerFinishedScreen} from "./PlayerFinishedScreen/PlayerFinishedScreen.tsx";
 
 type GameScreenProps = {
 	stateId: string;
@@ -52,6 +53,11 @@ type GameScreenProps = {
     }
   }
 
+  async function getScoreboard(){
+    if(!apiObj.playerApi) throw Error("PlayerAPI not defined.")
+    const scoreboard = await apiObj.playerApi.getScorebaord();
+    return scoreboard
+  }
 
   /*
   TODO: implement
@@ -75,12 +81,11 @@ type GameScreenProps = {
             currentDeadline={currentDeadline.val} 
             submittedAnswer={submittedAnswer} 
             submitAnswer={submitAnswer}
-            
           />
         )
       }
       {
-        state.val === "finished" && <h2>The game has finished.</h2>
+        state.val === "finished" && <PlayerFinishedScreen getScoreboard={getScoreboard} />
       }
     </div>
   )
