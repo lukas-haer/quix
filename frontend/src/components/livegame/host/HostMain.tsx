@@ -5,6 +5,7 @@ import { Player, GameStateObjects, StateOptions } from "../../../models/GameStat
 import { JoinGameReturn, GetCurrentQuestionReturn } from "../../../models/PlayerApiReturns.ts";
 import { HostWaitingScreen } from "./HostWaitingScreen/HostWaitingScreen.tsx";
 import { HostPlayingScreen } from "./HostPlayingScreen/HostPlayingScreen.tsx";
+import { HostFinishedScreen } from "./HostFinishedScreen/HostFinishedScreen.tsx";
 import { Component, template } from "uix/components/Component.ts";
 import { Snackbar } from "frontend/src/components/utils/snackbar/Snackbar.tsx";
 
@@ -95,7 +96,7 @@ class PlayerAPI {
           state.val === "playing" && <HostPlayingScreen currentRound={currentRound.val} gameStateObjects={gameStateObjects} />
         }
         {
-          state.val === "finished" && <h2>Game has finished.</h2>
+          state.val === "finished" && <HostFinishedScreen state={state} currentRound={currentRound} />
         }
     </div>
     )
