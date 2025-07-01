@@ -75,7 +75,9 @@ class PlayerAPI {
 @template(() => {
 
   //TODO: intermediary screen that detects if host already has a game running and asks if the host wishes to create a new game or view the old one.
+
   const resetGame = () => {
+    //TODO: This is already done through HostFinishedScreen, except resetting the players list.
     //TODO: This is broken.
     //TODO: resetting the pointer values multiple times breaks the page (with currentRound it breaks immediately)
     state.val = "waiting"
