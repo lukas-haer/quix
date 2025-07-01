@@ -1,4 +1,4 @@
-import { userSignUp } from "../../../../backend/UserAuthentication.ts";
+import { userSignUp } from "backend/UserAccounts/UserAuthentication.ts";
 import { Context } from "uix/routing/context.ts";
 
 

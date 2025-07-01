@@ -1,5 +1,5 @@
 import { Datex } from "datex-core-legacy/datex.ts";
-import { Question } from "../../../../../common/Question.ts";
+import { Question } from "common/models/Question.ts";
 
 type QuestionScreenProps = {
     questionText: string;

@@ -1,24 +1,25 @@
 import { provideRedirect } from "uix/providers/common.tsx";
 import { Context } from "uix/routing/context.ts";
-import { users } from "backend/UserAccountData.ts";
-import { Quiz } from "common/Quiz.tsx";
+import { users } from "backend/UserAccounts/UserAuthentication.ts";
+import { Quiz } from "common/models/Quiz.tsx";
+import { quizzes } from "backend/SaveQuiz.ts";
 
 export async function accountPage (ctx: Context) {
 	const session = await ctx.getPrivateData();
-	const userId = session.userId;
+	const currentUser = session.userId;
 
-	if (!userId) {
+	if (!currentUser) {
 		console.error("no user logged in");
 		return provideRedirect("/login");
 	}
 
-	const quizzes = Object.values(users[userId].quizzes);
+	const userQuizzes = Object.values(quizzes).filter(quiz => quiz.accountId === currentUser);
 
 	return (
 		<div>
-			<h1>{ userId }s Quizzes</h1>
+			<h1>{ currentUser }s Quizzes</h1>
 			{
-				quizzes.length === 0 
+				userQuizzes.length === 0 
 			? 
 				<div> 
 					<p>You dont have any Quizzes for now</p> 
@@ -27,7 +28,7 @@ export async function accountPage (ctx: Context) {
 			: 
 				<div>
 					<ol>
-						{quizzes.map((quiz : Quiz) => (
+						{userQuizzes.map((quiz : Quiz) => (
 							<li> 
 								<strong>{ quiz.title }</strong> <br/> { quiz.description }
 							</li>

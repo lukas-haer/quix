@@ -1,21 +1,30 @@
 import { Context } from "uix/routing/context.ts";
-import { users } from "backend/UserAccountData.ts";
-import { Quiz } from "common/Quiz.tsx";
+import { users } from "backend/UserAccounts/UserAuthentication.ts";
+import { Quiz } from "common/models/Quiz.tsx";
 import { provideRedirect } from "uix/providers/common.tsx";
-import { SingleChoiceQuestion, MultipleChoiceQuestion } from "common/Question.ts";
+import { SingleChoiceQuestion, MultipleChoiceQuestion } from "common/models/Question.ts";
+
+export const quizzes = eternal ?? $({} as Record<string, Quiz>);
 
 export async function saveQuiz (ctx: Context) {
-	const session = await ctx.getPrivateData();
-	const userId = session.userId;
 
-	if(!userId || !(userId in users)) {
+	const session = await ctx.getPrivateData();
+	const currentUser = session.userId;
+
+	////////////////bearbeiten
+	if(!currentUser || !(currentUser in users)) {
 		console.error("User not found or not logged in."); //braucht funktionalen Error
+		//!!!!!!!sollte nicht alle Eingaben verwerfen, sondern nur Möglichkeit zur anmelden / einloggen geben und da dann das Quiz speichern
 		return provideRedirect("/"); //hier snackbar fehler bitte melde dich erst an
 	}
-
+	////////////////bearbeiten
 
 	const data = await ctx.request.formData();
-
+	
+	const quizId = data.get("quizId") as string;
+	const title = data.get("title") as string;
+	const description = data.get("description") as string;
+	const accountId = currentUser;
 	//questions
 	const rawQuestions = JSON.parse(data.get("questions") as string);
 	const mappedQuestions = rawQuestions.map((q: any) => {
@@ -25,7 +34,18 @@ export async function saveQuiz (ctx: Context) {
         	return new MultipleChoiceQuestion(q.content);
     	}
 	});
+	const questions = mappedQuestions;
 
+	
+	quizzes[quizId] = Quiz ({
+		quizId: quizId,
+		title : title,
+		description : description,
+		accountId : accountId,
+		questions : questions
+	})
+
+	/*
 	const quiz: Quiz = {
         quizId: data.get("quizId") as string,
         title: data.get("title") as string,
@@ -34,56 +54,36 @@ export async function saveQuiz (ctx: Context) {
         //questions: JSON.parse(data.get("questions") as string),
 		questions: mappedQuestions
     };
-
-
-
-
-
-
-	console.log("LOG -------------Quiz data received:-------------", quiz);
-	console.log("LOG -------------Quiz data received ENDE -------------");
-
-	if (!users[userId]) {
-		// Falls User nicht da ist, redirect zum Anlegen oder Fehler werfen
-		console.error("User not found in users store:", userId);
-		return;
-	}
-
-	//console.log("LOG VOR SAVE -------------------------")
-	//console.log("userId:", userId);
-	//console.log("users:", users);
-	//console.log("userObj:", users[userId]);
-	//console.log("LOG VOR SAVE ENDE -------------------------")
-
-	/*----------------------------------------------------------------------------------------------------
-	const userObj = users[userId];
-	if (!userObj.quizzes) {
-		userObj.quizzes = {};
-	}
-	userObj.quizzes[quiz.quizId] = quiz;
 	*/
 
-	//users[userId].quizzes.push(quiz);
+	console.log("LOG -------------Quiz saved:-------------", quizzes[quizId]);
+	console.log("-------------------------------");
+	console.log();
 
+	////////////////bearbeiten
+	if (!users[currentUser]) {
+		// Falls User nicht da ist, redirect zum Anlegen oder Fehler werfen
+		console.error("User not found in users store:", currentUser);
+		return;
+	}
+	////////////////bearbeiten
 
-	users[userId].quizzes[quiz.quizId] = quiz;
-	users.val = { ...users.val }; //ist das so die ideale Methode?
+	//quizzes of user x: 
+	const userQuizzes = Object.values(quizzes).filter(quiz => quiz.accountId === currentUser);
 
-	console.log("Quiz saved for user:", userId);
-	console.log("LOG NACH SAVE -------------------------")
-	console.log("Updated user quizzes:", users[userId].quizzes);
-
-	for (const quiz in users[userId].quizzes) {
-		console.log("Quizzes of user:", userId)
-		console.log("Quiz ID:", quiz)
-		console.log("Quiz Title:", users[userId].quizzes[quiz].title);
-		console.log("Quiz Description:", users[userId].quizzes[quiz].description);
-		console.log("Quiz Questions:", users[userId].quizzes[quiz].questions);
+	console.log("-------------------------------");
+	console.log("Updated users quizzes as Object:", userQuizzes)
+	console.log("-------------------------------");
+	console.log();
+	console.log("-------------------------------");
+	for (const quiz of userQuizzes) {
+		console.log("Quiz of user", quiz.accountId);
+		console.log("Quiz ID:", quiz.quizId);
+		console.log("Title:", quiz.title);
+		console.log("Description:", quiz.description);
+		console.log("Questions:", quiz.questions);
+		console.log("-----------------------------");
 	}
 
-
-	console.log("users:", users);
-	console.log("userObj:", users[userId]);
-
-    return provideRedirect("/account");
+	return provideRedirect("/account");
 }

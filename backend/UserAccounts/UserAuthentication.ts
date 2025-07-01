@@ -1,5 +1,7 @@
 import { Context } from "uix/routing/context.ts";
-import { User } from "../common/userCredentials.ts";
+import { User } from "common/models/User.ts";
+import { quizzes } from "../SaveQuiz.ts";
+import { Quiz } from "common/models/Quiz.tsx";
 
 import * as argon2 from "jsr:@felix/argon2";
 import { provideRedirect } from "uix/providers/common.tsx";
@@ -40,20 +42,24 @@ export async function userLogin(ctx: Context) {
 
 
 	//////////////////////////LOGGING///////////////////////////////////////
-	for (const quiz in users[user].quizzes) {
-		console.log("-----------ALL Quizzes of user: ----------------", user)
-		console.log("");
-		console.log("Quiz ID:", quiz)
-		console.log("Quiz Title:", users[user].quizzes[quiz].title);
-		console.log("Quiz Description:", users[user].quizzes[quiz].description);
-		console.log("Quiz Questions:", users[user].quizzes[quiz].questions);
-		console.log("");
-		console.log("----------------------------------------------------------");
-	}
-	console.log("users:", users);
-	console.log("userObj:", users[user]);
-		//////////////////////////LOGGING///////////////////////////////////////
+	const userQuizzes = Object.values(quizzes).filter(quiz => quiz.accountId === user);
 
+	if (userQuizzes.length === 0) {
+		console.log("User has no Quizzes yet")
+	}
+	else {
+
+		console.log(user,"s Quizzes-------------------")
+		for (const quiz of userQuizzes) {
+			console.log("Quizzes of user ", quiz.accountId);
+			console.log("Quiz ID:", quiz.quizId);
+			console.log("Title:", quiz.title);
+			console.log("Description:", quiz.description);
+			console.log("Questions:", quiz.questions);
+			console.log("-----------------------------");
+		}
+	}
+	//////////////////////////LOGGING///////////////////////////////////////
 
 	return provideRedirect("/account");
 }
@@ -86,14 +92,14 @@ export async function userSignUp(ctx: Context) {
 	users[user] = User({
 		id: user,
 		password: await argon2.hash(password),
-		quizzes: [] // oder mit {}
+		//quizzes: [] // oder mit {}
 	});
 	console.log("Registering new user successful:", user);
 
 	//if signup successful, setting session
 	const session = await ctx.getPrivateData();
 	session.userId = user;
-	return provideRedirect("/account");//sollte irgendwann auf Account Startseite weiterleiten
+	return provideRedirect("/account");
 	}
 }
 
