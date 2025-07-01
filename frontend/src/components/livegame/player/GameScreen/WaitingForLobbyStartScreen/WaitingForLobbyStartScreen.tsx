@@ -1,29 +1,17 @@
-import { Component, template } from 'uix/components/Component.ts';
+import { Component, template, style } from 'uix/components/Component.ts';
+import { LoadingScreen } from 'frontend/src/components/utils/loadingscreen/LoadingScreen.tsx';
 
-const styles = {
-    container: {
-        display: 'flex',
-        flexDirection: 'column' as const,
-        justifyContent: 'center',
-        alignItems: 'center',
-        textAlign: 'center' as const,
-        fontFamily: 'sans-serif',
-    },
-    heading: {
-        fontSize: '2rem',
-        marginBottom: '10px',
-    },
-    text: {
-        fontSize: '1.2rem',
-    },
-};
 
 @template(() => {
     return (
-      <div style={styles.container}>
-          <h2 style={styles.heading}>Waiting for the lobby host...</h2>
-          <p style={styles.text}>The game will start once the host is ready.</p>
-      </div>
+        <section class="loading-screen">
+            <div class="loading-text">You're in!</div>
+            <div class="sub-text">Now wait for the game to start...</div>
+            <div class="shape rectangle"></div>
+            <div class="shape circle"></div>
+            <div class="shape triangle"></div>
+            <div class="shape star"></div>
+        </section>
     );
 })
 export class WaitingForLobbyStartScreen extends Component {}

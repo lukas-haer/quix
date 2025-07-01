@@ -84,20 +84,7 @@ body {
 .sub-text {
   font-size: 1.2rem;
   margin-top: 0.5rem;
-  color: #777;
-  animation: fadeIn 3s ease-in-out infinite;
-}
-
-@keyframes fadeIn {
-
-  0%,
-  100% {
-    opacity: 1;
-  }
-
-  50% {
-    opacity: 0.4;
-  }
+  color: #000000;
 }
 
 .shape {
