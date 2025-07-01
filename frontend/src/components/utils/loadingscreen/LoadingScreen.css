@@ -84,8 +84,7 @@ body {
 .sub-text {
   font-size: 1.2rem;
   margin-top: 0.5rem;
-  color: #777;
-  animation: fadeIn 3s ease-in-out infinite;
+  color: #000000;
 }
 
 @keyframes fadeIn {
@@ -107,15 +106,16 @@ body {
   opacity: 0.75;
   z-index: 0;
   filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.2));
-  animation: rotate 30s linear infinite;
 }
 
 .rectangle {
   top: -105vmax;
   left: -105vmax;
   background: #007BFF;
-  border-radius: 30%;
+  border-radius: 15px;
   box-shadow: 0 0 50px rgba(0, 123, 255, 0.5);
+  animation: rotate 50s linear infinite;
+
 }
 
 .circle {
@@ -124,6 +124,8 @@ body {
   background: #28a745;
   border-radius: 50%;
   box-shadow: 0 0 50px rgba(40, 167, 69, 0.5);
+  animation: rotate 30s linear infinite;
+
 }
 
 .triangle {

@@ -12,7 +12,6 @@ import { Snackbar, successSnackbarMessage, failureSnackbarMessage } from 'fronte
 //Backendfunctions
 import { getHostIdFromGamecode } from 'backend/lobbyManagement/LobbyManagement.ts';
 
-
 type PlayerMainProps = {
     id?: string;
 };
@@ -36,7 +35,7 @@ const apiObj: ObjectRef<{ playerApi?: PlayerAPIType }> = $({}); //encapsulate ap
     const activeComponent = $('loading');
     const name = $('');
 
-    UIX.Theme.useTheme("uix-light-plain")
+    UIX.Theme.useTheme('uix-light-plain');
 
     async function getEndpointByGamecode() {
         try {
@@ -62,7 +61,7 @@ const apiObj: ObjectRef<{ playerApi?: PlayerAPIType }> = $({}); //encapsulate ap
                 activeComponent.val = 'nameSelection';
             } catch (error) {
                 console.error('Error when attempting to find Lobby: ' + error);
-                failureSnackbarMessage('Lobby not found', 'There is no lobby for this gamecode.',30_000);
+                failureSnackbarMessage('Lobby not found', 'There is no lobby for this gamecode.', 30_000);
                 return;
             }
         } catch (error) {
@@ -105,7 +104,7 @@ const apiObj: ObjectRef<{ playerApi?: PlayerAPIType }> = $({}); //encapsulate ap
     const renderComponent = () => {
         switch (activeComponent.val) {
             case 'liveGame':
-                return <GameScreen stateId={stateId.val} currentRoundId={currentRoundId.val} apiObj={apiObj} />
+                return <GameScreen stateId={stateId.val} currentRoundId={currentRoundId.val} apiObj={apiObj} />;
             case 'nameSelection':
                 return (
                     <div class="nameselection-container">
@@ -123,7 +122,16 @@ const apiObj: ObjectRef<{ playerApi?: PlayerAPIType }> = $({}); //encapsulate ap
                             />
                             <div class="glowing-line" id="glowingLine"></div>
                         </div>
-                        <button type="button" class="button" onclick={() => joinGame()}>
+                        <button
+                            type="button"
+                            class="button"
+                            onclick={() => joinGame()}
+                            onkeydown={(event: KeyboardEvent) => {
+                                if (event.key === 'Enter') {
+                                    joinGame();
+                                }
+                            }}
+                        >
                             JOIN
                         </button>
                     </div>
@@ -131,15 +139,22 @@ const apiObj: ObjectRef<{ playerApi?: PlayerAPIType }> = $({}); //encapsulate ap
             case 'loading':
                 return <LoadingScreen text="Loading..." />;
             default:
-                return <div> <p>We're sorry, something happend that was not supposed to happen. </p><button type="button" class="button" onclick={() => redirect('/')}>Go Back</button></div>;
+                return (
+                    <div>
+                        {' '}
+                        <p>We're sorry, something happend that was not supposed to happen. </p>
+                        <button type="button" class="button" onclick={() => redirect('/')}>
+                            Go Back
+                        </button>
+                    </div>
+                );
         }
     };
 
     return (
         <main class="section">
-
             {renderComponent()}
-            <Snackbar/>
+            <Snackbar />
         </main>
     );
 })

@@ -8,10 +8,12 @@ import { UIX } from 'uix';
     if (props.text) {
         text.val = props.text;
     }
+    const subtext = props.subtext;
 
     return (
         <section class="loading-screen">
             <div class="loading-text">{text}</div>
+            { subtext ? <div class="sub-text">{subtext}</div> : <span></span> }
             <div class="shape rectangle"></div>
             <div class="shape circle"></div>
             <div class="shape triangle"></div>
@@ -19,4 +21,4 @@ import { UIX } from 'uix';
         </section>
     );
 })
-export class LoadingScreen extends Component<{ text?: string }> {}
+export class LoadingScreen extends Component<{ text?: string, subtext?: string }> {}

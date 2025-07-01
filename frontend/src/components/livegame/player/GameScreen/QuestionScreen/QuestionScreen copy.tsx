@@ -1,18 +1,17 @@
 import { Datex } from "datex-core-legacy/datex.ts";
 import { Component, template } from "uix/components/Component.ts";
-import { LoadingScreen } from "frontend/src/components/utils/loadingscreen/LoadingScreen.tsx";
 
 type DefaultQuestionScreenProps = {
     questionText: string;
     answers: string;
-    currentDeadline: number;
+    currentDeadline: string;
     submitAnswer: (answerIndex: number) => void;
 };
 
 type FunctionQuestionScreenProps = DefaultQuestionScreenProps & { submittedAnswer: Datex.Pointer<boolean>; }
 type ComponentQuestionScreenProps = DefaultQuestionScreenProps & { submittedAnswer: Datex.Pointer; }
 
-@template( ({ questionText, answers, currentDeadline, submittedAnswer, submitAnswer }: FunctionQuestionScreenProps) => {
+@template(({ questionText, answers, currentDeadline, submittedAnswer, submitAnswer }: FunctionQuestionScreenProps) => {
 
   function handleAnswerClick(answerId: number) {
     //TODO: error handling
@@ -20,34 +19,23 @@ type ComponentQuestionScreenProps = DefaultQuestionScreenProps & { submittedAnsw
     submittedAnswer.val = true;
   }
 
-  console.log("CD: ",currentDeadline);
-  
 
   return (
-    <main>
-      { !submittedAnswer.val ? (
-                 <section class="section">
-        <h1>{questionText}</h1>
-        <div class="button-container">
-          {
-            answers.split(";").map( (answer: string, index: number) => <AnswerButton answerText={answer} answerId={index} handleSubmit={() => handleAnswerClick(index)}/>)
+          <div>
+          { !submittedAnswer.val ? (
+            <>
+            <h2>{questionText}</h2>
+            <div style={{display: "flex", gap: "10px"}}>
+            {
+              answers.split(";").map((answer: string, index: number) => <AnswerButton answerText={answer} answerId={index} handleSubmit={() => handleAnswerClick(index)}/>)
+            }
+            </div>
+            <h2>Deadline: {currentDeadline}</h2>
+            </>
+          )
+            : <h2>Waiting for next Question.</h2>
           }
         </div>
-        <div class="countdown-bar" id="countdownBar" style={`animation: countdown ${Math.floor(currentDeadline - Date.now()) / 1000}s linear forwards`}>
-</div>
-</section>
-
-        ) : (
-          <main>
-            <LoadingScreen text="Lets see if you were right..." subtext="Please wait for the others to answer"/>
-          </main>
-        )
-
-        
-}
-
- 
-    </main>
   );
 })
 export class QuestionScreen extends Component<ComponentQuestionScreenProps> {}
@@ -59,10 +47,16 @@ type AnswerButtonProps = {
 }
 
 @template(({answerText, answerId, handleSubmit}: AnswerButtonProps) => {
+  const buttonColors = ['green', 'blue', 'red', 'yellow'];
   return(
     <button 
-    type="button"
-      class={`button button${answerId}`}
+      style={{
+              backgroundColor: buttonColors[answerId],
+              border: 'none',
+              borderRadius: '6px',
+              height: '20vh',
+              width: '20vh',
+          }}
       onclick={handleSubmit}>
       {answerText}
     </button>
