@@ -162,6 +162,8 @@ input {
 	margin-right: 10px;
 }
 
-#export-btn {
+#export-btn, #import-btn {
 	background-color: var(--color-b);
+	margin-left: 10px;
+	border: none;
 }

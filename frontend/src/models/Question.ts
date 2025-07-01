@@ -49,14 +49,14 @@ const question1 = new SingleChoiceQuestion({
         questionText: "Frage 1: abcd?", 
         answers: ["a","b","c","d"], 
         correctAnswerId: 0, 
-        timeInSeconds: 5
+        timeInSeconds: 30
     })
 
 const question2 = new SingleChoiceQuestion({
         questionText: "Frage 2: abcd?", 
         answers: ["a","b","c","d"], 
         correctAnswerId: 2, 
-        timeInSeconds: 5
+        timeInSeconds: 30
     })
 
 export const sampleQuestions: Question<QuestionType>[] = [question1, question2];
