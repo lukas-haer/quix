@@ -4,11 +4,16 @@ import {
   StateOptions,
 } from "../../../../models/GameState.ts";
 
-@template(function ({state, currentRound} : {state: Datex.Pointer<StateOptions>, currentRound: Datex.Pointer<number>}) {
+type HostFinishedScreenProps = {
+    state: Datex.Pointer<StateOptions>;
+    currentRound: Datex.Pointer<number>;
+};
+
+@template(function ({state, currentRound} : HostFinishedScreenProps) {
   return (
     <div>
       <h2>Game has finished.</h2>
-	  <button onclick={() => {
+	  <button type="button" onclick={() => {
 		currentRound.val = 0;
 		state.val = "waiting";
 		}}>New Round</button>
