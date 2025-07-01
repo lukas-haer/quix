@@ -82,7 +82,7 @@ export function removeQuestionById(questionId: string) {
         }
  
         //remove that index
-        const removedQuestion = quiz.questions.splice(questionIndex, 1);
+        quiz.questions.splice(questionIndex, 1);
     } catch (error) {
         console.error("Error removing question:", error);
         failureSnackbarMessage("Error when removing a question","An unexprected error occured")

@@ -74,7 +74,7 @@ import { Snackbar } from "frontend/src/components/utils/snackbar/Snackbar.tsx";
                 }, 500);
             }, index * 200);
         });
-    });
+    }); 
 
     /**
      * If all CodeInput-Fields have a value, the player will be redirected to join the lobby
@@ -93,7 +93,7 @@ import { Snackbar } from "frontend/src/components/utils/snackbar/Snackbar.tsx";
         <main>
             <Snackbar/>
             <section class={{ "section": true, "live": activeSection.val == "joinSection" }} id="joinSection">
-                <h1 class="sticky-top pt-30">JOIN QUIX</h1>
+                <h1 class="sticky-top pt-30">🎉 JOIN QUIX</h1>
                 <div id="code-input-container" class={{ "code-input-container": true, "live": activeSection.val == "joinSection" }}>
                     {
                         codeInputFields.map((inputfield) => inputfield)
@@ -102,8 +102,8 @@ import { Snackbar } from "frontend/src/components/utils/snackbar/Snackbar.tsx";
             </section>
 
             <section class={{ "section": true, "live": activeSection.val == "hostSection" }} id="hostSection">
-                <h1 class="section-text sticky-top pb-30">HOST QUIX</h1>
-                <button type="button" id="openGameEditorButton" class={{ "button": true, "live": activeSection.val == "hostSection" }} onclick={() => redirect(`${globalThis.location.origin}/create`)}>
+                <h1 class="section-text sticky-top pb-30">🚀 HOST QUIX</h1>
+                <button type="button" id="openGameEditorButton" class={{ "button": true, "live": activeSection.val == "hostSection" }} onclick={() => redirect("/host")}>
                     Open Game Editor
                 </button>
             </section>

@@ -1,4 +1,5 @@
 //UIX tooling
+import { UIX } from 'uix';
 import { Datex } from 'datex-core-legacy/datex.ts';
 import { ObjectRef } from 'datex-core-legacy/runtime/pointers.ts';
 import { Component, template } from 'uix/components/Component.ts';
@@ -35,6 +36,8 @@ const apiObj: ObjectRef<{ playerApi?: PlayerAPIType }> = $({}); //encapsulate ap
     const activeComponent = $('loading');
     const name = $('');
 
+    UIX.Theme.useTheme("uix-light-plain")
+
     async function getEndpointByGamecode() {
         try {
             const gameCodeRegex = /^\d{6}$/; //Checks if gamecode consists of exactly 6 numbers
@@ -59,7 +62,8 @@ const apiObj: ObjectRef<{ playerApi?: PlayerAPIType }> = $({}); //encapsulate ap
                 activeComponent.val = 'nameSelection';
             } catch (error) {
                 console.error('Error when attempting to find Lobby: ' + error);
-                failureSnackbarMessage('Lobby not found', 'There is no lobby for this gamecode.');
+                failureSnackbarMessage('Lobby not found', 'There is no lobby for this gamecode.',30_000);
+                return;
             }
         } catch (error) {
             console.error('ERROR (joinGameByGamecode): ' + error);
@@ -104,7 +108,7 @@ const apiObj: ObjectRef<{ playerApi?: PlayerAPIType }> = $({}); //encapsulate ap
                 return <GameScreen stateId={stateId.val} currentRoundId={currentRoundId.val} apiObj={apiObj} />
             case 'nameSelection':
                 return (
-                    <div>
+                    <div class="nameselection-container">
                         <h1>WHAT SHOULD WE CALL YOU?</h1>
                         <div class="name-input-container">
                             <input
@@ -114,6 +118,7 @@ const apiObj: ObjectRef<{ playerApi?: PlayerAPIType }> = $({}); //encapsulate ap
                                 value={name}
                                 maxlength="12"
                                 placeholder="Enter your name"
+                                autofocus
                                 required
                             />
                             <div class="glowing-line" id="glowingLine"></div>
@@ -124,7 +129,7 @@ const apiObj: ObjectRef<{ playerApi?: PlayerAPIType }> = $({}); //encapsulate ap
                     </div>
                 );
             case 'loading':
-                return <LoadingScreen text={'Loading...'} />;
+                return <LoadingScreen text="Loading..." />;
             default:
                 return <div> <p>We're sorry, something happend that was not supposed to happen. </p><button type="button" class="button" onclick={() => redirect('/')}>Go Back</button></div>;
         }
@@ -132,8 +137,9 @@ const apiObj: ObjectRef<{ playerApi?: PlayerAPIType }> = $({}); //encapsulate ap
 
     return (
         <main class="section">
+
             {renderComponent()}
-            <Snackbar />
+            <Snackbar/>
         </main>
     );
 })
