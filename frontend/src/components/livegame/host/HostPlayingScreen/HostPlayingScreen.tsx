@@ -15,7 +15,6 @@ type HostPlayingScreenProps = {
     const timeoutID: Datex.Pointer<number> = $(0);
 
     const startGame = () => {
-      // state.val = "playing";
       updateDeadlineAndTimer();
     };
 

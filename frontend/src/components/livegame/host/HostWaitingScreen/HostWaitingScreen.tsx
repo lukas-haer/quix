@@ -13,40 +13,13 @@ import { successSnackbarMessage } from "frontend/src/components/utils/snackbar/S
 
 type HostWaitingScreenProps = {
   state: Datex.Pointer<StateOptions>;
-  currentRound: Datex.Pointer<number>;
   gameStateObjects: ObjectRef<GameStateObjects>;
 };
 
 @style("../HostMain.css") //TODO: replace and delete me
 @template(
-  async ({ state, currentRound, gameStateObjects }: HostWaitingScreenProps) => {
+  async ({ state, gameStateObjects }: HostWaitingScreenProps) => {
     UIX.Theme.useTheme("uix-light-plain");
-
-    const { prefix, name, instance } = Datex.Runtime.endpoint;
-
-    // const startGame = () => {
-    //     state.val = 'playing';
-    //     updateDeadlineAndTimer();
-    // };
-
-    // const nextRound = () => {
-    //     if (currentRound.val + 1 === gameStateObjects.questions.length) {
-    //         state.val = 'finished';
-    //         return;
-    //     }
-
-    //     updateDeadlineAndTimer();
-    //     currentRound.val++;
-    // };
-
-    // const updateDeadlineAndTimer = () => {
-    //     // Can you do this more smoothly? an easy to understand one-liner perhaps?
-    //     const newDeadline = new Date();
-    //     newDeadline.setSeconds(newDeadline.getSeconds() + gameStateObjects.questions[currentRound.val].content.timeInSeconds);
-    //     gameStateObjects.currentDeadline = newDeadline;
-
-    //     setTimeout(nextRound, gameStateObjects.currentDeadline.getTime() - Date.now());
-    // };
 
     let gamecode: string = "";
     try {
@@ -132,9 +105,6 @@ type HostWaitingScreenProps = {
           >
             {invitelink}
           </p>
-          {/* <button class="button" type="button" onclick={() => startGame()}>
-            Start Game 🚀
-          </button> */}
           <button class="button" type="button" onclick={() => state.val = "playing"}>Start Game</button>
         </div>
       </section>
@@ -143,6 +113,5 @@ type HostWaitingScreenProps = {
 )
 export class HostWaitingScreen extends Component<{
   state: Datex.Pointer;
-  currentRound: Datex.Pointer;
   gameStateObjects: ObjectRef<GameStateObjects>;
 }> {}
