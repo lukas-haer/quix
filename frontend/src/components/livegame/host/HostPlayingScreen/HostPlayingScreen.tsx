@@ -13,6 +13,7 @@ type HostPlayingScreenProps = {
 @template(
   function ({ state, currentRound, gameStateObjects }: HostPlayingScreenProps) {
     const timeoutID: Datex.Pointer<number> = $(0);
+
     const startGame = () => {
       // state.val = "playing";
       updateDeadlineAndTimer();
@@ -43,13 +44,18 @@ type HostPlayingScreenProps = {
       );
     };
 
+    // This needs to exist because trying to get the questionText directly in html doesn't work with changing currentRound.val
+    function getCurrentQuestion() {
+      return gameStateObjects.questions[currentRound.val].content.questionText;;
+    }
+
     startGame();
 
     return (
       <div>
         <h2>Current Question:</h2>
         <p>
-          {gameStateObjects.questions[currentRound.val].content.questionText}
+          {getCurrentQuestion()}
         </p>
         <h2>Current Deadline:</h2>
         <p>{gameStateObjects.currentDeadline.toString()}</p>
