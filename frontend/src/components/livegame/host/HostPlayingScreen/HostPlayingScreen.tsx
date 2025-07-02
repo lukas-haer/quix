@@ -53,6 +53,15 @@ type HostPlayingScreenProps = {
         </p>
         <h2>Current Deadline:</h2>
         <p>{gameStateObjects.currentDeadline.toString()}</p>
+        <button
+          type="button"
+          onclick={() => {
+            clearTimeout(timeoutID.val);
+            nextRound();
+          }}
+        >
+          Skip Question
+        </button>
       </div>
     );
   },
