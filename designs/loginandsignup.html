@@ -14,6 +14,7 @@
         body {
             font-family: Arial, sans-serif;
             overflow: hidden;
+            position: relative; /* Position relative for absolute positioning of home button */
         }
         .section {
             display: flex;
@@ -95,13 +96,31 @@
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-10px); }
         }
+        .home-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            font-weight: bold;
+            color: #fff;
+            background-color: #28a745;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .home-button:hover {
+            background-color: #218838;
+        }
     </style>
 </head>
 <body>
+    <button class="home-button" onclick="goHome()">Back to home</button>
     <div class="section" id="login-section">
         <h1>LOGIN TO QUIX</h1>
         <div class="form-container" id="login-form">
-            <input type="text" placeholder="Username or Email" required>
+            <input type="text" placeholder="Username" required>
             <input type="password" placeholder="Password" required>
             <button class="button" onclick="login()">Login</button>
         </div>
@@ -113,7 +132,6 @@
     <div class="section" id="signup-section">
         <h1>SIGN UP TO QUIX</h1>
         <div class="form-container hidden" id="signup-form">
-            <input type="email" placeholder="Email" required>
             <input type="text" placeholder="Username" required>
             <input type="password" placeholder="Password" required>
             <input type="password" placeholder="Repeat Password" required>
@@ -171,6 +189,11 @@
 
         function signup() {
             alert('Signing up...');
+        }
+
+        function goHome() {
+            alert('Going to home...');
+            // Implement the logic to navigate to the home page
         }
     </script>
 </body>
