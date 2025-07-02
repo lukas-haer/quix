@@ -17,9 +17,24 @@ export async function registerLobby() {
         if (!gameCodeRegex.test(lobbyCode.toString())) {
 			throw new Error("Gamecode is not a 6 digit number")
         }
+
+		var newLobbyId: string = "";
+		var checkId = true;
+		while (checkId) {
+			newLobbyId = crypto.randomUUID();
+			for (var i = 0; i <= lobbies.length; i++) {
+				if (i == lobbies.length) {
+					checkId = false;
+				}else{
+					if (newLobbyId == lobbies[i].id) {
+						break;
+					}
+				}
+			}
+		}
 		
 		const newLobby: Lobby = {
-			id: crypto.randomUUID(),
+			id: newLobbyId,
 			code: lobbyCode,
 			host: {
 				endpointId: datex.meta.caller,
