@@ -1,9 +1,10 @@
 import { Datex } from "datex-core-legacy/datex.ts";
-import { GetCurrentQuestionReturn } from "../../../models/PlayerApiReturns.ts";
-import { PlayerAPIType } from "../JoinScreen/JoinScreen.tsx";
-import QuestionScreen from "../QuestionScreen/QuestionScreen.tsx";
+import { Component, template } from 'uix/components/Component.ts';
 import { ObjectRef } from "datex-core-legacy/runtime/pointers.ts";
-import WaitingForLobbyStartScreen from "../WaitingForLobbyStartScreen/WaitingForLobbyStartScreen.tsx";
+import { GetCurrentQuestionReturn } from "../../../../models/PlayerApiReturns.ts";
+import { PlayerAPIType } from "../PlayerMain.tsx";
+import { QuestionScreen } from "./QuestionScreen/QuestionScreen.tsx";
+import { LoadingScreen } from "frontend/src/components/utils/loadingscreen/LoadingScreen.tsx";
 
 type GameScreenProps = {
 	stateId: string;
@@ -11,7 +12,7 @@ type GameScreenProps = {
 	apiObj: ObjectRef<{playerApi?: PlayerAPIType}>;
 }
 
-export default async function GameScreen({stateId, currentRoundId, apiObj}: GameScreenProps) {
+@template(async ({stateId, currentRoundId, apiObj}: GameScreenProps) => {
   //TODO: error handling
   const state: Datex.Pointer<string> = await datex.get(`$${stateId}`)
   const currentRound: Datex.Pointer<number> = await datex.get(`$${currentRoundId}`)
@@ -19,7 +20,7 @@ export default async function GameScreen({stateId, currentRoundId, apiObj}: Game
   //TODO: Maybe we can just grab the pointer references instead of manually calling the endpoint.
   const question: Datex.Pointer<string> = $("");
   const answers: Datex.Pointer<string> = $("");
-  const currentDeadline: Datex.Pointer<string> = $("");
+  const currentDeadline: Datex.Pointer<number> = $(0);
 
   const points = $(0);
 
@@ -31,8 +32,9 @@ export default async function GameScreen({stateId, currentRoundId, apiObj}: Game
 
     question.val = res.questionText;
     answers.val = res.answers.join(";"); //To avoid using ObjectRef
-    currentDeadline.val = res.currentDeadline.toLocaleString(); //To avoid using ObjectRef
-
+    currentDeadline.val = res.currentDeadline.getTime(); //To avoid using ObjectRef
+    console.log("DCD: ",currentDeadline.val);
+    
     submittedAnswer.val = false;
   }
 
@@ -50,22 +52,30 @@ export default async function GameScreen({stateId, currentRoundId, apiObj}: Game
     }
   }
 
-  return (
-    <div>
-      <h2>State: {state.val}</h2>
+
+  /*
+  TODO: implement
+       <h2>State: {state.val}</h2>
       <h2>Round: {currentRound.val}</h2>
       <h2>Points: {points.val}</h2>
+
+  */
+
+  return (
+    <div>
+ 
       {
-        state.val === "waiting" && <WaitingForLobbyStartScreen />
+        state.val === "waiting" && <LoadingScreen text="You're in!" subtext="Now wait for the game to start..." />
       }
       {
         state.val === "playing" && (
           <QuestionScreen 
-            questionText={""} 
+            questionText={question.val} 
             answers={answers.val} 
             currentDeadline={currentDeadline.val} 
             submittedAnswer={submittedAnswer} 
             submitAnswer={submitAnswer}
+            
           />
         )
       }
@@ -74,4 +84,5 @@ export default async function GameScreen({stateId, currentRoundId, apiObj}: Game
       }
     </div>
   )
-}
+})
+export class GameScreen extends Component<GameScreenProps> {}

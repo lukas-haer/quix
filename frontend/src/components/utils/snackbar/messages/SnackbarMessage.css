@@ -24,9 +24,20 @@
   opacity: 0;
 }
 
+.snackbar-body {
+  display: flex;    
+  align-items: center; 
+  justify-content: space-between; /* Pushes the logo to the right */
+  gap: 10px; 
+}
+
+.snackbar-icon {
+  height: 25px; /* Matches the height of the text */
+  width: auto; /* Maintains the aspect ratio of the image */
+}
+
 .snackbar-message-title {
   font-weight: bold;
-  margin-bottom: 5px;
   font-size: 16px;
   margin-top: 0;
   color: #000;

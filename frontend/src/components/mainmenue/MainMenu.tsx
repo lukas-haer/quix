@@ -1,5 +1,6 @@
 import { Component, template } from 'uix/components/Component.ts';
 import { UIX } from 'uix';
+import { Snackbar } from "frontend/src/components/utils/snackbar/Snackbar.tsx";
 
 @template(() => {
     /** Remove default UIX styling */
@@ -16,6 +17,7 @@ import { UIX } from 'uix';
         <input id="codeField5" type="text" class="code-input" maxlength="1" value={codeInputValues[4]} />,
         <input id="codeField6" type="text" class="code-input" maxlength="1" value={codeInputValues[5]} />
     ]
+
 
     /**
      * Adds Event-Listener for input and key down on all Code-Input-Fields
@@ -72,7 +74,7 @@ import { UIX } from 'uix';
                 }, 500);
             }, index * 200);
         });
-    });
+    }); 
 
     /**
      * If all CodeInput-Fields have a value, the player will be redirected to join the lobby
@@ -89,8 +91,9 @@ import { UIX } from 'uix';
 
     return (
         <main>
+            <Snackbar/>
             <section class={{ "section": true, "live": activeSection.val == "joinSection" }} id="joinSection">
-                <h1 class="sticky-top pt-30">JOIN QUIX</h1>
+                <h1 class="sticky-top pt-30">🎉 JOIN QUIX</h1>
                 <div id="code-input-container" class={{ "code-input-container": true, "live": activeSection.val == "joinSection" }}>
                     {
                         codeInputFields.map((inputfield) => inputfield)
@@ -99,8 +102,8 @@ import { UIX } from 'uix';
             </section>
 
             <section class={{ "section": true, "live": activeSection.val == "hostSection" }} id="hostSection">
-                <h1 class="section-text sticky-top pb-30">HOST QUIX</h1>
-                <button type="button" id="openGameEditorButton" class={{ "button": true, "live": activeSection.val == "hostSection" }} onclick={() => redirect(`${globalThis.location.origin}/create`)}>
+                <h1 class="section-text sticky-top pb-30">🚀 HOST QUIX</h1>
+                <button type="button" id="openGameEditorButton" class={{ "button": true, "live": activeSection.val == "hostSection" }} onclick={() => redirect("/host")}>
                     Open Game Editor
                 </button>
             </section>

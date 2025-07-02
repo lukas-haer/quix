@@ -1,13 +1,18 @@
+//UIX tooling
+import { UIX } from 'uix';
 import { Datex } from 'datex-core-legacy/datex.ts';
 import { ObjectRef } from 'datex-core-legacy/runtime/pointers.ts';
-import { JoinGameReturn, GetCurrentQuestionReturn } from '../../../models/PlayerApiReturns.ts';
-import { getHostIdFromGamecode } from 'backend/lobbyManagement/LobbyManagement.ts';
-import GameScreen from '../GameScreen/GameScreen.tsx';
 import { Component, template } from 'uix/components/Component.ts';
-import { Snackbar, successSnackbarMessage, failureSnackbarMessage } from 'frontend/src/components/utils/snackbar/Snackbar.tsx';
+//Components and Type imports
+import { GameScreen } from './GameScreen/GameScreen.tsx';
+import { JoinGameReturn, GetCurrentQuestionReturn } from '../../../models/PlayerApiReturns.ts';
+//Utils
 import { LoadingScreen } from 'frontend/src/components/utils/loadingscreen/LoadingScreen.tsx';
+import { Snackbar, successSnackbarMessage, failureSnackbarMessage } from 'frontend/src/components/utils/snackbar/Snackbar.tsx';
+//Backendfunctions
+import { getHostIdFromGamecode } from 'backend/lobbyManagement/LobbyManagement.ts';
 
-type JoinScreenProps = {
+type PlayerMainProps = {
     id?: string;
 };
 
@@ -24,11 +29,13 @@ export type PlayerAPIType = {
 const apiObj: ObjectRef<{ playerApi?: PlayerAPIType }> = $({}); //encapsulate api in ObjectRef to guarantee reactivity
 
 //TODO: error handling, user feedback (snackbar/form), form validation for endpoint format and username length
-@template<JoinScreenProps>(({ id }) => {
+@template<PlayerMainProps>(({ id }) => {
     const gamecode = $(decodeURIComponent(id ?? ''));
     const endpointId = $('');
-    const activeComponent = $('asdf');
+    const activeComponent = $('loading');
     const name = $('');
+
+    UIX.Theme.useTheme('uix-light-plain');
 
     async function getEndpointByGamecode() {
         try {
@@ -54,7 +61,8 @@ const apiObj: ObjectRef<{ playerApi?: PlayerAPIType }> = $({}); //encapsulate ap
                 activeComponent.val = 'nameSelection';
             } catch (error) {
                 console.error('Error when attempting to find Lobby: ' + error);
-                failureSnackbarMessage('Lobby not found', 'There is no lobby for this gamecode.');
+                failureSnackbarMessage('Lobby not found', 'There is no lobby for this gamecode.', 30_000);
+                return;
             }
         } catch (error) {
             console.error('ERROR (joinGameByGamecode): ' + error);
@@ -64,7 +72,7 @@ const apiObj: ObjectRef<{ playerApi?: PlayerAPIType }> = $({}); //encapsulate ap
             );
         }
     }
-    //getEndpointByGamecode();
+    getEndpointByGamecode();
 
     const joinGame = async () => {
         try {
@@ -85,7 +93,7 @@ const apiObj: ObjectRef<{ playerApi?: PlayerAPIType }> = $({}); //encapsulate ap
             activeComponent.val = 'liveGame';
             stateId.val = res.state.id;
         } catch (error) {
-            console.error('ERROR: JoinScreen/joinGame: ' + error);
+            console.error('ERROR: PlayerMain/joinGame: ' + error);
             failureSnackbarMessage(
                 'Error when loading Lobby',
                 'Could not join the Lobby. Please make sure the Host is connected.'
@@ -96,10 +104,10 @@ const apiObj: ObjectRef<{ playerApi?: PlayerAPIType }> = $({}); //encapsulate ap
     const renderComponent = () => {
         switch (activeComponent.val) {
             case 'liveGame':
-                return <GameScreen stateId={stateId.val} currentRoundId={currentRoundId.val} apiObj={apiObj} />
+                return <GameScreen stateId={stateId.val} currentRoundId={currentRoundId.val} apiObj={apiObj} />;
             case 'nameSelection':
                 return (
-                    <div>
+                    <div class="nameselection-container">
                         <h1>WHAT SHOULD WE CALL YOU?</h1>
                         <div class="name-input-container">
                             <input
@@ -109,19 +117,37 @@ const apiObj: ObjectRef<{ playerApi?: PlayerAPIType }> = $({}); //encapsulate ap
                                 value={name}
                                 maxlength="12"
                                 placeholder="Enter your name"
+                                autofocus
                                 required
                             />
                             <div class="glowing-line" id="glowingLine"></div>
                         </div>
-                        <button type="button" class="button" onclick={() => joinGame()}>
+                        <button
+                            type="button"
+                            class="button"
+                            onclick={() => joinGame()}
+                            onkeydown={(event: KeyboardEvent) => {
+                                if (event.key === 'Enter') {
+                                    joinGame();
+                                }
+                            }}
+                        >
                             JOIN
                         </button>
                     </div>
                 );
             case 'loading':
-                return <LoadingScreen text={'Loading...'} />;
+                return <LoadingScreen text="Loading..." />;
             default:
-                return <div> <p>We're sorry, something happend that was not supposed to happen. </p><button type="button" class="button" onclick={() => redirect('/')}>Go Back</button></div>;
+                return (
+                    <div>
+                        {' '}
+                        <p>We're sorry, something happend that was not supposed to happen. </p>
+                        <button type="button" class="button" onclick={() => redirect('/')}>
+                            Go Back
+                        </button>
+                    </div>
+                );
         }
     };
 
@@ -132,4 +158,4 @@ const apiObj: ObjectRef<{ playerApi?: PlayerAPIType }> = $({}); //encapsulate ap
         </main>
     );
 })
-export default class JoinScreen extends Component<JoinScreenProps> {}
+export class PlayerMain extends Component<PlayerMainProps> {}
