@@ -3,15 +3,15 @@ import { Component, template } from "uix/components/Component.ts";
 
 
 type PlayerFinishedScreenProps = {
-
+    getScoreboard: () => Promise<{ name: string; punkte: number }[]>;
 };
 
-@template(function ({} : PlayerFinishedScreenProps) {
+@template(function ({getScoreboard} : PlayerFinishedScreenProps) {
     return (
         <div>
         </div>
     );
 })
 
-export class PlayerFinishedScreen extends Component {
+export class PlayerFinishedScreen extends Component<PlayerFinishedScreenProps> {
 }

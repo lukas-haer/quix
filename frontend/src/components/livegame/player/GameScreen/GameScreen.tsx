@@ -85,7 +85,7 @@ type GameScreenProps = {
         )
       }
       {
-          state.val === "finished" && <button onclick={()=>console.log(getScoreboard())}> test </button>
+          state.val === "finished" && <PlayerFinishedScreen getScoreboard={getScoreboard} />
       }
 
     </div>
