@@ -3,21 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QUIX</title>
+    <title>ANSWER THE QUESTION</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Avenir+Next:wght@700&display=swap');
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             font-family: Arial, sans-serif;
-            overflow: hidden; /* Disable default scrolling */
+            overflow: hidden;
         }
-
         .section {
             height: 100vh;
             display: flex;
@@ -25,137 +22,114 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            position: relative; /* For positioning elements */
-        }
-
-        .section {
+            position: relative;
             background: #ffffff;
             color: #000;
         }
-
         h1 {
             font-family: 'Avenir Next', Arial, sans-serif;
-            font-size: 4rem;
+            font-size: 5vw; /* Adjust font size based on viewport width */
             font-weight: bold;
             font-style: italic;
+            margin-bottom: 1rem;
+            max-width: 90%; /* Limit width to prevent overflow */
+            word-wrap: break-word; /* Break long words */
         }
-
-        .name-input-container {
-            display: flex;
-            justify-content: center;
+        .button-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
             margin-top: 2rem;
-            position: relative;
         }
-
-        .name-input {
-            width: 100%;
-            height: 70px;
-            border: none;
-            border-bottom: 2px solid transparent;
-            text-align: center;
+        .button {
+            width: 150px;
+            height: 150px;
             font-size: 2rem;
             font-weight: bold;
-            background: transparent;
-            color: #000;
-            transition: all 0.3s ease;
-        }
-
-        .name-input:focus {
-            outline: none;
-            caret-color: rgba(0, 123, 255, 1); /* Change cursor color */
-            animation: bounce 0.5s ease-in-out; /* Bounce animation on focus */
-        }
-
-        @keyframes bounce {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
-        }
-
-        .button {
-            margin-top: 2rem;
-            padding: 1rem 2rem;
-            font-size: 1.5rem;
-            font-weight: bold;
             color: #fff;
-            background-color: #007BFF;
             border: none;
-            border-radius: 5px;
+            border-radius: 10px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-
-        .button:hover {
-            background-color: #0056b3;
+        .button1 { background-color: #007BFF; }
+        .button1:hover {
+            background: linear-gradient(135deg, #0056b3, #007BFF);
+            transform: scale(1.1) rotate(5deg);
+            animation: pulse 1s infinite;
         }
-
-        .glowing-line {
+        .button2 { background-color: #28a745; }
+        .button2:hover {
+            background: linear-gradient(135deg, #218838, #28a745);
+            transform: scale(1.1) rotate(5deg);
+            animation: pulse 1s infinite;
+        }
+        .button3 { background-color: #ffc107; }
+        .button3:hover {
+            background: linear-gradient(135deg, #e0a800, #ffc107);
+            transform: scale(1.1) rotate(5deg);
+            animation: pulse 1s infinite;
+        }
+        .button4 { background-color: #dc3545; }
+        .button4:hover {
+            background: linear-gradient(135deg, #c82333, #dc3545);
+            transform: scale(1.1) rotate(5deg);
+            animation: pulse 1s infinite;
+        }
+        .countdown-bar {
             position: absolute;
-            bottom: -10px;
+            bottom: 0;
             left: 0;
-            width: 100%;
-            height: 5px;
-            background: linear-gradient(90deg, rgba(0, 123, 255, 0) 0%, rgba(0, 123, 255, 1) 50%, rgba(0, 123, 255, 0) 100%);
-            background-size: 200% 200%;
-            animation: moveGradient 3s linear infinite;
+            width: 0%;
+            height: 20px;
+            background: linear-gradient(90deg, rgba(0, 123, 255, 0) 0%, rgba(0, 123, 255, 1) 100%);
+            box-shadow: 0 0 20px rgba(0, 123, 255, 0.7);
+            animation: countdown 30s linear forwards;
         }
-
-        @keyframes moveGradient {
-            0% {
-                background-position: 200% 0;
-            }
-            100% {
-                background-position: -200% 0;
-            }
+        @keyframes countdown {
+            from { width: 0%; }
+            to { width: 100%; }
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1.1); }
+            50% { transform: scale(1.15); }
+        }
+        .icon {
+            font-size: 3rem;
         }
     </style>
 </head>
 <body>
     <div class="section">
-        <h1>WHAT SHOULD WE CALL YOU?</h1>
-        <div class="name-input-container">
-            <input type="text" class="name-input" id="nameInput" maxlength="12" placeholder="Enter your name" oninput="updateGlowingLine()">
-            <div class="glowing-line" id="glowingLine"></div>
+        <h1>WHAT IS YOUR FAVORITE COLOR?</h1>
+        <div class="button-container">
+            <button class="button button1" onclick="answerQuestion('Answer 1')">
+                <span class="icon">&#9650;</span> <!-- Triangle -->
+            </button>
+            <button class="button button2" onclick="answerQuestion('Answer 2')">
+                <span class="icon">&#9632;</span> <!-- Square -->
+            </button>
+            <button class="button button3" onclick="answerQuestion('Answer 3')">
+                <span class="icon">&#9675;</span> <!-- Circle -->
+            </button>
+            <button class="button button4" onclick="answerQuestion('Answer 4')">
+                <span class="icon">&#10006;</span> <!-- Cross -->
+            </button>
         </div>
-        <button class="button" onclick="submitName()">JOIN</button>
+        <div class="countdown-bar" id="countdownBar"></div>
     </div>
-
     <script>
-        function submitName() {
-            const nameInput = document.getElementById('nameInput');
-            const name = nameInput.value.trim();
-            if (name) {
-                alert(`Name submitted: ${name}`);
-            } else {
-                alert('Please enter a name.');
-            }
+        function answerQuestion(answer) {
+            alert(`You selected: ${answer}`);
         }
-
-        function updateGlowingLine() {
-            const nameInput = document.getElementById('nameInput');
-            const glowingLine = document.getElementById('glowingLine');
-            const length = nameInput.value.length;
-            const maxLength = nameInput.maxLength;
-
-            if (length === maxLength) {
-                glowingLine.style.animation = 'none';
-            } else {
-                const speed = 3 - (length / maxLength) * 2; // Adjust speed based on input length
-                glowingLine.style.animation = `moveGradient ${speed}s linear infinite`;
-            }
-        }
-
-        // Focus on the input field and apply bounce effect
+        // Set a timeout to notify the user when the countdown ends
         window.addEventListener('DOMContentLoaded', () => {
-            const nameInput = document.getElementById('nameInput');
-            nameInput.focus();
-            nameInput.style.animation = 'bounce 0.5s ease-in-out';
             setTimeout(() => {
-                nameInput.style.animation = ''; // Reset animation
-            }, 500);
+                alert('Time is up! Shouldve made a selection.');
+            }, 30000);
         });
     </script>
 </body>
