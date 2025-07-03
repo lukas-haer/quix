@@ -3,25 +3,25 @@ import {Component, template} from "uix/components/Component.ts";
 import {frontendRouter} from "uix/routing/"
 
 type PlayerFinishedScreenProps = {
-    getScoreboard?: () => Promise<{ name: string; points: number }[]>;
-    name?: string
+    getScoreboard: () => Promise<{ name: string; points: number }[]>;
+    getName: () => Promise<string>;
 };
 
 
-@template(function ({getScoreboard}: PlayerFinishedScreenProps) {
+@template(async function ({getScoreboard, getName}: PlayerFinishedScreenProps) {
 
     type Player = { name: string; points: number };
     type PlayerWithRank = Player & { rank: number };
 
     function navigateToMainMenu() {
-        window.location.href = "/"
+        window.location.href = "/host"
     }
 
     function navigateToJoinScreen() {
-        window.location.href = "/join"
+        window.location.href = "/"
     }
 
-    function getRankedScoreboard(scoreboard: Player[]): PlayerWithRank[] {
+    function getRankedScoreboard(scoreboard: { name: string; points: number }[]): PlayerWithRank[] {
         const sorted = [...scoreboard].sort((a, b) => b.points - a.points);
         let rank = 1;
         let lastPoints: number | null = null;
@@ -73,42 +73,36 @@ type PlayerFinishedScreenProps = {
         return `${rank}th`;
     }
 
-    //const rankedScoreboard = getRankedScoreboard(getScoreboard())
-
-
-    //TODO dummy daten rausschmeißen und echte nehmen
-    const scoreboard = [
-        {name: 'Player1', points: 100},
-        {name: 'Player2', points: 100},
-        {name: 'Player3', points: 102},
-        {name: 'Player4', points: 104},
-        {name: 'Player5', points: 5},
-        {name: 'Player6', points: 6},
-        {name: 'Player7', points: 7},
-        {name: 'Player8', points: 8},
-        {name: 'Player9', points: 9},
-        {name: 'Player10', points: 10}
-    ];
-    const myName = 'Player1'
-    const rankedScoreboard = getRankedScoreboard(scoreboard)
+    const rankedScoreboard = getRankedScoreboard(await getScoreboard())
+    const myName = await getName();
 
     const nextRankInfo = pointsToNextRankAndPlace(rankedScoreboard, myName);
     const myRank = getMyRank(rankedScoreboard, myName)
-
+    const myPoints = getMyPoints(rankedScoreboard, myName)
+    console.log("name {}" , myName)
+    console.log("points {} ", myPoints)
+    console.log("scoreboard", rankedScoreboard)
     return (
         <div class="color-fade player-finished-container">
-            <h1>
-                {formatNumberToNumberWithSuffix(myRank)} Place
-            </h1>
-            <h3>
-                {getMyPoints(rankedScoreboard, myName)} Points
-            </h3>
-            {nextRankInfo != null && (
-                <h4>
-                    {nextRankInfo.pointsNeeded} point{nextRankInfo.pointsNeeded !== 1 && "s"} away
-                    from {formatNumberToNumberWithSuffix(nextRankInfo.nextRank)} place
-                </h4>
-            )}
+            {myPoints <= 0 &&
+                <h3>You did not compete.</h3>
+            }
+            {myPoints > 0 &&
+                <>
+                    <h1>
+                        {formatNumberToNumberWithSuffix(myRank)} Place
+                    </h1>
+                    <h3>
+                        {myPoints} Points
+                    </h3>
+                    {nextRankInfo != null && (
+                        <h4>
+                            {nextRankInfo.pointsNeeded} point{nextRankInfo.pointsNeeded !== 1 && "s"} away
+                            from {formatNumberToNumberWithSuffix(nextRankInfo.nextRank)} place
+                        </h4>
+                    )}
+                </>
+            }
             <div class="button-container">
                 <button onclick={navigateToJoinScreen}>
                     Join another quix

@@ -35,7 +35,7 @@ type GameScreenProps = {
     answers.val = res.answers.join(";"); //To avoid using ObjectRef
     currentDeadline.val = res.currentDeadline.getTime(); //To avoid using ObjectRef
     console.log("DCD: ",currentDeadline.val);
-    
+
     submittedAnswer.val = false;
   }
 
@@ -59,6 +59,13 @@ type GameScreenProps = {
     return scoreboard
   }
 
+  async function getName(){
+    if(!apiObj.playerApi) throw Error("PlayerAPI not defined.")
+    const name = await apiObj.playerApi.whoAmI();
+    return name
+  }
+
+
   /*
   TODO: implement
        <h2>State: {state.val}</h2>
@@ -75,17 +82,17 @@ type GameScreenProps = {
       }
       {
         state.val === "playing" && (
-          <QuestionScreen 
-            questionText={question.val} 
-            answers={answers.val} 
-            currentDeadline={currentDeadline.val} 
-            submittedAnswer={submittedAnswer} 
+          <QuestionScreen
+            questionText={question.val}
+            answers={answers.val}
+            currentDeadline={currentDeadline.val}
+            submittedAnswer={submittedAnswer}
             submitAnswer={submitAnswer}
           />
         )
       }
       {
-          state.val === "finished" && <PlayerFinishedScreen getScoreboard={getScoreboard} />
+          state.val === "finished" && <PlayerFinishedScreen getScoreboard={getScoreboard} getName={getName}/>
       }
 
     </div>

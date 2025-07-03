@@ -72,6 +72,15 @@ class PlayerAPI {
     return scorebaord
   }
 
+  @property static whoAmI(): string {
+    const callerId = datex.meta?.caller
+    const playerIndex = gameStateObjects.players.findIndex((player: Player) => player.endpointId === callerId)
+
+    if(playerIndex === -1) throw new Error("There is no player with that endpoint id.")
+
+    return gameStateObjects.players[playerIndex].name
+  }
+
   @property static version = "0.0.1";
 }
 
