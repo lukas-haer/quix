@@ -9,32 +9,30 @@ export async function registerLobby() {
 			throw new Error("No caller ID found. Cannot register lobby.");
 		}
 
-		// Generate a random 6-digit lobby code
-		const lobbyCode = Math.floor(100000 + Math.random() * 900000).toString();
+		
+	   const gameCodeRegex = /^\d{6}$/;
+	   let lobbyCode: string | undefined = undefined;
+	   // Try to generate a valid, unique 6-digit code
+	   while (true) {
+		   const candidate = Math.floor(100000 + Math.random() * 900000).toString();
+		   if (!gameCodeRegex.test(candidate)) {  //Checks if gamecode consists of exactly 6 numbers. This is currently pointless, but a safety feature, we may sometime appriciate
+			   throw new Error("Generated game code is not a 6 digit number.");
+		   }
+		   if (lobbies.some(lobby => lobby.code === candidate)) {
+			   // Duplicate found, try again
+			   continue;
+		   }
+		   lobbyCode = candidate;
+		   break;
+	   }
+	   
+	   if (!lobbyCode) {
+		   throw new Error("Failed to generate a valid lobby code.");
+	   }
 
-		//Checks if gamecode consists of exactly 6 numbers. This is currently pointless, but a safety feature, we may sometime appriciate
-		const gameCodeRegex = /^\d{6}$/; 
-        if (!gameCodeRegex.test(lobbyCode.toString())) {
-			throw new Error("Gamecode is not a 6 digit number")
-        }
-
-		var newLobbyId: string = "";
-		var checkId = true;
-		while (checkId) {
-			newLobbyId = crypto.randomUUID();
-			for (var i = 0; i <= lobbies.length; i++) {
-				if (i == lobbies.length) {
-					checkId = false;
-				}else{
-					if (newLobbyId == lobbies[i].id) {
-						break;
-					}
-				}
-			}
-		}
 		
 		const newLobby: Lobby = {
-			id: newLobbyId,
+			id: crypto.randomUUID(),
 			code: lobbyCode,
 			host: {
 				endpointId: datex.meta.caller,
