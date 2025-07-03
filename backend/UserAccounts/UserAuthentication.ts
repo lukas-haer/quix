@@ -93,7 +93,7 @@ export async function userSignUp(username: string, password: string) {
 	console.log("Registering new user successful:", username);
 
 	//if signup successful, setting session
-	const session = await Context.getPrivateData(datex.meta);
+	const session = await Context.getPrivateData(datex.meta.caller);
 	session.userId = username;
 	return true; //sollte irgendwann auf Account Startseite weiterleiten
 	}

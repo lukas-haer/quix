@@ -10,16 +10,16 @@ import { UsernameTakenError, WeakPasswordError } from "common/models/errors/acco
  */
 export function userSignUpForm (ctx: Context) {
 	const url = new URL(ctx.request.url);
-	const error = url.searchParams.get("error");
 
 	const username = $("");
 	const password = $("");
 
-	async function startRegister() {
+	async function register() {
 		try {
-			await register(username.val, password.val)
+			await userSignUp(username.val, password.val)
+			redirect('/login')
 		} catch (error) {
-			console.error("Error (UserSignUpForm/startRegister): ", error);		
+			console.error("Error (UserSignUpForm/register): ", error);		
 			
 			if (String(error).includes("UsernameTakenError")) {
 				failureSnackbarMessage("Username taken", "A user with this name already exists.");
@@ -38,7 +38,7 @@ export function userSignUpForm (ctx: Context) {
 			<input type="text" name="username" placeholder="Username" value={username} required />
 			<input type="password" name="password" placeholder="Password" value={password} required/>
 			<p style={hintStyle}>Password needs to contain at least 8 characters, 1 number, 1 special sign</p>
-			<button type="submit" onclick={startRegister}>Sign Up</button>
+			<button type="submit" onclick={register}>Sign Up</button>
 			<p><a href="/login">Already have an account? Log in here</a></p>
 		</main>
 	)
