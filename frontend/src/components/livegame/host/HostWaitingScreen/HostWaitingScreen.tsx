@@ -74,7 +74,7 @@ type HostWaitingScreenProps = {
                 </div>
             </div>
             <div class="l-col l-col-6 center-vertically">
-                <QrCode class="qrCode" url={invitelink}></QrCode>
+                <QrCode class="qrCode" url={invitelink} />
                 <div class="separator">
                     <span>or join via {hostname}</span>
                 </div>
@@ -84,7 +84,7 @@ type HostWaitingScreenProps = {
                     title="Copy invite link"
                     onclick={() => {
                       navigator.clipboard.writeText(invitelink);
-                      successSnackbarMessage("Link coppied!","The Link has been coppied successfully",2_000)
+                      successSnackbarMessage("Link copied!","The Link has been copied successfully",2_000)
                     }}
                     style={{ cursor: 'pointer', marginLeft: '0.5rem', fontSize: '1.5rem', verticalAlign: 'middle', userSelect: 'none' }}
                   >
@@ -93,7 +93,7 @@ type HostWaitingScreenProps = {
                 </p>
                 <p class="invitelink"                     onclick={() => {
                       navigator.clipboard.writeText(invitelink);
-                      successSnackbarMessage("Link coppied!","The Link has been coppied successfully",2_000)
+                      successSnackbarMessage("Link copied!","The Link has been copied successfully",2_000)
                     }}>{invitelink}</p>
                 <button class="button" type="button" onclick={() => startGame()}>
                     Start Game 🚀
