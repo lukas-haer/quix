@@ -1,5 +1,7 @@
 import { Context } from "uix/routing/context.ts";
-import { User } from "../common/userCredentials.ts";
+import { User } from "common/models/User.ts";
+import { quizzes } from "../SaveQuiz.ts";
+import { Quiz } from "common/models/Quiz.tsx";
 
 import * as argon2 from "jsr:@felix/argon2";
 import { provideRedirect } from "uix/providers/common.tsx";
@@ -14,9 +16,8 @@ declare global {
 };
 
 //Login
-export async function authenticate(ctx: Context) {
+export async function userLogin(ctx: Context) {
 
-	console.log("LOGGING ALLE USER users:", users);
 
 	//receives context with credentials from userLogin function
 	const data = await ctx.request.formData();
@@ -35,15 +36,38 @@ export async function authenticate(ctx: Context) {
 
 	console.log(`Logging in user ${user}`);
 
+
 	//if login successful, setting session
 	const session = await ctx.getPrivateData();
 	session.userId = user;
-	return provideRedirect("/");//sollte irgendwann auf Account Startseite weiterleiten
+
+
+	//////////////////////////LOGGING///////////////////////////////////////
+	const userQuizzes = Object.values(quizzes).filter(quiz => quiz.accountId === user);
+
+	if (userQuizzes.length === 0) {
+		console.log("User has no Quizzes yet")
+	}
+	else {
+
+		console.log(user,"s Quizzes-------------------")
+		for (const quiz of userQuizzes) {
+			console.log("Quizzes of user ", quiz.accountId);
+			console.log("Quiz ID:", quiz.quizId);
+			console.log("Title:", quiz.title);
+			console.log("Description:", quiz.description);
+			console.log("Questions:", quiz.questions);
+			console.log("-----------------------------");
+		}
+	}
+	//////////////////////////LOGGING///////////////////////////////////////
+
+	return provideRedirect("/account");
 }
 
 
 //Signup
-export async function register(username: string, password: string) {
+export async function userSignUp(username: string, password: string) {
 
 	console.log("LOGGING ALLE USER users:", users);
 
@@ -64,7 +88,7 @@ export async function register(username: string, password: string) {
 	users[username] = User({
 		id: username,
 		password: await argon2.hash(password),
-		quizzes: [] // oder mit {}
+		//quizzes: [] // oder mit {}
 	});
 	console.log("Registering new user successful:", username);
 
@@ -73,7 +97,6 @@ export async function register(username: string, password: string) {
 	session.userId = username;
 	return true; //sollte irgendwann auf Account Startseite weiterleiten
 	}
-
 }
 
 //Password validation
@@ -81,6 +104,3 @@ function isValidPassword (password: string) : boolean {
 	const regex = /^(?=.*[0-9])(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-])[A-Za-z\d!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]{8,}$/;
 	return regex.test(password);
 }
-
-//more logging
-console.log("LOGGING ALLE USER users:", users);

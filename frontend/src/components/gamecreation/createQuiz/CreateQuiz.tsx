@@ -1,8 +1,8 @@
 import { Component, template } from "uix/components/Component.ts";
 import { CreateSingleChoiceQuestion } from "./types/CreateSingleChoiceQuestion.tsx";
-import { Question, QuestionType, SingleChoiceQuestion } from "../../../../../common/Question.ts";
+import { Question, QuestionType, SingleChoiceQuestion } from "common/models/Question.ts";
 import { saveQuiz } from "backend/SaveQuiz.ts";
-import { Quiz } from "common/Quiz.tsx";
+import { Quiz } from "common/models/Quiz.tsx";
 
 /**
  * Example data for a quiz. In production, this would only contaion default values.
@@ -19,7 +19,7 @@ let quiz = $(Quiz ({
     title: "",
     description: "",
     accountId: "", //beim backend speichern gesetzt
-    questions: [] //as SingleChoiceQuestion[] //später noch um weitere Typen erweitern
+    questions: [] //as SingleChoiceQuestion[] ? //später noch um weitere Typen erweitern
 }));
 
 
@@ -82,7 +82,6 @@ export function removeQuestionById(questionId: string) {
         );
     }
 }
-
 
 
 /**

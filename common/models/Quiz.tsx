@@ -1,5 +1,5 @@
 import { inferType } from "datex-core-legacy/datex_all.ts";
-import { SingleChoiceQuestion, MultipleChoiceQuestion } from "common/Question.ts";
+import { SingleChoiceQuestion, MultipleChoiceQuestion } from "./Question.ts";
 
 export const Quiz = struct("Quiz",
 	class {

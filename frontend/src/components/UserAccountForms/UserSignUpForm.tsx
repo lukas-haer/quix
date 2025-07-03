@@ -1,4 +1,4 @@
-import { register } from "backend/UserAccountData.ts";
+import { userSignUp } from "backend/UserAccounts/UserAuthentication.ts";
 import { Context } from "uix/routing/context.ts";
 import { failureSnackbarMessage, Snackbar } from "frontend/src/components/utils/snackbar/Snackbar.tsx";
 import { UsernameTakenError, WeakPasswordError } from "common/models/errors/accountErrors.ts";
@@ -8,7 +8,7 @@ import { UsernameTakenError, WeakPasswordError } from "common/models/errors/acco
  * @param ctx context of the request, for registration
  * @returns references registration function, hint about password requirements, error if user already exists or invalid password
  */
-export function userSignUp (ctx: Context) {
+export function userSignUpForm (ctx: Context) {
 	const url = new URL(ctx.request.url);
 	const error = url.searchParams.get("error");
 

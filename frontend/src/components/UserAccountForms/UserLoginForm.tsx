@@ -1,4 +1,4 @@
-import { authenticate } from "backend/UserAccountData.ts";
+import { userLogin } from "backend/UserAccounts/UserAuthentication.ts";
 import { Context } from "uix/routing/context.ts";
 
 /**
@@ -6,12 +6,12 @@ import { Context } from "uix/routing/context.ts";
  * @param ctx context of the request, for authentication
  * @returns references authentication function, errors if no existing user or wrong password
  */
-export function userLogin (ctx: Context) {
+export function userLoginForm (ctx: Context) {
 	
 	const url = new URL(ctx.request.url);
 	const error = url.searchParams.get("error");
 
-	return <form action={authenticate} method="post">
+	return <form action={userLogin} method="post">
 		<h2>Login</h2>
 		<input type="text" name="user" placeholder="Enter your Name" required />
 		<input type="password" name="password" placeholder="Password" required />
