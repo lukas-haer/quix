@@ -24,6 +24,8 @@ type QuizImportProps = {
         const quizObject = JSON.parse(text)
         if(!quizObject) return failureSnackbarMessage("Error", "Failed to parse quiz file content.", 2000)
         
+		//TODO: check if quizObject is actually a valid quiz and display error message if that's not the case
+
 		gameStateObjects.questions = quizObject.questions
 		currentQuizName.val = file.name
         successSnackbarMessage("Success", "Quiz import succeeded.", 2000)
