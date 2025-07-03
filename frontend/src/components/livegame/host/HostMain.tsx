@@ -92,10 +92,10 @@ class PlayerAPI {
     <div class="container">
       <Snackbar></Snackbar>
         {
-          state.val === "waiting" && <HostWaitingScreen state={state} currentRound={currentRound} gameStateObjects={gameStateObjects} />
+          state.val === "waiting" && <HostWaitingScreen state={state} gameStateObjects={gameStateObjects} />
         }
         {
-          state.val === "playing" && <HostPlayingScreen currentRound={currentRound.val} gameStateObjects={gameStateObjects} />
+          state.val === "playing" && <HostPlayingScreen state={state} currentRound={currentRound} gameStateObjects={gameStateObjects} />
         }
         {
           state.val === "finished" && <HostFinishedScreen state={state} currentRound={currentRound} />
