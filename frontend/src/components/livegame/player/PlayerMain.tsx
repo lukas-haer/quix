@@ -106,9 +106,7 @@ const apiObj: ObjectRef<{ playerApi?: PlayerAPIType }> = $({}); //encapsulate ap
     const renderComponent = () => {
         switch (activeComponent.val) {
             case 'liveGame':
-            {
                 return <GameScreen stateId={stateId.val} currentRoundId={currentRoundId.val} apiObj={apiObj}/>;
-            }
             case 'nameSelection':
                 return (
                     <div class="nameselection-container">

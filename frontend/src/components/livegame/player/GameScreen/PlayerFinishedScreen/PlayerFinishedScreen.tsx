@@ -79,30 +79,23 @@ type PlayerFinishedScreenProps = {
     const nextRankInfo = pointsToNextRankAndPlace(rankedScoreboard, myName);
     const myRank = getMyRank(rankedScoreboard, myName)
     const myPoints = getMyPoints(rankedScoreboard, myName)
-    console.log("name {}" , myName)
-    console.log("points {} ", myPoints)
-    console.log("scoreboard", rankedScoreboard)
+
     return (
         <div class="color-fade player-finished-container">
-            {myPoints <= 0 &&
-                <h3>You did not compete.</h3>
-            }
-            {myPoints > 0 &&
-                <>
-                    <h1>
-                        {formatNumberToNumberWithSuffix(myRank)} Place
-                    </h1>
-                    <h3>
-                        {myPoints} Points
-                    </h3>
-                    {nextRankInfo != null && (
-                        <h4>
-                            {nextRankInfo.pointsNeeded} point{nextRankInfo.pointsNeeded !== 1 && "s"} away
-                            from {formatNumberToNumberWithSuffix(nextRankInfo.nextRank)} place
-                        </h4>
-                    )}
-                </>
-            }
+            <>
+                <h1>
+                    {formatNumberToNumberWithSuffix(myRank)} Place
+                </h1>
+                <h3>
+                    {myPoints} Point{myPoints !== 1 && "s"}
+                </h3>
+                {nextRankInfo != null && (
+                    <h4>
+                        {nextRankInfo.pointsNeeded} point{nextRankInfo.pointsNeeded !== 1 && "s"} away
+                        from {formatNumberToNumberWithSuffix(nextRankInfo.nextRank)} place
+                    </h4>
+                )}
+            </>
             <div class="button-container">
                 <button onclick={navigateToJoinScreen}>
                     Join another quix
