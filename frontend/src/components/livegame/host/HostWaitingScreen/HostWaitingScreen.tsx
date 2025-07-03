@@ -7,6 +7,7 @@ import { QrCode } from 'frontend/src/components/utils/qrcode/qrcode.tsx';
 import { UIX } from 'uix';
 import { successSnackbarMessage } from "frontend/src/components/utils/snackbar/Snackbar.tsx";
 import { QuizImport } from "frontend/src/components/livegame/host/QuizImport/QuizImport.tsx";
+import { Separator } from "frontend/src/components/utils/Separator/Separator.tsx";
 
 type HostWaitingScreenProps = {
     state: Datex.Pointer<StateOptions>;
@@ -76,9 +77,7 @@ type HostWaitingScreenProps = {
             </div>
             <div class="l-col l-col-6 center-vertically">
                 <QrCode class="qrCode" url={invitelink} />
-                <div class="separator">
-                    <span>or join via {hostname}</span>
-                </div>
+                <Separator text={`or join via ${hostname}`} />
                 <p class="gamecode">{gamecode}
                   <span
                     class="copy-invite-link"

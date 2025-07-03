@@ -2,6 +2,7 @@ import { Component, template, style } from 'uix/components/Component.ts';
 import { ObjectRef } from 'datex-core-legacy/runtime/pointers.ts';
 import { GameStateObjects, Player, StateOptions } from 'frontend/src/models/GameState.ts';
 import { successSnackbarMessage, failureSnackbarMessage } from "frontend/src/components/utils/snackbar/Snackbar.tsx";
+import { Separator } from "frontend/src/components/utils/Separator/Separator.tsx";
 
 type QuizImportProps = {
 	gameStateObjects: ObjectRef<GameStateObjects>;
@@ -31,9 +32,7 @@ type QuizImportProps = {
 
 	return (
 		<div class="l-col l-col-6 center-vertically">
-			<div class="separator">
-				<span>Manually import quiz</span>
-			</div>
+			<Separator text={"Manually import quiz"} />
 			<span>{currentQuizName.val}</span>
 			<label class="button">
 				<input type="file" accept="application/json" id="import-quiz-input" style={{display: "none"}} onchange={handleImportQuiz}/>
