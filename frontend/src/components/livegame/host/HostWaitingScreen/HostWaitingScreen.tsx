@@ -6,6 +6,7 @@ import { registerLobby } from 'backend/lobbyManagement/LobbyManagement.ts';
 import { QrCode } from 'frontend/src/components/utils/qrcode/qrcode.tsx';
 import { UIX } from 'uix';
 import { successSnackbarMessage } from "frontend/src/components/utils/snackbar/Snackbar.tsx";
+import { QuizImport } from "frontend/src/components/livegame/host/QuizImport/QuizImport.tsx";
 
 type HostWaitingScreenProps = {
     state: Datex.Pointer<StateOptions>;
@@ -99,6 +100,7 @@ type HostWaitingScreenProps = {
                     Start Game 🚀
                 </button>
             </div>
+            <QuizImport gameStateObjects={gameStateObjects} />
         </section>
     );
 })
