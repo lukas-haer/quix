@@ -12,12 +12,23 @@ type HostPlayingScreenProps = {
 
 @template(function ({currentRound, gameStateObjects}: HostPlayingScreenProps) {
 return (
-      <div>
-        <h2>Current Question:</h2>
-        <p>{gameStateObjects.questions[currentRound].content.questionText}</p>
+  <body>
+      <div class="section">
+        <h1>{gameStateObjects.questions[currentRound].content.questionText}</h1>
+        <div class="answer-container">
+            <div class="answer answer1">{gameStateObjects.questions[currentRound].content.answers[0]}</div>
+            <div class="answer answer2">{gameStateObjects.questions[currentRound].content.answers[1]}</div>
+            <div class="answer answer3">{gameStateObjects.questions[currentRound].content.answers[2]}</div>
+            <div class="answer answer4">{gameStateObjects.questions[currentRound].content.answers[3]}</div>
+        </div>
+        {/* <p>{gameStateObjects.questions[currentRound].content.questionText}</p>
         <h2>Current Deadline:</h2>
         <p>{gameStateObjects.currentDeadline.toString()}</p>
+        <p>{gameStateObjects.questions[currentRound].content.answers[1]}</p> */}
+        <div class="countdown-bar" id="countdownBar"></div>
       </div>
+  </body>
+      
   )
 })
 export class HostPlayingScreen extends Component<HostPlayingScreenProps> {}
