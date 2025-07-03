@@ -1,0 +1,78 @@
+
+h1 {
+    font-family: 'Avenir Next', Arial, sans-serif;
+    color: white;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
+    font-weight: bold;
+    font-size: 2em;
+    margin-bottom: 3rem;
+}
+
+h3, h4 {
+    font-family: 'Avenir Next', Arial, sans-serif;
+    color: white;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
+    font-weight: bold;
+    margin: 0.5em
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 3rem
+}
+
+button {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    cursor: pointer;
+    width: 300px;
+}
+
+button:hover {
+    background: #72b5ff;
+}
+
+.player-finished-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+}
+
+.color-fade {
+    -webkit-animation: color-fade ease-in-out infinite alternate 12s;
+    animation: color-fade ease-in-out infinite alternate 12s;
+}
+
+@-webkit-keyframes color-fade {
+    0% {
+        background: #19dcea;
+    }
+    50% {
+        background: #b22cff;
+    }
+    100% {
+        background: #ea2222;
+    }
+}
+
+@keyframes color-fade {
+    0% {
+        background: #19dcea;
+    }
+    50% {
+        background: #b22cff;
+    }
+    100% {
+        background: #ea2222;
+    }
+}

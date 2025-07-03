@@ -1,6 +1,6 @@
 import {Datex} from "datex-core-legacy/datex.ts";
 import {Component, template} from "uix/components/Component.ts";
-
+import {frontendRouter} from "uix/routing/"
 
 type PlayerFinishedScreenProps = {
     getScoreboard?: () => Promise<{ name: string; points: number }[]>;
@@ -12,6 +12,14 @@ type PlayerFinishedScreenProps = {
 
     type Player = { name: string; points: number };
     type PlayerWithRank = Player & { rank: number };
+
+    function navigateToMainMenu() {
+        window.location.href = "/"
+    }
+
+    function navigateToJoinScreen() {
+        window.location.href = "/join"
+    }
 
     function getRankedScoreboard(scoreboard: Player[]): PlayerWithRank[] {
         const sorted = [...scoreboard].sort((a, b) => b.points - a.points);
@@ -32,6 +40,11 @@ type PlayerFinishedScreenProps = {
         return me ? me.rank : -1;
     }
 
+    function getMyPoints(rankedScoreboard: PlayerWithRank[], myName: string): number {
+        const me = rankedScoreboard.find(p => p.name === myName);
+        return me ? me.points : -1;
+    }
+
     function pointsToNextRankAndPlace(rankedScoreboard: PlayerWithRank[], myName: string): {
         pointsNeeded: number;
         nextRank: number
@@ -50,6 +63,16 @@ type PlayerFinishedScreenProps = {
         return {pointsNeeded: diff > 0 ? diff : 0, nextRank};
     }
 
+    function formatNumberToNumberWithSuffix(rank: number): string {
+        const mod100 = rank % 100;
+        if (mod100 >= 11 && mod100 <= 13) return `${rank}th`;
+        const mod10 = rank % 10;
+        if (mod10 === 1) return `${rank}st`;
+        if (mod10 === 2) return `${rank}nd`;
+        if (mod10 === 3) return `${rank}rd`;
+        return `${rank}th`;
+    }
+
     //const rankedScoreboard = getRankedScoreboard(getScoreboard())
 
 
@@ -57,8 +80,8 @@ type PlayerFinishedScreenProps = {
     const scoreboard = [
         {name: 'Player1', points: 100},
         {name: 'Player2', points: 100},
-        {name: 'Player3', points: 101},
-        {name: 'Player4', points: 101},
+        {name: 'Player3', points: 102},
+        {name: 'Player4', points: 104},
         {name: 'Player5', points: 5},
         {name: 'Player6', points: 6},
         {name: 'Player7', points: 7},
@@ -72,17 +95,29 @@ type PlayerFinishedScreenProps = {
     const nextRankInfo = pointsToNextRankAndPlace(rankedScoreboard, myName);
     const myRank = getMyRank(rankedScoreboard, myName)
 
-    const text = "text depending on the place"
-    const backgroundColor = "color depending on the place"
-    const textColor = "color depending on the place"
-
     return (
-        <>
-            <div>
-                Hey {myName}, you got place number: {myRank}.
-                {nextRankInfo != null && <div> You are {nextRankInfo.pointsNeeded} Points behind place {nextRankInfo.nextRank} </div>}
+        <div class="color-fade player-finished-container">
+            <h1>
+                {formatNumberToNumberWithSuffix(myRank)} Place
+            </h1>
+            <h3>
+                {getMyPoints(rankedScoreboard, myName)} Points
+            </h3>
+            {nextRankInfo != null && (
+                <h4>
+                    {nextRankInfo.pointsNeeded} point{nextRankInfo.pointsNeeded !== 1 && "s"} away
+                    from {formatNumberToNumberWithSuffix(nextRankInfo.nextRank)} place
+                </h4>
+            )}
+            <div class="button-container">
+                <button onclick={navigateToJoinScreen}>
+                    Join another quix
+                </button>
+                <button onclick={navigateToMainMenu}>
+                    Create your own quix for free
+                </button>
             </div>
-        </>
+        </div>
     );
 })
 
