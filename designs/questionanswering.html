@@ -28,10 +28,12 @@
         }
         h1 {
             font-family: 'Avenir Next', Arial, sans-serif;
-            font-size: 3rem;
+            font-size: 5vw; /* Adjust font size based on viewport width */
             font-weight: bold;
             font-style: italic;
             margin-bottom: 1rem;
+            max-width: 90%; /* Limit width to prevent overflow */
+            word-wrap: break-word; /* Break long words */
         }
         .button-container {
             display: grid;
@@ -48,38 +50,33 @@
             border: none;
             border-radius: 10px;
             cursor: pointer;
-            transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .button1 { background-color: #007BFF; }
         .button1:hover {
             background: linear-gradient(135deg, #0056b3, #007BFF);
             transform: scale(1.1) rotate(5deg);
-            box-shadow: 0 0 30px 10px rgba(0, 123, 255, 0.7);
-            filter: brightness(1.2);
             animation: pulse 1s infinite;
         }
         .button2 { background-color: #28a745; }
         .button2:hover {
             background: linear-gradient(135deg, #218838, #28a745);
             transform: scale(1.1) rotate(5deg);
-            box-shadow: 0 0 30px 10px rgba(40, 167, 69, 0.7);
-            filter: brightness(1.2);
             animation: pulse 1s infinite;
         }
         .button3 { background-color: #ffc107; }
         .button3:hover {
             background: linear-gradient(135deg, #e0a800, #ffc107);
             transform: scale(1.1) rotate(5deg);
-            box-shadow: 0 0 30px 10px rgba(255, 193, 7, 0.7);
-            filter: brightness(1.2);
             animation: pulse 1s infinite;
         }
         .button4 { background-color: #dc3545; }
         .button4:hover {
             background: linear-gradient(135deg, #c82333, #dc3545);
             transform: scale(1.1) rotate(5deg);
-            box-shadow: 0 0 30px 10px rgba(220, 53, 69, 0.7);
-            filter: brightness(1.2);
             animation: pulse 1s infinite;
         }
         .countdown-bar {
@@ -96,13 +93,12 @@
             from { width: 0%; }
             to { width: 100%; }
         }
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
         @keyframes pulse {
             0%, 100% { transform: scale(1.1); }
             50% { transform: scale(1.15); }
+        }
+        .icon {
+            font-size: 3rem;
         }
     </style>
 </head>
@@ -110,10 +106,18 @@
     <div class="section">
         <h1>WHAT IS YOUR FAVORITE COLOR?</h1>
         <div class="button-container">
-            <button class="button button1" onclick="answerQuestion('Answer 1')"></button>
-            <button class="button button2" onclick="answerQuestion('Answer 2')"></button>
-            <button class="button button3" onclick="answerQuestion('Answer 3')"></button>
-            <button class="button button4" onclick="answerQuestion('Answer 4')"></button>
+            <button class="button button1" onclick="answerQuestion('Answer 1')">
+                <span class="icon">&#9650;</span> <!-- Triangle -->
+            </button>
+            <button class="button button2" onclick="answerQuestion('Answer 2')">
+                <span class="icon">&#9632;</span> <!-- Square -->
+            </button>
+            <button class="button button3" onclick="answerQuestion('Answer 3')">
+                <span class="icon">&#9679;</span> <!-- Filled Circle -->
+            </button>
+            <button class="button button4" onclick="answerQuestion('Answer 4')">
+                <span class="icon">&#10006;</span> <!-- Cross -->
+            </button>
         </div>
         <div class="countdown-bar" id="countdownBar"></div>
     </div>
@@ -121,18 +125,8 @@
         function answerQuestion(answer) {
             alert(`You selected: ${answer}`);
         }
-        // Apply bounce effect sequentially without focusing on any button
+        // Set a timeout to notify the user when the countdown ends
         window.addEventListener('DOMContentLoaded', () => {
-            const buttons = document.querySelectorAll('.button');
-            buttons.forEach((button, index) => {
-                setTimeout(() => {
-                    button.style.animation = 'bounce 0.5s ease-in-out';
-                    setTimeout(() => {
-                        button.style.animation = '';
-                    }, 500);
-                }, index * 200);
-            });
-            // Set a timeout to notify the user when the countdown ends
             setTimeout(() => {
                 alert('Time is up! Shouldve made a selection.');
             }, 30000);
