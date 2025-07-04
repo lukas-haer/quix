@@ -4,6 +4,7 @@ import { CreateSingleChoiceQuestion } from "./types/CreateSingleChoiceQuestion.t
 import { Question, QuestionType, SingleChoiceQuestion } from "frontend/src/models/Question.ts";
 import { Quiz } from "frontend/src/models/Quiz.ts";
 import { failureSnackbarMessage, Snackbar, successSnackbarMessage } from "frontend/src/components/utils/snackbar/Snackbar.tsx";
+import { ImportButton } from "frontend/src/components/livegame/host/QuizImport/QuizImport.tsx";
 
 /**
  * Example data for a quiz. In production, this would only contaion default values.
@@ -159,60 +160,6 @@ function setQuiz(newQuiz: Quiz) {
     }
 }
 
-/**
- * This inputfield will be injected below and is created here to preserve the reference
- */
-const importInputField = (
-    <input
-        type="file"
-        accept="application/json"
-        style="display: none"
-        onchange={handleFileUpload}
-    ></input>
-);
-
-/**
- * Called after importing the quiz from the InputButton / importInputField.
- * Turns JSON-File into an object and calls setQuiz()
- * @returns 
- */
-async function handleFileUpload() {
-    const input = importInputField as HTMLInputElement;
-    if (!input || !input.files || !input.files[0]) {
-        failureSnackbarMessage("Import failed", "No file selected.");
-        return;
-    }
-
-    const file = input.files[0];
-    if (file.type !== "application/json") {
-        failureSnackbarMessage("Import failed", "Wrong file type. Please select a JSON file.");
-        return;
-    }
-
-    try {
-        const text = await file.text();
-        let importedQuizJson;
-        try {
-            importedQuizJson = JSON.parse(text);
-        } catch (parseError) {
-            failureSnackbarMessage("Import failed", "Invalid JSON format.");
-            console.error("JSON parse error:", parseError);
-            return;
-        }
-
-        if (!importedQuizJson || typeof importedQuizJson !== "object" || !importedQuizJson.questions) {
-            failureSnackbarMessage("Import failed", "The file does not contain a valid quiz object.");
-            return;
-        }
-
-        setQuiz(importedQuizJson);
-        successSnackbarMessage("Import successful", "The quiz was successfully imported.");
-    } catch (error) {
-        failureSnackbarMessage("Import failed", "Failed to read the file.");
-        console.error("File read error:", error);
-    }
-}
-
 @template(() => {
     UIX.Theme.useTheme("uix-light")
 
@@ -225,21 +172,13 @@ async function handleFileUpload() {
             </div>
             <div class="gc-col gc-col-3 vertically-centered align-right">
 				<div>
-
-                    <button
-                	    type="button"
-                	    id="import-btn"
-                	    onclick={() => (importInputField as HTMLInputElement).click()}
-						>
-                        Import
-                        { importInputField }
-                    </button>
+                    <ImportButton callback={(quiz) => {setQuiz(quiz)}} />
                 	<button
                 	    type="button"
-                	    id="export-btn"
+                	    class="button"
                 	    onclick={exportQuestionSet}
 						>
-                	    Export
+                	    Export Quiz
                 	</button>
 				</div>
             </div>
