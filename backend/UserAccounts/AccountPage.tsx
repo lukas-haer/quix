@@ -5,11 +5,12 @@ import { Quiz } from "common/models/Quiz.tsx";
 import { quizzes } from "backend/SaveQuiz.ts";
 
 export async function accountPage (ctx: Context) {
-	const session = await ctx.getPrivateData();
+	
+	const session = await Context.getPrivateData(datex.meta.caller);
 	const currentUser = session.userId;
 
 	if (!currentUser) {
-		console.error("no user logged in");
+		console.error("LOG AccountPage: no user logged in");
 		return provideRedirect("/login");
 	}
 

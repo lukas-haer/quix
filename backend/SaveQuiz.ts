@@ -8,8 +8,12 @@ export const quizzes = eternal ?? $({} as Record<string, Quiz>);
 
 export async function saveQuiz (ctx: Context) {
 
-	const session = await ctx.getPrivateData();
+	const session = await Context.getPrivateData(datex.meta.caller);
 	const currentUser = session.userId;
+
+	console.log("LOG SaveQuiz: current session: ", session)
+	console.log("LOG SaveQuiz: current session user: ", session.userId)
+
 
 	////////////////bearbeiten
 	if(!currentUser || !(currentUser in users)) {
