@@ -13,9 +13,11 @@ import { quizzes } from "backend/SaveQuiz.ts";
 
 export default function HostDashboard({ quizId }: { quizId: string }) {
 
-
+  console.log("HostDashboard selected quiz to host: ", quizId)
   const hostedQuiz = quizzes[quizId];
   const questionsInQuiz = hostedQuiz.questions;
+
+  console.log("HOSTDASHBOARD Questions: ", questionsInQuiz);
 
 
 
