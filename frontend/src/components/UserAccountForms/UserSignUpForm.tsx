@@ -9,7 +9,7 @@ import { UsernameTakenError, WeakPasswordError } from "common/models/errors/acco
  * @returns references registration function, hint about password requirements, error if user already exists or invalid password
  */
 export function userSignUpForm (ctx: Context) {
-	const url = new URL(ctx.request.url);
+	//const url = new URL(ctx.request.url);
 
 	const username = $("");
 	const password = $("");
@@ -17,7 +17,7 @@ export function userSignUpForm (ctx: Context) {
 	async function register() {
 		try {
 			await userSignUp(username.val, password.val)
-			redirect('/login')
+			redirect('/')
 		} catch (error) {
 			console.error("Error (UserSignUpForm/register): ", error);		
 			
@@ -34,7 +34,7 @@ export function userSignUpForm (ctx: Context) {
 	return (
 		<main>
 			<Snackbar></Snackbar>
-			<h2>Sign Up</h2>
+			<h2>Sign Up for a new Account</h2>
 			<input type="text" name="username" placeholder="Username" value={username} required />
 			<input type="password" name="password" placeholder="Password" value={password} required/>
 			<p style={hintStyle}>Password needs to contain at least 8 characters, 1 number, 1 special sign</p>
@@ -44,12 +44,6 @@ export function userSignUpForm (ctx: Context) {
 	)
 	
 }
-
-const errorStyle = {
-	color: "red",
-	fontSize: "0.9rem",
-	marginTop: "0.2rem",
-};
 
 const hintStyle = {
 	color: "#555",

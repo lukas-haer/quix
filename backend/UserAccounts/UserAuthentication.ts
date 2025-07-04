@@ -5,7 +5,7 @@ import { Quiz } from "common/models/Quiz.tsx";
 
 import * as argon2 from "jsr:@felix/argon2";
 import { provideRedirect } from "uix/providers/common.tsx";
-import { UsernameTakenError, WeakPasswordError } from "common/models/errors/accountErrors.ts";
+import { InvalidPasswordError, UsernameTakenError, UserNotFoundError, WeakPasswordError } from "common/models/errors/accountErrors.ts";
 
 export const users = eternal ?? $({} as Record<string, User>);
 
@@ -16,41 +16,34 @@ declare global {
 };
 
 //Login
-export async function userLogin(ctx: Context) {
-
-
-	//receives context with credentials from userLogin function
-	const data = await ctx.request.formData();
-	const user = data.get("user") as string;
-	const password = data.get("password") as string;
-
+export async function userLogin(username: string, password: string) {
+	
 	//user doesn't exist
-	if (!(user in users)) {
-		return provideRedirect("/login?error=user_not_found");
-	}
+	if (!(username in users)) {
+		throw new UserNotFoundError();
+	}	
 
 	//wrong password for user
-	if (!await argon2.verify(users[user].password, password)) {
-		return provideRedirect("/login?error=invalid_password");
+	if (!await argon2.verify(users[username].password, password)) {
+		throw new InvalidPasswordError();
 	}
 
-	console.log(`Logging in user ${user}`);
+	console.log(`Logging in user ${username}`);
 
 
 	//if login successful, setting session
-	const session = await ctx.getPrivateData();
-	session.userId = user;
-
+	const session = await Context.getPrivateData(datex.meta.caller);
+	session.userId = username;
 
 	//////////////////////////LOGGING///////////////////////////////////////
-	const userQuizzes = Object.values(quizzes).filter(quiz => quiz.accountId === user);
+	const userQuizzes = Object.values(quizzes).filter(quiz => quiz.accountId === username);
 
 	if (userQuizzes.length === 0) {
 		console.log("User has no Quizzes yet")
 	}
 	else {
 
-		console.log(user,"s Quizzes-------------------")
+		console.log(username,"s Quizzes-------------------")
 		for (const quiz of userQuizzes) {
 			console.log("Quizzes of user ", quiz.accountId);
 			console.log("Quiz ID:", quiz.quizId);
@@ -62,7 +55,7 @@ export async function userLogin(ctx: Context) {
 	}
 	//////////////////////////LOGGING///////////////////////////////////////
 
-	return provideRedirect("/account");
+	return true; //TODO sollte irgendwann auf Account Startseite weiterleiten
 }
 
 
@@ -95,7 +88,7 @@ export async function userSignUp(username: string, password: string) {
 	//if signup successful, setting session
 	const session = await Context.getPrivateData(datex.meta.caller);
 	session.userId = username;
-	return true; //sollte irgendwann auf Account Startseite weiterleiten
+	return true; //TODO sollte irgendwann auf Account Startseite weiterleiten
 	}
 }
 
@@ -103,4 +96,26 @@ export async function userSignUp(username: string, password: string) {
 function isValidPassword (password: string) : boolean {
 	const regex = /^(?=.*[0-9])(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-])[A-Za-z\d!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]{8,}$/;
 	return regex.test(password);
+}
+
+//user logout
+export async function logout (ctx: Context) {
+	const session = await ctx.getPrivateData();
+	const currentUser = session.userId;
+
+	if (currentUser) {
+		session.userId = undefined
+		console.log("User logged out, userId shouldn't be set anymore: ", session.userId)
+	} else {
+		throw new Error ("No current user logged in that could be logged out");
+	}
+	return provideRedirect("/");
+}
+
+@endpoint
+export class Account {
+	@property static async getCurrentUser() {
+		const session = await Context.getPrivateData(datex.meta);
+		return session.userId;
+	}
 }

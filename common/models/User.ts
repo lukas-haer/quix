@@ -6,7 +6,6 @@ export const User = struct("User",
 	class {
 		@property id!: string
 		@property password!: string
-		//@property quizzes!: Record<string, Quiz>;
 	}
 )
 
