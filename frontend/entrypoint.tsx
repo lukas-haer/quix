@@ -5,6 +5,7 @@ import { CreateQuiz } from './src/components/gamecreation/createQuiz/CreateQuiz.
 
 import { userLoginForm } from "./src/components/UserAccountForms/UserLoginForm.tsx";
 import { userSignUpForm } from "./src/components/UserAccountForms/UserSignUpForm.tsx";
+import AccountPage from "frontend/AccountPage.tsx";
 
 export default {
     "/": () => <MainMenu />,
@@ -13,5 +14,7 @@ export default {
     "/create": () => <HostDashboard />,
     "/createQuiz": () => <CreateQuiz />,
 	"/login": userLoginForm,
-	"/signup": userSignUpForm
+	"/signup": userSignUpForm,
+     "/account/:userId": (_: any, { userId }: { userId: string }) => <AccountPage userId={userId}/>
+
 };

@@ -15,7 +15,7 @@ export function userLoginForm (ctx: Context) {
 	async function authenticate() {
 		try {
 			await userLogin(username.val, password.val)
-			redirect("/")
+			redirect(`/account/${username.val}`)
 		} catch(error) {
 			console.error("Error (UserLoginForm/authenticate): ", error);	
 			if (String(error).includes("UserNotFoundError")) {

@@ -17,7 +17,7 @@ export async function saveQuiz (ctx: Context) {
 
 	////////////////bearbeiten
 	if(!currentUser || !(currentUser in users)) {
-		console.error("User not found or not logged in."); //braucht funktionalen Error
+		console.error("LOG SaveQuiz: User not found or not logged in."); //braucht funktionalen Error
 		//!!!!!!!sollte nicht alle Eingaben verwerfen, sondern nur Möglichkeit zur anmelden / einloggen geben und da dann das Quiz speichern
 		return provideRedirect("/"); //hier snackbar fehler bitte melde dich erst an
 	}
@@ -49,16 +49,6 @@ export async function saveQuiz (ctx: Context) {
 		questions : questions
 	})
 
-	/*
-	const quiz: Quiz = {
-        quizId: data.get("quizId") as string,
-        title: data.get("title") as string,
-        description: data.get("description") as string,
-        accountId: userId,
-        //questions: JSON.parse(data.get("questions") as string),
-		questions: mappedQuestions
-    };
-	*/
 
 	console.log("LOG -------------Quiz saved:-------------", quizzes[quizId]);
 	console.log("-------------------------------");
@@ -67,7 +57,7 @@ export async function saveQuiz (ctx: Context) {
 	////////////////bearbeiten
 	if (!users[currentUser]) {
 		// Falls User nicht da ist, redirect zum Anlegen oder Fehler werfen
-		console.error("User not found in users store:", currentUser);
+		console.error("LOG SaveQuiz: User not found in users store:", currentUser);
 		return;
 	}
 	////////////////bearbeiten
@@ -89,5 +79,5 @@ export async function saveQuiz (ctx: Context) {
 		console.log("-----------------------------");
 	}
 
-	return provideRedirect("/account");
+	return provideRedirect(`/account/${currentUser}`);
 }

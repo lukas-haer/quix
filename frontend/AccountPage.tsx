@@ -4,14 +4,19 @@ import { users } from "backend/UserAccounts/UserAuthentication.ts";
 import { Quiz } from "common/models/Quiz.tsx";
 import { quizzes } from "backend/SaveQuiz.ts";
 
-export async function accountPage (ctx: Context) {
+export default async function AccountPage ({ userId }: { userId: string }) {
 	
+	//KLAPPT DAS IM FRONTEND?
 	const session = await Context.getPrivateData(datex.meta.caller);
-	const currentUser = session.userId;
+	const sessionUser = session.userId;
+	console.log("LOG AccountPage user über Context und nicht als Param: ", sessionUser);
+
+	const currentUser = userId;
+	console.log("Log Accountpage current user: ", currentUser);
 
 	if (!currentUser) {
 		console.error("LOG AccountPage: no user logged in");
-		return provideRedirect("/login");
+		//return provideRedirect("/login");
 	}
 
 	const userQuizzes = Object.values(quizzes).filter(quiz => quiz.accountId === currentUser);

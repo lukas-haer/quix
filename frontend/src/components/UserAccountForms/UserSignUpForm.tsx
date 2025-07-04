@@ -17,7 +17,7 @@ export function userSignUpForm (ctx: Context) {
 	async function register() {
 		try {
 			await userSignUp(username.val, password.val)
-			redirect('/')
+			redirect(`/account/${username.val}`)
 		} catch (error) {
 			console.error("Error (UserSignUpForm/register): ", error);		
 			
