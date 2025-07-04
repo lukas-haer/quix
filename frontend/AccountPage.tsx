@@ -21,7 +21,26 @@ export default async function AccountPage ({ userId }: { userId: string }) {
 
 	const userQuizzes = Object.values(quizzes).filter(quiz => quiz.accountId === currentUser);
 
+	console.log("LOGGING FOR ACCOUNT PAGE");
+	console.log("LOG Length of current user quizzes:", userQuizzes.length);
+	
+		console.log("-------------------------------");
+		console.log("LOG Updated users quizzes as Object:", userQuizzes);
+		console.log("-------------------------------");
+		console.log();
+		console.log("-------------------------------");
+		for (const quiz of userQuizzes) {
+			console.log("LOG QUIZZES AT ACCOUNT");
+			console.log("Quiz of user", quiz.accountId);
+			console.log("Quiz ID:", quiz.quizId);
+			console.log("Title:", quiz.title);
+			console.log("Description:", quiz.description);
+			console.log("Questions:", quiz.questions);
+			console.log("-----------------------------");
+		}
+
 	return (
+
 		<div>
 			<h1>{ currentUser }s Quizzes</h1>
 			{
@@ -37,6 +56,8 @@ export default async function AccountPage ({ userId }: { userId: string }) {
 						{userQuizzes.map((quiz : Quiz) => (
 							<li> 
 								<strong>{ quiz.title }</strong> <br/> { quiz.description }
+								<a href={`/host/${quiz.quizId}`}><button type="button" id="hostQuiz-btn">Host your Quiz</button></a>
+
 							</li>
 						))}
 					</ol>
@@ -45,4 +66,5 @@ export default async function AccountPage ({ userId }: { userId: string }) {
 			}
 		</div>
 	)
-}
+}			
+//					<button type="submit" onclick={() => `/host/${quiz.quizId}`}>Host this Quiz</button>							

@@ -6,11 +6,18 @@ import { JoinGameReturn, GetCurrentQuestionReturn } from "../../../models/Player
 import HostWaitingScreen from "../HostWaitingScreen/HostWaitingScreen.tsx";
 import HostPlayingScreen from "../HostPlayingScreen/HostPlayingScreen.tsx";
 import { styles } from "./HostDashboardStyles.ts";
+import { quizzes } from "backend/SaveQuiz.ts";
 
 //TODO: Does it make any difference having the pointers and api outside vs inside of a component?
 //TODO: pause/reset timeout
 
-export default function HostDashboard() {
+export default function HostDashboard({ quizId }: { quizId: string }) {
+
+
+  const hostedQuiz = quizzes[quizId];
+  const questionsInQuiz = hostedQuiz.questions;
+
+
 
   //TODO: Do we want these as eternal variables? -> If yes, how do we handle recovery of the next question timer and api calls while host is offline.
   const state: Datex.Pointer<StateOptions> = $("waiting");
@@ -19,7 +26,7 @@ export default function HostDashboard() {
   //This ObjectRef encapsules all the gamestate variables, that are some kind of object type. This is necessary to guarantee reactivity.
   const gameStateObjects: ObjectRef<GameStateObjects> = $({
     currentDeadline: new Date(),
-    questions: sampleQuestions,
+    questions: questionsInQuiz,
     players: []
   })
 
@@ -35,7 +42,7 @@ export default function HostDashboard() {
 
     gameStateObjects.players.splice(0)
     //gameStateObjects.currentDeadline = new Date()
-    gameStateObjects.questions = sampleQuestions
+    gameStateObjects.questions = questionsInQuiz
   }
 
   //TODO: can we move the api class out of here?

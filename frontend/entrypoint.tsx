@@ -11,7 +11,7 @@ export default {
     "/": () => <MainMenu />,
     "/join/:id": (_: any, { id }:{ id: string }) => <JoinScreen id={ id } />,
     "/join": () => <JoinScreen />,
-    "/create": () => <HostDashboard />,
+    "/host/:quizId": (_: any, { quizId }: { quizId: string }) => <HostDashboard quizId={quizId}/>,
     "/createQuiz": () => <CreateQuiz />,
 	"/login": userLoginForm,
 	"/signup": userSignUpForm,
