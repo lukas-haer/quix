@@ -2,8 +2,8 @@
 	--bg-color: #797979;
 	--color-a: #007BFF;
 	--color-a-selected: #0056b3;
-	--color-b: #28a745;	
-	--color-b-selected: #1e7b34;
+	--color-b: #007BFF;	
+	--color-b-selected: #0056b3;
 	--color-c: #ffc107;
 	--color-c-selected: #b38f00;
 	--color-d: #dc3545;
@@ -166,4 +166,21 @@ input {
 	background-color: var(--color-b);
 	margin-left: 10px;
 	border: none;
+}
+
+.button {
+	background-color: #007BFF;
+	color: white;
+	border: none;
+	padding: 0.75rem 1.5rem;
+	font-size: 1rem;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: background-color 0.3s ease, transform 0.15s cubic-bezier(0.23, 1, 0.32, 1);
+	margin-top: 1rem;
+}
+
+.button:hover {
+	background-color: #045cba;
+	transform: scale(1.07);
 }
