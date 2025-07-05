@@ -1,0 +1,24 @@
+.separator {
+	display: flex;
+	align-items: center;
+	text-align: center;
+	color: #666;
+	margin: 30px 0 10px 0;
+	font-style: italic;
+}
+
+.separator span {
+	flex: 0 0 auto;
+	padding: 0 1rem;
+	white-space: nowrap;
+	font-size: 1.1rem;
+}
+
+.separator::before,
+.separator::after {
+	content: "";
+	flex: 1 1 0%;
+	border-bottom: 1.5px solid #AAA;
+	margin: 0 0.5rem;
+	min-width: 20px;
+}

@@ -1,8 +1,11 @@
+import { UIX } from "uix"
 import { Component, template } from "uix/components/Component.ts";
 import { CreateSingleChoiceQuestion } from "./types/CreateSingleChoiceQuestion.tsx";
 import { Question, QuestionType, SingleChoiceQuestion } from "common/models/Question.ts";
+import { failureSnackbarMessage, Snackbar, successSnackbarMessage } from "frontend/src/components/utils/snackbar/Snackbar.tsx";
+import { ImportButton } from "frontend/src/components/livegame/host/QuizImport/QuizImport.tsx";
 import { saveQuiz } from "backend/SaveQuiz.ts";
-import { Quiz } from "common/models/Quiz.tsx";
+import { Quiz } from "common/models/Quiz.ts";
 
 /**
  * Example data for a quiz. In production, this would only contaion default values.
@@ -19,6 +22,7 @@ let quiz = $(Quiz ({
     title: "",
     description: "",
     accountId: "", //beim backend speichern gesetzt
+    //endpointId: "",
     questions: [] //as SingleChoiceQuestion[] ? //später noch um weitere Typen erweitern
 }));
 
@@ -42,10 +46,10 @@ function addQuestion() {
             questionText: "",
             answers: ["", "", "", ""],
             correctAnswerId: 0,
-            timeInSeconds: 5
+            timeInSeconds: 30
         }));
     } else {
-        alert("Unsupported question type");
+        failureSnackbarMessage("Unsupported Question Type","Please select a valid Question Type")
         console.error("Unsupported question type:", type);
         return;
     }
@@ -61,7 +65,7 @@ function refresh() {
  * This function removes a question from the quiz by its ID.
  */
 export function removeQuestionById(questionId: string) {
-    try {
+    try {        
         //Find question index by id
         const questionIndex = quiz.questions.findIndex(
             (q) => q.id === questionId
@@ -72,31 +76,18 @@ export function removeQuestionById(questionId: string) {
         }
  
         //remove that index
-        const removedQuestion = quiz.questions.splice(questionIndex, 1);
-
-        console.log("Removed question: ", removedQuestion[0].id);
+        quiz.questions.splice(questionIndex, 1);
     } catch (error) {
         console.error("Error removing question:", error);
-        alert(
-            "An error occurred while removing the question. Please try again."
-        );
+        failureSnackbarMessage("Error when removing a question","An unexprected error occured")
     }
 }
-
-
-/**
- * Feedback field for the Question Export. 
- * TODO: Replace with snackbar
- */
-const questionExportFeedback = $("");
 
 /**
  * Exports the current quiz as a JSON file.
  * The file will be named `quiz-{quiz.id}.json`.
  */
 function exportQuestionSet() {
-	questionExportFeedback.val = "";
-
 	try {
 	const fileName = `quix-${quiz.title.replace(/\s+/g, "-").toLowerCase()}.json`;
 
@@ -111,20 +102,61 @@ function exportQuestionSet() {
 
     URL.revokeObjectURL(url);
 
-	questionExportFeedback.val = "Quiz exported successfully!";
+	successSnackbarMessage("Export successful","The Quix was exported successfully.");
 
-	setTimeout(() => {
-		questionExportFeedback.val = "";
-	}, 5000);
 	} catch (error) {
 		console.error("Error exporting quiz:", error);
-		questionExportFeedback.val = "An error occurred while exporting the quiz.";
-
+		failureSnackbarMessage("Export failed","An error occurred while exporting the quiz.");
 		return;
 	}
 }
 
-@template(() => (
+/**
+ * Setter for quiz var. Has to be done this way, since replacing the quiz directly impacts the reactivity.
+ * @param newQuiz Replaces values of the current quiz with new quiz. 
+ * @throws Error if newQuiz is invalid or required properties are missing.
+ */
+function setQuiz(newQuiz: Quiz) {
+    
+    try {
+        if (!newQuiz || typeof newQuiz !== "object") {
+            throw new Error("Invalid quiz object provided.");
+        }
+        if (!newQuiz.title || !Array.isArray(newQuiz.questions)) {
+            throw new Error("Quiz object is missing required properties.");
+        }
+
+        quiz.title = newQuiz.title;
+        quiz.description = newQuiz.description;
+        quiz.accountId = datex.meta.caller.toString(); //TODO replace with accounts
+        const questions = quiz.questions;
+        questions.length = 0;
+
+        newQuiz.questions.forEach((q : Quiz) => {
+            if (q.content && typeof q.content === "object") {
+                questions.push(
+                    //Currently only supports Singlechoice questions
+                    //TODO Add handeling for other question types
+                    new SingleChoiceQuestion({
+                        questionText: q.content.questionText,
+                        answers: q.content.answers,
+                        correctAnswerId: q.content.correctAnswerId,
+                        timeInSeconds: q.content.timeInSeconds,
+                    })
+                );
+                return;
+            }
+        });
+    } catch (error) {
+        throw error;
+    }
+    
+}
+
+@template(() => {
+    UIX.Theme.useTheme("uix-light")
+
+    return(
     <section>
     <form action={saveQuiz} method="post">
         <header class="gc-row">
@@ -134,10 +166,10 @@ function exportQuestionSet() {
             </div>
             <div class="gc-col gc-col-3 vertically-centered align-right">
 				<div>
+                    <ImportButton callback={(quiz) => {setQuiz(quiz)}} />
                 	<button type="button" id="export-btn" onclick={exportQuestionSet}>
-                	    Export
+                	    Export Quiz
                 	</button>
-					<p class="margin0" id="export-feedback"> {questionExportFeedback} </p>
 				</div>
             </div>
         </header>
@@ -150,10 +182,10 @@ function exportQuestionSet() {
                 </div>
                 <div class="gc-col-6">
                     <label for="quizId">Quiz-ID</label>
-                    <input type="text" id="quizId" name="quizId" value={quiz.quizId} readonly/>
+                    <input type="text" id="quizId" name="quizId" value={quiz.quizId} readonly />
                 </div>
             </div>
-            <div>
+            <div class="gc-col">
                 <label for="quizDescription">Quiz Description</label>
                 <input type="text" id="quizDescription" name="description" value={quiz.description} />
             </div>
@@ -189,11 +221,13 @@ function exportQuestionSet() {
         />
         <button type="submit" onclick={refresh}>Save Quiz</button>
     </form>
+            <Snackbar/>
     </section>  
-))
+    )
+})
 /*
 //########### Debugging-Tools ###########
-        <hr />
+                <hr />
         <h1>Debug</h1>
 
         <textarea style={"height: 500px"} name="" id="">
@@ -203,6 +237,5 @@ function exportQuestionSet() {
         <button type="button" onclick={() => console.log(quiz)}>
             Log
         </button>
-
         */
 export class CreateQuiz extends Component {}

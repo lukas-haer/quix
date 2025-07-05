@@ -1,7 +1,7 @@
 import { Context } from "uix/routing/context.ts";
 import { User } from "common/models/User.ts";
 import { quizzes } from "../SaveQuiz.ts";
-import { Quiz } from "common/models/Quiz.tsx";
+import { Quiz } from "../../common/models/Quiz.ts";
 
 import * as argon2 from "jsr:@felix/argon2";
 import { provideRedirect } from "uix/providers/common.tsx";

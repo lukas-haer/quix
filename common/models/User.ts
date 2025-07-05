@@ -1,5 +1,5 @@
 import { inferType } from "datex-core-legacy/datex_all.ts";
-import { Quiz } from "./Quiz.tsx";
+import { Quiz } from "./Quiz.ts";
 
 //struct for users
 export const User = struct("User",

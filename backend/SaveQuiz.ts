@@ -1,6 +1,6 @@
 import { Context } from "uix/routing/context.ts";
 import { users } from "backend/UserAccounts/UserAuthentication.ts";
-import { Quiz } from "common/models/Quiz.tsx";
+import { Quiz } from "../common/models/Quiz.ts";
 import { provideRedirect } from "uix/providers/common.tsx";
 import { SingleChoiceQuestion, MultipleChoiceQuestion } from "common/models/Question.ts";
 
@@ -18,7 +18,6 @@ export async function saveQuiz (ctx: Context) {
 	////////////////bearbeiten
 	if(!currentUser || !(currentUser in users)) {
 		console.error("LOG SaveQuiz: User not found or not logged in."); //braucht funktionalen Error
-		//!!!!!!!sollte nicht alle Eingaben verwerfen, sondern nur Möglichkeit zur anmelden / einloggen geben und da dann das Quiz speichern
 		return provideRedirect("/"); //hier snackbar fehler bitte melde dich erst an
 	}
 	////////////////bearbeiten

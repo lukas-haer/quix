@@ -44,6 +44,10 @@ input {
 	margin: 0;
 }
 
+.mr-10 {
+	margin-right: 10px;
+}
+
 .inline{
 	display: inline;
 }
@@ -57,6 +61,7 @@ input {
 	text-align: right;
 	justify-content: flex-end;
 }
+
 
 .gc-row {
     display: flex;
@@ -162,6 +167,33 @@ input {
 	margin-right: 10px;
 }
 
-#export-btn {
+#export-btn, #import-btn {
 	background-color: var(--color-b);
+	margin-left: 10px;
+	border: none;
+}
+
+.time-label {
+	margin-right: 10px;
+}
+
+.time-input{
+	min-width: 200px;
+}
+
+.button {
+	background-color: #007BFF;
+	color: white;
+	border: none;
+	padding: 0.75rem 1.5rem;
+	font-size: 1rem;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: background-color 0.3s ease, transform 0.15s cubic-bezier(0.23, 1, 0.32, 1);
+	margin-top: 1rem;
+}
+
+.button:hover {
+	background-color: #045cba;
+	transform: scale(1.07);
 }

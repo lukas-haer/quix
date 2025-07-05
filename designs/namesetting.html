@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QUIX</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Avenir+Next:wght@700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            overflow: hidden; /* Disable default scrolling */
+        }
+
+        .section {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative; /* For positioning elements */
+        }
+
+        .section {
+            background: #ffffff;
+            color: #000;
+        }
+
+        h1 {
+            font-family: 'Avenir Next', Arial, sans-serif;
+            font-size: 4rem;
+            font-weight: bold;
+            font-style: italic;
+        }
+
+        .name-input-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+            position: relative;
+        }
+
+        .name-input {
+            width: 100%;
+            height: 70px;
+            border: none;
+            border-bottom: 2px solid transparent;
+            text-align: center;
+            font-size: 2rem;
+            font-weight: bold;
+            background: transparent;
+            color: #000;
+            transition: all 0.3s ease;
+        }
+
+        .name-input:focus {
+            outline: none;
+            caret-color: rgba(0, 123, 255, 1); /* Change cursor color */
+            animation: bounce 0.5s ease-in-out; /* Bounce animation on focus */
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .button {
+            margin-top: 2rem;
+            padding: 1rem 2rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #fff;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        .glowing-line {
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, rgba(0, 123, 255, 0) 0%, rgba(0, 123, 255, 1) 50%, rgba(0, 123, 255, 0) 100%);
+            background-size: 200% 200%;
+            animation: moveGradient 3s linear infinite;
+        }
+
+        @keyframes moveGradient {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="section">
+        <h1>WHAT SHOULD WE CALL YOU?</h1>
+        <div class="name-input-container">
+            <input type="text" class="name-input" id="nameInput" maxlength="12" placeholder="Enter your name" oninput="updateGlowingLine()">
+            <div class="glowing-line" id="glowingLine"></div>
+        </div>
+        <button class="button" onclick="submitName()">JOIN</button>
+    </div>
+
+    <script>
+        function submitName() {
+            const nameInput = document.getElementById('nameInput');
+            const name = nameInput.value.trim();
+            if (name) {
+                alert(`Name submitted: ${name}`);
+            } else {
+                alert('Please enter a name.');
+            }
+        }
+
+        function updateGlowingLine() {
+            const nameInput = document.getElementById('nameInput');
+            const glowingLine = document.getElementById('glowingLine');
+            const length = nameInput.value.length;
+            const maxLength = nameInput.maxLength;
+
+            if (length === maxLength) {
+                glowingLine.style.animation = 'none';
+            } else {
+                const speed = 3 - (length / maxLength) * 2; // Adjust speed based on input length
+                glowingLine.style.animation = `moveGradient ${speed}s linear infinite`;
+            }
+        }
+
+        // Focus on the input field and apply bounce effect
+        window.addEventListener('DOMContentLoaded', () => {
+            const nameInput = document.getElementById('nameInput');
+            nameInput.focus();
+            nameInput.style.animation = 'bounce 0.5s ease-in-out';
+            setTimeout(() => {
+                nameInput.style.animation = ''; // Reset animation
+            }, 500);
+        });
+    </script>
+</body>
+</html>
