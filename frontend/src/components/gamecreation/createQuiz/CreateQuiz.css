@@ -44,6 +44,10 @@ input {
 	margin: 0;
 }
 
+.mr-10 {
+	margin-right: 10px;
+}
+
 .inline{
 	display: inline;
 }
@@ -57,6 +61,7 @@ input {
 	text-align: right;
 	justify-content: flex-end;
 }
+
 
 .gc-row {
     display: flex;
@@ -166,6 +171,14 @@ input {
 	background-color: var(--color-b);
 	margin-left: 10px;
 	border: none;
+}
+
+.time-label {
+	margin-right: 10px;
+}
+
+.time-input{
+	min-width: 200px;
 }
 
 .button {

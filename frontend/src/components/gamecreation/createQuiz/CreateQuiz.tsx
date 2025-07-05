@@ -57,7 +57,7 @@ function addQuestion() {
             questionText: "",
             answers: ["", "", "", ""],
             correctAnswerId: 0,
-            timeInSeconds: 5
+            timeInSeconds: 30
         }));
     } else {
         failureSnackbarMessage("Unsupported Question Type","Please select a valid Question Type")
@@ -193,6 +193,11 @@ function setQuiz(newQuiz: Quiz) {
                 <div class="gc-col-6">
                     <label for="quizId">Quiz-ID</label>
                     <input type="text" id="quizId" value={quiz.id} disabled />
+                </div>
+                <div class="gc-col">
+                    <label for="quizDescription">Quiz Description</label>
+                    <input type="text" id="quizDescription" value={quiz.description}/>
+
                 </div>
             </div>
         </div>
