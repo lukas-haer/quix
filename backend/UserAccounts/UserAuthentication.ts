@@ -5,7 +5,7 @@ import { Quiz } from "../../common/models/Quiz.ts";
 
 import * as argon2 from "jsr:@felix/argon2";
 import { provideRedirect } from "uix/providers/common.tsx";
-import { InvalidPasswordError, UsernameTakenError, UserNotFoundError, WeakPasswordError } from "common/models/errors/accountErrors.ts";
+import { InvalidPasswordError, UsernameTakenError, UserNotFoundError, WeakPasswordError, InvalidPasswordRepeatError } from "common/models/errors/accountErrors.ts";
 
 export const users = eternal ?? $({} as Record<string, User>);
 
@@ -60,13 +60,17 @@ export async function userLogin(username: string, password: string) {
 
 
 //Signup
-export async function userSignUp(username: string, password: string) {
+export async function userSignUp(username: string, password: string, passwordRepeat : string)  {
 
 	console.log("LOGGING ALLE USER users:", users);
 
 	//wrong password for existing user
 	if (!isValidPassword(password)) {
 		throw new WeakPasswordError();
+	}
+
+	if(!(password === passwordRepeat)) {
+		throw new InvalidPasswordRepeatError();
 	}
 
 	//user already exists

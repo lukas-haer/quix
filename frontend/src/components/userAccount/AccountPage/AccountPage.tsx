@@ -1,7 +1,7 @@
 import { provideRedirect } from "uix/providers/common.tsx";
 import { Context } from "uix/routing/context.ts";
 import { users } from "backend/UserAccounts/UserAuthentication.ts";
-import { Quiz } from "../common/models/Quiz.ts";
+import { Quiz } from "common/models/Quiz.ts";
 import { quizzes } from "backend/SaveQuiz.ts";
 
 export default async function AccountPage ({ userId }: { userId: string }) {

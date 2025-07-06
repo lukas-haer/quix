@@ -1,14 +1,12 @@
 import { userLogin } from "backend/UserAccounts/UserAuthentication.ts";
 import { Context } from "uix/routing/context.ts";
 import { failureSnackbarMessage, Snackbar } from "frontend/src/components/utils/snackbar/Snackbar.tsx";
-/**
- * 
- * @param ctx context of the request, for authentication
- * @returns references authentication function, errors if no existing user or wrong password
- */
-export function userLoginForm (ctx: Context) {
-	//const url = new URL(ctx.request.url);
+import { Component, template, style } from "uix/components/Component.ts";
 
+@style ("./AccountAccess.css")
+@template (() => {
+	
+	
 	const username = $("");
 	const password = $("");
 
@@ -30,14 +28,23 @@ export function userLoginForm (ctx: Context) {
 	}
 
 	return (
-			<main>
-				<Snackbar></Snackbar>
-				<h2>Log into your Account</h2>
-				<input type="text" name="username" placeholder="Username" value={username} required />
-				<input type="password" name="password" placeholder="Password" value={password} required/>
-				<button type="submit" onclick={authenticate}>Log in</button>
-				<p><a href="/signup">Don't have an account yet? Sign up here</a></p>
-			</main>
+			<body id="login-body">
+				<Snackbar/>	
+				<section id="login-section">
+					<a href="/"><button type="button" class="home-button">Back to home menu</button></a>
+					<h1>LOG INTO YOUR ACCOUNT</h1>
+					<div class="form-container" id="login-form">
+						<input type="text" name="username" placeholder="Username" value={username} required />
+						<input type="password" name="password" placeholder="Password" value={password} required/>
+						<button type="submit" class="button" onclick={authenticate}>Log in</button>
+					</div>
+					<div class="signup-text">
+						<p><a href="/signup">Don't have an account yet? Sign up here</a></p>
+					</div>
+				</section>
+			</body>
 		)
 
-}
+})
+
+export class UserLoginForm extends Component {}

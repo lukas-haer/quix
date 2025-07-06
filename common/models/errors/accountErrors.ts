@@ -25,3 +25,10 @@ export class InvalidPasswordError extends Error {
     this.name = "InvalidPasswordError";
   }
 }
+
+export class InvalidPasswordRepeatError extends Error {
+  constructor() {
+    super("Passwords don't match");
+    this.name = "InvalidPasswordRepeatError";
+  }
+}
