@@ -5,7 +5,7 @@ import { CreateQuiz } from './src/components/gamecreation/createQuiz/CreateQuiz.
 
 import { UserLoginForm } from "frontend/src/components/userAccount/AccountAccess/UserLoginForm.tsx";
 import { UserSignUpForm } from "./src/components/userAccount/AccountAccess/UserSignUpForm.tsx";
-import AccountPage from "frontend/src/components/userAccount/AccountPage/AccountPage.tsx";
+import { AccountPage } from "frontend/src/components/userAccount/AccountPage/AccountPage.tsx";
 
 export default {
     "/": () => <MainMenu />,
@@ -13,9 +13,7 @@ export default {
     "/join": () => redirect('/'),
     "/host/:quizId": (_: any, { quizId }: { quizId: string }) => setupHost(quizId),
     "/createQuiz": () => <CreateQuiz />,
-	  "/login": <UserLoginForm/>,
-	  "/signup": <UserSignUpForm/>,
+	"/login": <UserLoginForm/>,
+	"/signup": <UserSignUpForm/>,
     "/account/:userId": (_: any, { userId }: { userId: string }) => <AccountPage userId={userId}/>
 };
-
-//    "/host/:quizId": (_: any, { quizId }: { quizId: string }) => <HostMain quizId={quizId}/>,

@@ -3,13 +3,9 @@ import { Context } from "uix/routing/context.ts";
 import { users } from "backend/UserAccounts/UserAuthentication.ts";
 import { Quiz } from "common/models/Quiz.ts";
 import { quizzes } from "backend/SaveQuiz.ts";
+import { Component, template } from "uix/components/Component.ts";
 
-export default async function AccountPage ({ userId }: { userId: string }) {
-	
-	//KLAPPT DAS IM FRONTEND?
-	const session = await Context.getPrivateData(datex.meta.caller);
-	const sessionUser = session.userId;
-	console.log("LOG AccountPage user über Context und nicht als Param: ", sessionUser);
+@template(function ({ userId }) {
 
 	const currentUser = userId;
 	console.log("Log Accountpage current user: ", currentUser);
@@ -40,31 +36,46 @@ export default async function AccountPage ({ userId }: { userId: string }) {
 		}
 
 	return (
-
-		<div>
+		<body>
+			<button class="logout-button" type="button">Logout</button>
 			<h1>{ currentUser }s Quizzes</h1>
 			{
 				userQuizzes.length === 0 
-			? 
+			?(
 				<div> 
-					<p>You dont have any Quizzes for now</p> 
-					<a href="/createQuiz"><button type="button" id="createQuiz-btn">Create your first Quiz</button></a>
+					<div class="no-quizzes-message">You don't have any Quizzes for now</div> 
+					<div class="quiz-section-divider"></div>
+					<div class="quiz-container">
+						<div class="create-card">
+							<h3>Create your First Quiz</h3>
+							<a href="/createQuiz"><button class="button" type="button" id="createQuiz-btn">Create</button></a>
+						</div>
+					</div>
 				</div>
-			: 
+			): (
 				<div>
-					<ol>
-						{userQuizzes.map((quiz : Quiz) => (
-							<li> 
-								<strong>{ quiz.title }</strong> <br/> { quiz.description }
-								<a href={`/host/${quiz.quizId}`}><button type="button" id="hostQuiz-btn">Host your Quiz</button></a>
-
-							</li>
+					<div class="quiz-section-divider"></div>
+					<div class="quiz-container">
+						{userQuizzes.map((quiz: Quiz) => (
+							<div class="quiz-card">
+								<h3>{ quiz.title }</h3>
+								<p>{ quiz.description }</p>
+								<div>
+									<button class="button" type="button">Edit</button>
+									<a href={`/host/${quiz.quizId}`}><button class="button" type="button">Host</button></a>
+									<button class="button delete-button" type="button">Delete</button>
+								</div>
+							</div>
 						))}
-					</ol>
-					<a href="/createQuiz"><button type="button" id="createQuiz-btn">Create another Quiz</button></a>
+						<div class="create-card">
+							<h3>Create another Quiz</h3>
+							<a href="/createQuiz"><button class="button" type="button" id="createQuiz-btn">Create</button></a>
+						</div>	
+					</div>			
 				</div>
-			}
-		</div>
+			)}
+		</body>
 	)
-}			
-//					<button type="submit" onclick={() => `/host/${quiz.quizId}`}>Host this Quiz</button>							
+})
+
+export class AccountPage extends Component<{ userId : string }> {}

@@ -1,5 +1,4 @@
 import { userLogin } from "backend/UserAccounts/UserAuthentication.ts";
-import { Context } from "uix/routing/context.ts";
 import { failureSnackbarMessage, Snackbar } from "frontend/src/components/utils/snackbar/Snackbar.tsx";
 import { Component, template, style } from "uix/components/Component.ts";
 
