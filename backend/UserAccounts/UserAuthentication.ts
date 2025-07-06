@@ -1,7 +1,6 @@
 import { Context } from "uix/routing/context.ts";
 import { User } from "common/models/User.ts";
 import { quizzes } from "../SaveQuiz.ts";
-import { Quiz } from "../../common/models/Quiz.ts";
 
 import * as argon2 from "jsr:@felix/argon2";
 import { provideRedirect } from "uix/providers/common.tsx";
@@ -35,27 +34,15 @@ export async function userLogin(username: string, password: string) {
 	const session = await Context.getPrivateData(datex.meta.caller);
 	session.userId = username;
 
-	//////////////////////////LOGGING///////////////////////////////////////
 	const userQuizzes = Object.values(quizzes).filter(quiz => quiz.accountId === username);
 
 	if (userQuizzes.length === 0) {
 		console.log("User has no Quizzes yet")
 	}
 	else {
-
-		console.log(username,"s Quizzes-------------------")
-		for (const quiz of userQuizzes) {
-			console.log("Quizzes of user ", quiz.accountId);
-			console.log("Quiz ID:", quiz.quizId);
-			console.log("Title:", quiz.title);
-			console.log("Description:", quiz.description);
-			console.log("Questions:", quiz.questions);
-			console.log("-----------------------------");
-		}
+		console.log("User has", userQuizzes.length, " Quizzes yet")
 	}
-	//////////////////////////LOGGING///////////////////////////////////////
-
-	return true; //TODO sollte irgendwann auf Account Startseite weiterleiten
+	return true;
 }
 
 
@@ -69,6 +56,7 @@ export async function userSignUp(username: string, password: string, passwordRep
 		throw new WeakPasswordError();
 	}
 
+	//repeated and initial password don't match
 	if(!(password === passwordRepeat)) {
 		throw new InvalidPasswordRepeatError();
 	}
@@ -85,14 +73,13 @@ export async function userSignUp(username: string, password: string, passwordRep
 	users[username] = User({
 		id: username,
 		password: await argon2.hash(password),
-		//quizzes: [] // oder mit {}
 	});
 	console.log("Registering new user successful:", username);
 
 	//if signup successful, setting session
 	const session = await Context.getPrivateData(datex.meta.caller);
 	session.userId = username;
-	return true; //TODO sollte irgendwann auf Account Startseite weiterleiten
+	return true;
 	}
 }
 
@@ -102,9 +89,9 @@ function isValidPassword (password: string) : boolean {
 	return regex.test(password);
 }
 
-//user logout
-export async function logout (ctx: Context) {
-	const session = await ctx.getPrivateData();
+//user logout, not used right now 
+export async function logout () {
+	const session = await Context.getPrivateData(datex.meta.caller)
 	const currentUser = session.userId;
 
 	if (currentUser) {
@@ -114,12 +101,4 @@ export async function logout (ctx: Context) {
 		throw new Error ("No current user logged in that could be logged out");
 	}
 	return provideRedirect("/");
-}
-
-@endpoint
-export class Account {
-	@property static async getCurrentUser() {
-		const session = await Context.getPrivateData(datex.meta);
-		return session.userId;
-	}
 }

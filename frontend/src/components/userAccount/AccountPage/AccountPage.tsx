@@ -16,28 +16,21 @@ import { Component, template } from "uix/components/Component.ts";
 	}
 
 	const userQuizzes = Object.values(quizzes).filter(quiz => quiz.accountId === currentUser);
+		
+	console.log("LOG AccountPage");
+	console.log("Quiz of user", currentUser);
 
-	console.log("LOGGING FOR ACCOUNT PAGE");
-	console.log("LOG Length of current user quizzes:", userQuizzes.length);
-	
-		console.log("-------------------------------");
-		console.log("LOG Updated users quizzes as Object:", userQuizzes);
-		console.log("-------------------------------");
-		console.log();
-		console.log("-------------------------------");
-		for (const quiz of userQuizzes) {
-			console.log("LOG QUIZZES AT ACCOUNT");
-			console.log("Quiz of user", quiz.accountId);
-			console.log("Quiz ID:", quiz.quizId);
-			console.log("Title:", quiz.title);
-			console.log("Description:", quiz.description);
-			console.log("Questions:", quiz.questions);
-			console.log("-----------------------------");
-		}
+	for (const quiz of userQuizzes) {
+		console.log("Quiz ID:", quiz.quizId);
+		console.log("Title:", quiz.title);
+		console.log("Description:", quiz.description);
+		console.log("Questions:", quiz.questions);
+		console.log("-----------------------------");
+	}
 
 	return (
 		<body>
-			<button class="logout-button" type="button">Logout</button>
+			<button class="logout-button" type="button" onclick={() => redirect("/")}>Go to home</button>
 			<h1>{ currentUser }s Quizzes</h1>
 			{
 				userQuizzes.length === 0 

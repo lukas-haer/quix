@@ -14,13 +14,10 @@ export async function saveQuiz (ctx: Context) {
 	console.log("LOG SaveQuiz: current session: ", session)
 	console.log("LOG SaveQuiz: current session user: ", session.userId)
 
-
-	////////////////bearbeiten
 	if(!currentUser || !(currentUser in users)) {
-		console.error("LOG SaveQuiz: User not found or not logged in."); //braucht funktionalen Error
-		return provideRedirect("/"); //hier snackbar fehler bitte melde dich erst an
+		console.error("LOG SaveQuiz: User not found or not logged in."); //TODO Zugriffsbegrenzung?
+		return provideRedirect("/");
 	}
-	////////////////bearbeiten
 
 	const data = await ctx.request.formData();
 	
@@ -38,7 +35,6 @@ export async function saveQuiz (ctx: Context) {
     	}
 	});
 	const questions = mappedQuestions;
-
 	
 	quizzes[quizId] = Quiz ({
 		quizId: quizId,
@@ -53,22 +49,9 @@ export async function saveQuiz (ctx: Context) {
 	console.log("-------------------------------");
 	console.log();
 
-	////////////////bearbeiten
-	if (!users[currentUser]) {
-		// Falls User nicht da ist, redirect zum Anlegen oder Fehler werfen
-		console.error("LOG SaveQuiz: User not found in users store:", currentUser);
-		return;
-	}
-	////////////////bearbeiten
-
-	//quizzes of user x: 
+	//quizzes of user x
 	const userQuizzes = Object.values(quizzes).filter(quiz => quiz.accountId === currentUser);
 
-	console.log("-------------------------------");
-	console.log("Updated users quizzes as Object:", userQuizzes)
-	console.log("-------------------------------");
-	console.log();
-	console.log("-------------------------------");
 	for (const quiz of userQuizzes) {
 		console.log("Quiz of user", quiz.accountId);
 		console.log("Quiz ID:", quiz.quizId);
