@@ -13,6 +13,8 @@ type HostPlayingScreenProps = {
 @template(
   function ({ state, currentRound, gameStateObjects }: HostPlayingScreenProps) {
     const timeoutID: Datex.Pointer<number> = $(0);
+    const solutionScreenTimeInSeconds: number = 10;
+    let solutionPhase: boolean = false;
 
     const startGame = () => {
       updateDeadlineAndTimer();
@@ -29,18 +31,27 @@ type HostPlayingScreenProps = {
     };
 
     const updateDeadlineAndTimer = () => {
+        const questionTime = gameStateObjects.questions[currentRound.val].content.timeInSeconds
+        console.log(questionTime)
       // Can you do this more smoothly? an easy to understand one-liner perhaps?
       const newDeadline = new Date();
       newDeadline.setSeconds(
-        newDeadline.getSeconds() +
-          gameStateObjects.questions[currentRound.val].content.timeInSeconds,
+        newDeadline.getSeconds() + questionTime + solutionScreenTimeInSeconds,
       );
       gameStateObjects.currentDeadline = newDeadline;
 
+      const altNewDeadline = new Date(new Date().getTime() + (questionTime + solutionScreenTimeInSeconds) * 1000);
+      console.log(newDeadline)
+      console.log(altNewDeadline)
+
       timeoutID.val = setTimeout(
         nextRound,
-        gameStateObjects.currentDeadline.getTime() - Date.now(),
+          newDeadline.getTime() - Date.now(),
       );
+       setTimeout(
+          ()=>{solutionPhase = true},
+          newDeadline.getTime() - Date.now()-solutionScreenTimeInSeconds,
+      )
     };
 
     // This needs to exist because trying to get the questionText directly in html doesn't work with changing currentRound.val
@@ -51,6 +62,8 @@ type HostPlayingScreenProps = {
     startGame();
 
     return (
+        <>
+
       <div>
         <h2>Current Question:</h2>
         <p>
@@ -68,6 +81,8 @@ type HostPlayingScreenProps = {
           Skip Question
         </button>
       </div>
+
+        </>
     );
   },
 )
