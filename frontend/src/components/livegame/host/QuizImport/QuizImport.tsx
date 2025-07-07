@@ -3,7 +3,7 @@ import { ObjectRef } from 'datex-core-legacy/runtime/pointers.ts';
 import { GameStateObjects, Player, StateOptions } from 'frontend/src/models/GameState.ts';
 import { successSnackbarMessage, failureSnackbarMessage } from "frontend/src/components/utils/snackbar/Snackbar.tsx";
 import { Separator } from "frontend/src/components/utils/Separator/Separator.tsx";
-import { Quiz } from "frontend/src/models/Quiz.ts";
+import { Quiz } from "common/models/Quiz.ts";
 
 type QuizImportProps = {
 	gameStateObjects: ObjectRef<GameStateObjects>;

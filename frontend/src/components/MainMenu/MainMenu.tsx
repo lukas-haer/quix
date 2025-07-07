@@ -112,3 +112,11 @@ import { Snackbar } from "frontend/src/components/utils/snackbar/Snackbar.tsx";
 })
 
 export class MainMenu extends Component {}
+
+
+/*
+<a href="/login"><button type="button" id="login-btn">Log into your existing account</button></a>
+			  <a href="/signup"><button type="button" id="signup-btn">Create a new account</button></a>
+              <a href="/createQuiz"><button type="button" id="createQuiz-btn">Create a new Quiz</button></a>
+
+        */

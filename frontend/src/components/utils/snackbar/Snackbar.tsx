@@ -33,7 +33,7 @@ function showSnackbarMessage (
     durationInMs?: number
 ) {
 	if (!durationInMs) {
-		durationInMs = 5_000 // Default duration of 5 seconds
+		durationInMs = 10_000 // Default duration of 10 seconds
 	}
 
     /* Here we unfortunatly have to use good old JS getElementById and appendChild, because when using a reactive array

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Zwischen-View</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Avenir+Next:wght@700&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Avenir Next', Arial, sans-serif;
+      background-color: #f0f0f0;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      animation: fadeInUp 1s ease-out;
+      position: relative;
+    }
+
+    .left, .right {
+      width: 50%;
+      height: 100%;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .left {
+      border-right: 2px solid #ccc;
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 2rem;
+      color: #333;
+      text-align: center;
+    }
+
+    .answer-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      width: 100%;
+    }
+
+    .answer {
+      height: 80px;
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #fff;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 1;
+      transition: 0.3s ease-in-out;
+    }
+
+    .correct {
+      background-color: #28a745;
+    }
+
+    .incorrect {
+      background-color: #999;
+    }
+
+    .scoreboard-title {
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+      color: #333;
+    }
+
+    .scoreboard {
+      width: 80%;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .score-entry {
+      background-color: #007BFF;
+      color: #fff;
+      font-size: 1.5rem;
+      padding: 1rem;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      animation: pulse 2s infinite;
+    }
+
+    /* Countdown bar */
+    .countdown-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 15px;
+      background-color: #007BFF;
+      width: 0%;
+      animation: countdown 10s linear forwards;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      0% {
+        transform: translateY(50px);
+        opacity: 0;
+      }
+      100% {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      }
+      50% {
+        transform: scale(1.03);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+      }
+      100% {
+        transform: scale(1);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      }
+    }
+
+    @keyframes countdown {
+      from {
+        width: 0%;
+      }
+      to {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="left">
+    <h1>WHAT IS YOUR FAVORITE COLOR?</h1>
+    <div class="answer-container">
+      <div class="answer correct">Green</div>
+      <div class="answer incorrect">Blue</div>
+      <div class="answer incorrect">Yellow</div>
+      <div class="answer incorrect">Red</div>
+    </div>
+  </div>
+  <div class="right">
+    <div class="scoreboard-title">Top 3 Players</div>
+    <div class="scoreboard" id="scoreboard"></div>
+  </div>
+
+  <!-- Countdown bar -->
+  <div class="countdown-bar" id="countdownBar"></div>
+
+  <script>
+    // Dummy data – replace with dynamic input later
+    const topPlayers = [
+      { name: "PlayerOne", score: 3200 },
+      { name: "PlayerTwo", score: 2900 },
+      { name: "PlayerThree", score: 2600 }
+    ];
+
+    const scoreboardContainer = document.getElementById('scoreboard');
+
+    topPlayers.forEach((player, index) => {
+      const entry = document.createElement('div');
+      entry.className = 'score-entry';
+      entry.innerHTML = `
+        <span>#${index + 1} ${player.name}</span>
+        <span>${player.score} pts</span>
+      `;
+      scoreboardContainer.appendChild(entry);
+    });
+
+    // Show alert when 10s countdown is over
+    setTimeout(() => {
+      alert("Time's up!");
+    }, 10000);
+  </script>
+</body>
+</html>

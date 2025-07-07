@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Quizzes</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Avenir+Next:wght@700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            overflow-y: auto; /* Enable vertical scrolling */
+            padding: 20px;
+            position: relative; /* Position relative for absolute positioning of logout button */
+        }
+
+        h1 {
+            font-family: 'Avenir Next', Arial, sans-serif; 
+            font-size: 4rem;
+            font-weight: bold;
+            font-style: italic;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .quiz-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .quiz-card, .create-card {
+            border: 2px solid rgba(0, 123, 255, 1);
+            padding: 20px;
+            border-radius: 5px;
+            width: 300px;
+            height: 200px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .quiz-card h3, .create-card h3 {
+            margin: 0 0 10px;
+            font-size: 1.5rem;
+        }
+
+        .quiz-card p, .create-card p {
+            margin: 0 0 20px;
+        }
+
+        .button {
+            margin-top: 10px;
+            padding: 0.5rem 1rem; /* Smaller button size */
+            font-size: 1rem; /* Smaller font size */
+            font-weight: bold;
+            color: #fff;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 100px; /* Fixed width for buttons */
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        .delete-button {
+            background-color: #dc3545;
+        }
+
+        .delete-button:hover {
+            background-color: #c82333;
+        }
+
+        .no-quizzes {
+            text-align: center;
+        }
+
+        .logout-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            font-weight: bold;
+            color: #fff;
+            background-color: #FF5733;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-button:hover {
+            background-color: #C70039;
+        }
+    </style>
+</head>
+<body>
+
+    <button class="logout-button" onclick="logout()">Logout</button>
+    <h1>Your Quizzes</h1>
+    <div id="quiz-section" class="quiz-container">
+        <!-- Quizzes will be dynamically inserted here -->
+    </div>
+
+    <script>
+        const username = "Username"; // Example username
+        const quizzes = [
+            { name: "Quiz 1", description: "This is the first quiz." },
+            { name: "Quiz 2", description: "This is the second quiz." }
+        ]; // Example quizzes array
+
+        document.querySelector('h1').textContent = `Quizzes of ${username}`;
+
+        const quizSection = document.getElementById('quiz-section');
+
+        const createCard = `
+            <div class="create-card">
+                <h3>Create a New Quiz</h3>
+                <p>Engage with your audience.</p>
+                <button class="button" onclick="createQuiz()">Create</button>
+            </div>
+        `;
+
+        if (quizzes.length === 0) {
+            quizSection.innerHTML = `
+                <div class="no-quizzes">
+                    <p>There are no quizzes available.</p>
+                    ${createCard}
+                </div>
+            `;
+        } else {
+            quizzes.forEach(quiz => {
+                const quizCard = document.createElement('div');
+                quizCard.className = 'quiz-card';
+
+                quizCard.innerHTML = `
+                    <h3>${quiz.name}</h3>
+                    <p>${quiz.description}</p>
+                    <button class="button" onclick="editQuiz('${quiz.name}')">Edit</button>
+                    <button class="button" onclick="hostQuiz('${quiz.name}')">Host</button>
+                    <button class="button delete-button" onclick="deleteQuiz('${quiz.name}')">Delete</button>
+                `;
+
+                quizSection.appendChild(quizCard);
+            });
+
+            quizSection.innerHTML += createCard;
+        }
+
+        function createQuiz() {
+            alert('Create quiz functionality');
+        }
+
+        function editQuiz(quizName) {
+            alert(`Edit quiz: ${quizName}`);
+        }
+
+        function hostQuiz(quizName) {
+            alert(`Host quiz: ${quizName}`);
+        }
+
+        function deleteQuiz(quizName) {
+            alert(`Delete quiz: ${quizName}`);
+        }
+
+        function logout() {
+            alert('Logout functionality');
+        }
+    </script>
+
+</body>
+</html>
