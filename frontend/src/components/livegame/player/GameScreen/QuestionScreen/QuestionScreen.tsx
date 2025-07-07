@@ -64,7 +64,7 @@ type AnswerButtonProps = {
     type="button"
       class={`button button${answerId}`}
       onclick={handleSubmit}>
-      <span class={`icon${answerId}`}/>
+      <span class={`icon icon${answerId}`}/>
     </button>
     )
 })

@@ -157,11 +157,11 @@ h1 {
 	left: 0;
 	top: 50%;
 	transform: translateY(-50%);
-	width: 10%;              /* z. B. 10% der .answer-Breite */
-	height: 100%;            /* volle Höhe von .answer */
-	display: flex;           /* wichtig */
-	justify-content: center; /* zentriert horizontal */
-	align-items: center;     /* zentriert vertikal */
+	width: 10%;              
+	height: 100%;            
+	display: flex;           
+	justify-content: center; 
+	align-items: center;    
 	color: #ffffffe8;
 }
 
