@@ -45,7 +45,7 @@ type HostPlayingScreenProps = {
 
     // This needs to exist because trying to get the questionText directly in html doesn't work with changing currentRound.val
     function getCurrentQuestion() {
-      return gameStateObjects.questions[currentRound.val].content.questionText;;
+      return gameStateObjects.questions[currentRound.val].content.questionText;
     }
 
     startGame();
