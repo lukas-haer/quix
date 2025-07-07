@@ -10,16 +10,10 @@ import { Component, template } from "uix/components/Component.ts";
 import { Snackbar } from "frontend/src/components/utils/snackbar/Snackbar.tsx";
 import { quizzes } from "../../../../../backend/SaveQuiz.ts";
 
-
-export function setupHost (quizId : string) {
   //TODO: Does it make any difference having the pointers and api outside vs inside of a component?
   //TODO: pause/reset timeout
 
-  console.log("HostDashboard selected quiz to host: ", quizId)
-  const hostedQuiz = quizzes[quizId];
-  const questionsInQuiz = hostedQuiz.questions;
-
-  console.log("HOSTDASHBOARD Questions: ", questionsInQuiz);
+  
 
   //TODO: Do we want these as eternal variables? -> If yes, how do we handle recovery of the next question timer and api calls while host is offline.
   const state: Datex.Pointer<StateOptions> = $("waiting");
@@ -28,7 +22,7 @@ export function setupHost (quizId : string) {
   //This ObjectRef encapsules all the gamestate variables, that are some kind of object type. This is necessary to guarantee reactivity.
   const gameStateObjects: ObjectRef<GameStateObjects> = $({
     currentDeadline: new Date(),
-    questions: questionsInQuiz,
+    questions: sampleQuestions, //TODO hier stattdessen aktuelles user quiz oder importiertes Quiz
     players: []
   })
 
@@ -82,6 +76,7 @@ export function setupHost (quizId : string) {
   //(globalThis as any).gameStateObjects = gameStateObjects;
 
   @template(() => {
+ 
 
     //TODO: intermediary screen that detects if host already has a game running and asks if the host wishes to create a new game or view the old one.
 
@@ -94,7 +89,7 @@ export function setupHost (quizId : string) {
 
       gameStateObjects.players.splice(0)
       //gameStateObjects.currentDeadline = new Date()
-      gameStateObjects.questions = questionsInQuiz
+      gameStateObjects.questions = sampleQuestions
     }
 
     return (
@@ -112,7 +107,5 @@ export function setupHost (quizId : string) {
       </div>
       )
   })
-  class HostMain extends Component {}
+  export class HostMain extends Component {}
 
-  return <HostMain/>;
-}

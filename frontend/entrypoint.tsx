@@ -1,5 +1,5 @@
 import { MainMenu } from "./src/components/MainMenu/MainMenu.tsx";
-import { setupHost } from "frontend/src/components/livegame/host/HostMain.tsx";
+import { HostMain } from "frontend/src/components/livegame/host/HostMain.tsx";
 import { PlayerMain } from "frontend/src/components/livegame/player/PlayerMain.tsx";
 import { CreateQuiz } from './src/components/gamecreation/createQuiz/CreateQuiz.tsx';
 
@@ -11,9 +11,11 @@ export default {
     "/": () => <MainMenu />,
     "/join/:id": (_: any, { id }:{ id: string }) => <PlayerMain id={ id } />,
     "/join": () => redirect('/'),
-    "/host/:quizId": (_: any, { quizId }: { quizId: string }) => setupHost(quizId),
+    "/host/:quizId": <HostMain/>,
     "/createQuiz": () => <CreateQuiz />,
 	"/login": <UserLoginForm/>,
 	"/signup": <UserSignUpForm/>,
     "/account/:userId": (_: any, { userId }: { userId: string }) => <AccountPage userId={userId}/>
 };
+
+//"/host/:quizId": (_: any, { quizId }: { quizId: string }) => setupHost(quizId),

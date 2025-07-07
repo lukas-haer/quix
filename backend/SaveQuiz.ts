@@ -44,14 +44,10 @@ export async function saveQuiz (ctx: Context) {
 		questions : questions
 	})
 
-
-	console.log("LOG -------------Quiz saved:-------------", quizzes[quizId]);
-	console.log("-------------------------------");
-	console.log();
-
 	//quizzes of user x
 	const userQuizzes = Object.values(quizzes).filter(quiz => quiz.accountId === currentUser);
 
+	
 	for (const quiz of userQuizzes) {
 		console.log("Quiz of user", quiz.accountId);
 		console.log("Quiz ID:", quiz.quizId);
