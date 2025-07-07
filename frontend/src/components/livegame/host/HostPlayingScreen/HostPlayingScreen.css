@@ -58,6 +58,7 @@ h1 {
 	opacity: 0;
 	/* Start with hidden */
 	animation: fadeIn 1s ease-in-out forwards;
+	position: relative; 
 }
 
 .answer1 {
@@ -149,4 +150,43 @@ h1 {
 	cursor: pointer;
 	transition: background-color 0.3s ease, transform 0.15s cubic-bezier(0.23, 1, 0.32, 1);
 	margin-top: 1rem;
+}
+
+.icon {
+	position: absolute;
+	left: 0;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 10%;              /* z. B. 10% der .answer-Breite */
+	height: 100%;            /* volle Höhe von .answer */
+	display: flex;           /* wichtig */
+	justify-content: center; /* zentriert horizontal */
+	align-items: center;     /* zentriert vertikal */
+	color: #ffffffe8;
+}
+
+.icon0::before {
+    content: "\25B2";
+    /* ▲ */
+    font-size: 3rem;
+}
+
+.icon1::before {
+	content: "\25A0"; 
+	/* ■ */
+	font-size: 3.5rem;
+	padding-bottom: 10px;
+}
+
+.icon2::before {
+    content: "\25CF";
+    /* ● */
+    font-size: 4.3rem;
+	padding-bottom: 8px;
+}
+
+.icon3::before {
+    content: "\2716";
+    /* ✖ */
+    font-size: 3rem;
 }
