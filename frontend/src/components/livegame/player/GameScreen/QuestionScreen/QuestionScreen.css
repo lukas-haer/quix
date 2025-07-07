@@ -1,89 +1,144 @@
+section {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    background: #ffffff;
+    color: #000;
+}
 
-        section {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            position: relative;
-            background: #ffffff;
-            color: #000;
-        }
-        h1 {
-            font-family: 'Avenir Next', Arial, sans-serif;
-            font-size: 3rem;
-            font-weight: bold;
-            font-style: italic;
-            margin-bottom: 1rem;
-        }
-        .button-container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-        .button {
-            width: 150px;
-            height: 150px;
-            font-size: 2rem;
-            font-weight: bold;
-            color: #fff;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
-        }
-        .button0 { background-color: #007BFF; }
-        .button0:hover {
-            background: linear-gradient(135deg, #0056b3, #007BFF);
-            transform: scale(1.1) rotate(5deg);
-            box-shadow: 0 0 30px 10px rgba(0, 123, 255, 0.7);
-            filter: brightness(1.2);
-            animation: pulse 1s infinite;
-        }
-        .button1 { background-color: #28a745; }
-        .button1:hover {
-            background: linear-gradient(135deg, #218838, #28a745);
-            transform: scale(1.1) rotate(5deg);
-            box-shadow: 0 0 30px 10px rgba(40, 167, 69, 0.7);
-            filter: brightness(1.2);
-            animation: pulse 1s infinite;
-        }
-        .button2 { background-color: #ffc107; }
-        .button2:hover {
-            background: linear-gradient(135deg, #e0a800, #ffc107);
-            transform: scale(1.1) rotate(5deg);
-            box-shadow: 0 0 30px 10px rgba(255, 193, 7, 0.7);
-            filter: brightness(1.2);
-            animation: pulse 1s infinite;
-        }
-        .button3 { background-color: #dc3545; }
-        .button3:hover {
-            background: linear-gradient(135deg, #c82333, #dc3545);
-            transform: scale(1.1) rotate(5deg);
-            box-shadow: 0 0 30px 10px rgba(220, 53, 69, 0.7);
-            filter: brightness(1.2);
-            animation: pulse 1s infinite;
-        }
-        .countdown-bar {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0%;
-            height: 20px;
-            background: linear-gradient(90deg, rgba(0, 123, 255, 0) 0%, rgba(0, 123, 255, 1) 100%);
-            box-shadow: 0 0 20px rgba(0, 123, 255, 0.7);
-        }
-        @keyframes countdown {
-            from { width: 0%; }
-            to { width: 100%; }
-        }
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-        @keyframes pulse {
-            0%, 100% { transform: scale(1.1); }
-            50% { transform: scale(1.15); }
-        }
+h1 {
+    font-family: 'Avenir Next', Arial, sans-serif;
+    font-size: 5vw;
+    /* Adjust font size based on viewport width */
+    font-weight: bold;
+    font-style: italic;
+    margin-bottom: 1rem;
+    max-width: 90%;
+    /* Limit width to prevent overflow */
+    word-wrap: break-word;
+    /* Break long words */
+}
+
+.button-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-top: 2rem;  
+}
+
+.button {
+    width: 150px;
+    height: 150px;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.button0 {
+    background-color: #007BFF;
+}
+
+.button0:hover {
+    background: linear-gradient(135deg, #0056b3, #007BFF);
+    transform: scale(1.1) rotate(5deg);
+    animation: pulse 1s infinite;
+}
+
+.button1 {
+    background-color: #28a745;
+}
+
+.button1:hover {
+    background: linear-gradient(135deg, #218838, #28a745);
+    transform: scale(1.1) rotate(5deg);
+    animation: pulse 1s infinite;
+}
+
+.button2 {
+    background-color: #ffc107;
+}
+
+.button2:hover {
+    background: linear-gradient(135deg, #e0a800, #ffc107);
+    transform: scale(1.1) rotate(5deg);
+    animation: pulse 1s infinite;
+}
+
+.button3 {
+    background-color: #dc3545;
+}
+
+.button3:hover {
+    background: linear-gradient(135deg, #c82333, #dc3545);
+    transform: scale(1.1) rotate(5deg);
+    animation: pulse 1s infinite;
+}
+
+.countdown-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0%;
+    height: 20px;
+    background: linear-gradient(90deg, rgba(0, 123, 255, 0) 0%, rgba(0, 123, 255, 1) 100%);
+    box-shadow: 0 0 20px rgba(0, 123, 255, 0.7);
+    animation: countdown 30s linear forwards;
+}
+
+.icon0::before {
+    content: "\25B2";
+    /* ▲ */
+    font-size: 3rem;
+}
+
+.icon1::before {
+    content: "\25A0";
+    /* ■ */
+    font-size: 3.5rem;
+}
+
+.icon2::before {
+    content: "\25CF";
+    /* ● */
+    font-size: 4.3rem;
+}
+
+.icon3::before {
+    content: "\2716";
+    /* ✖ */
+    font-size: 3rem;
+}
+
+
+@keyframes countdown {
+    from {
+        width: 0%;
+    }
+
+    to {
+        width: 100%;
+    }
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1.1);
+    }
+
+    50% {
+        transform: scale(1.15);
+    }
+}
