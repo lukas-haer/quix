@@ -1,4 +1,5 @@
 import { Datex } from "datex-core-legacy/datex.ts";
+import { Question } from "common/models/Question.ts";
 import { Component, template } from "uix/components/Component.ts";
 
 type DefaultQuestionScreenProps = {

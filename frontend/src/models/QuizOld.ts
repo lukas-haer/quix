@@ -1,6 +1,6 @@
-import { Question } from "frontend/src/models/Question.ts";
+import { Question } from "common/models/Question.ts";
 
-export class Quiz {
+export class QuizOld {
 	readonly id: string;
 	title: string;
 	description: string;

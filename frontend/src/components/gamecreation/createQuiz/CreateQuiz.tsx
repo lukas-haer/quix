@@ -1,42 +1,31 @@
 import { UIX } from "uix"
 import { Component, template } from "uix/components/Component.ts";
 import { CreateSingleChoiceQuestion } from "./types/CreateSingleChoiceQuestion.tsx";
-import { Question, QuestionType, SingleChoiceQuestion } from "frontend/src/models/Question.ts";
-import { Quiz } from "frontend/src/models/Quiz.ts";
+import { Question, QuestionType, SingleChoiceQuestion } from "common/models/Question.ts";
 import { failureSnackbarMessage, Snackbar, successSnackbarMessage } from "frontend/src/components/utils/snackbar/Snackbar.tsx";
 import { ImportButton } from "frontend/src/components/livegame/host/QuizImport/QuizImport.tsx";
+import { saveQuiz } from "backend/SaveQuiz.ts";
+import { Quiz } from "common/models/Quiz.ts";
 
 /**
  * Example data for a quiz. In production, this would only contaion default values.
  *
- * @property {string} id - Unique identifier for the quiz.
+ * @property {string} quizId - Unique identifier for the quiz.
  * @property {string} title - Title of the quiz.
- * @property {Object} madeby - Information about the creator of the quiz.
+ * @property {string} description - Description of the quiz.
+ * @property {Object} accountId - Information about the creator of the quiz.
  * @property {Array<Question>} questions - Array of questions in the quiz.
  *
  */
-const quiz = $({
-    id: crypto.randomUUID(),
-    title: "My first Quix",
-    description: "This is a quiz about frontend development.",
-    madeby: {
-        endpointId: ""
-    },
-    questions: [
-        new SingleChoiceQuestion({
-                questionText: "What is the best Frontend Framework?",
-                answers: ["React", "Vue", "Angular", "UIX"],
-                correctAnswerId: 3,
-                timeInSeconds: 5
-            }),
-        new SingleChoiceQuestion({
-                questionText: "Which technology does not exitst?",
-                answers: ["Reverse Hashing", "Reactivity", "Responsive Design", "Cross-Realm Functions"],
-                correctAnswerId: 0,
-                timeInSeconds: 5
-            })
-    ],
-});
+let quiz = $(Quiz ({
+    quizId: crypto.randomUUID(),
+    title: "",
+    description: "",
+    accountId: "", //beim backend speichern gesetzt
+    //endpointId: "",
+    questions: [] //as SingleChoiceQuestion[] ? //später noch um weitere Typen erweitern
+}));
+
 
 /**
  * A reactive selector for the add question type select.
@@ -64,6 +53,10 @@ function addQuestion() {
         console.error("Unsupported question type:", type);
         return;
     }
+}
+
+function refresh() {
+    quiz.questions = [...quiz.questions];
 }
 
 /**
@@ -124,6 +117,7 @@ function exportQuestionSet() {
  * @throws Error if newQuiz is invalid or required properties are missing.
  */
 function setQuiz(newQuiz: Quiz) {
+    
     try {
         if (!newQuiz || typeof newQuiz !== "object") {
             throw new Error("Invalid quiz object provided.");
@@ -134,16 +128,14 @@ function setQuiz(newQuiz: Quiz) {
 
         quiz.title = newQuiz.title;
         quiz.description = newQuiz.description;
-        quiz.madeby = {
-            endpointId: datex.meta.caller.toString() //TODO replace with accounts
-        };
+        quiz.accountId = datex.meta.caller.toString(); //TODO replace with accounts
         const questions = quiz.questions;
         questions.length = 0;
 
-        newQuiz.questions.forEach((q) => {
+        newQuiz.questions.forEach((q : Quiz) => {
             if (q.content && typeof q.content === "object") {
                 questions.push(
-                    //Currently only supports Singlechoise questions
+                    //Currently only supports Singlechoice questions
                     //TODO Add handeling for other question types
                     new SingleChoiceQuestion({
                         questionText: q.content.questionText,
@@ -158,6 +150,7 @@ function setQuiz(newQuiz: Quiz) {
     } catch (error) {
         throw error;
     }
+    
 }
 
 @template(() => {
@@ -165,6 +158,7 @@ function setQuiz(newQuiz: Quiz) {
 
     return(
     <section>
+    <form action={saveQuiz} method="post">
         <header class="gc-row">
             <div class="gc-col gc-col-9">
                 <h2>Create a Quiz</h2>
@@ -173,11 +167,7 @@ function setQuiz(newQuiz: Quiz) {
             <div class="gc-col gc-col-3 vertically-centered align-right">
 				<div>
                     <ImportButton callback={(quiz) => {setQuiz(quiz)}} />
-                	<button
-                	    type="button"
-                	    class="button"
-                	    onclick={exportQuestionSet}
-						>
+                	<button type="button" id="export-btn" onclick={exportQuestionSet}>
                 	    Export Quiz
                 	</button>
 				</div>
@@ -188,28 +178,24 @@ function setQuiz(newQuiz: Quiz) {
             <div class="gc-row">
                 <div class="gc-col gc-col-6">
                     <label for="quizTitle">Quiz Title</label>
-                    <input type="text" id="quizTitle" value={quiz.title} />
+                    <input type="text" id="quizTitle" name="title" value={quiz.title} />
                 </div>
                 <div class="gc-col-6">
                     <label for="quizId">Quiz-ID</label>
-                    <input type="text" id="quizId" value={quiz.id} disabled />
+                    <input type="text" id="quizId" name="quizId" value={quiz.quizId} readonly />
                 </div>
-                <div class="gc-col">
-                    <label for="quizDescription">Quiz Description</label>
-                    <input type="text" id="quizDescription" value={quiz.description}/>
-
-                </div>
+            </div>
+            <div class="gc-col">
+                <label for="quizDescription">Quiz Description</label>
+                <input type="text" id="quizDescription" name="description" value={quiz.description} />
             </div>
         </div>
         <div>
-			
             {quiz.questions.map((question: Question<QuestionType>) => {
                 if (question instanceof SingleChoiceQuestion) {
                     return (
                         <div>
-                            <CreateSingleChoiceQuestion
-                                question={question}
-                            />
+                            <CreateSingleChoiceQuestion question={question}/>
                         </div>
                     );
                 }
@@ -217,11 +203,7 @@ function setQuiz(newQuiz: Quiz) {
             })}
         </div>
         <div>
-            <select
-                name="AddQuestion"
-                id="addQuestion-select"
-                value={addQuestionType}
-            >
+            <select name="AddQuestion" id="addQuestion-select" value={addQuestionType}>
                 <option selected disabled value="">
                     Select a Question-Type
                 </option>
@@ -231,16 +213,18 @@ function setQuiz(newQuiz: Quiz) {
                 Add
             </button>
         </div>
-
-
- 
+        <input type="hidden" name="questions" value={JSON.stringify(quiz.questions.map((q) => ({
+                id: q.id,
+                type: "single-choice",
+                content: q.content
+            })))}
+        />
+        <button type="submit" onclick={refresh}>Save Quiz</button>
+    </form>
             <Snackbar/>
-    </section>
+    </section>  
     )
-    
 })
-
-
 /*
 //########### Debugging-Tools ###########
                 <hr />
@@ -255,13 +239,3 @@ function setQuiz(newQuiz: Quiz) {
         </button>
         */
 export class CreateQuiz extends Component {}
-
-
-
-
-
-
-
-
-
-

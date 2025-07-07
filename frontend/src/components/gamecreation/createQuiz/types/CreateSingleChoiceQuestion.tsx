@@ -1,5 +1,5 @@
 import { Component, template } from 'uix/components/Component.ts';
-import { SingleChoiceQuestion } from '../../../../models/Question.ts';
+import { SingleChoiceQuestion } from 'common/models/Question.ts';
 import { removeQuestionById } from 'frontend/src/components/gamecreation/createQuiz/CreateQuiz.tsx';
 
 @template(props => {
