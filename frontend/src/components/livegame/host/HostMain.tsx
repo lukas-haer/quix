@@ -65,9 +65,24 @@ import { quizzes } from "../../../../../backend/SaveQuiz.ts";
       return { questionText, answers, currentDeadline: gameStateObjects.currentDeadline }
     }
 
-    @property static getPlayers() {
-      return gameStateObjects.players;
-    }
+  @property static getPlayers() {
+    return gameStateObjects.players;
+  }
+
+  @property static getScoreboard(): { name: string; points: number }[] {
+    if (state.val == "waiting") throw new Error("Cannot get scoreboard before the game started.");
+    const scorebaord = gameStateObjects.players.map((player: Player) => ({ name: player.name, points: player.points }));
+    return scorebaord
+  }
+
+  @property static whoAmI(): string {
+    const callerId = datex.meta?.caller
+    const playerIndex = gameStateObjects.players.findIndex((player: Player) => player.endpointId === callerId)
+
+    if(playerIndex === -1) throw new Error("There is no player with that endpoint id.")
+
+    return gameStateObjects.players[playerIndex].name
+  }
 
     @property static version = "0.0.1";
   }

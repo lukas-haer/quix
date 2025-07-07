@@ -24,6 +24,9 @@ export type PlayerAPIType = {
     joinGame: (name: string) => JoinGameReturn;
     getCurrentQuestion: () => GetCurrentQuestionReturn;
     submitAnswer: (answerId: number) => number;
+    getScoreboard: () => { name: string; points: number }[];
+    whoAmI: () => string;
+
 };
 
 const apiObj: ObjectRef<{ playerApi?: PlayerAPIType }> = $({}); //encapsulate api in ObjectRef to guarantee reactivity
@@ -100,11 +103,10 @@ const apiObj: ObjectRef<{ playerApi?: PlayerAPIType }> = $({}); //encapsulate ap
             );
         }
     };
-
     const renderComponent = () => {
         switch (activeComponent.val) {
             case 'liveGame':
-                return <GameScreen stateId={stateId.val} currentRoundId={currentRoundId.val} apiObj={apiObj} />;
+                return <GameScreen stateId={stateId.val} currentRoundId={currentRoundId.val} apiObj={apiObj}/>;
             case 'nameSelection':
                 return (
                     <div class="nameselection-container">

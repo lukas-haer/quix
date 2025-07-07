@@ -5,6 +5,7 @@ import { GetCurrentQuestionReturn } from "../../../../models/PlayerApiReturns.ts
 import { PlayerAPIType } from "../PlayerMain.tsx";
 import { QuestionScreen } from "./QuestionScreen/QuestionScreen.tsx";
 import { LoadingScreen } from "frontend/src/components/utils/loadingscreen/LoadingScreen.tsx";
+import {PlayerFinishedScreen} from "./PlayerFinishedScreen/PlayerFinishedScreen.tsx";
 
 type GameScreenProps = {
 	stateId: string;
@@ -34,7 +35,7 @@ type GameScreenProps = {
     answers.val = res.answers.join(";"); //To avoid using ObjectRef
     currentDeadline.val = res.currentDeadline.getTime(); //To avoid using ObjectRef
     console.log("DCD: ",currentDeadline.val);
-    
+
     submittedAnswer.val = false;
   }
 
@@ -50,6 +51,18 @@ type GameScreenProps = {
     if(newPoints > points.val){
       points.val = newPoints;
     }
+  }
+
+  async function getScoreboard(){
+    if(!apiObj.playerApi) throw Error("PlayerAPI not defined.")
+    const scoreboard = await apiObj.playerApi.getScoreboard();
+    return scoreboard
+  }
+
+  async function getName(){
+    if(!apiObj.playerApi) throw Error("PlayerAPI not defined.")
+    const name = await apiObj.playerApi.whoAmI();
+    return name
   }
 
 
@@ -69,19 +82,19 @@ type GameScreenProps = {
       }
       {
         state.val === "playing" && (
-          <QuestionScreen 
-            questionText={question.val} 
-            answers={answers.val} 
-            currentDeadline={currentDeadline.val} 
-            submittedAnswer={submittedAnswer} 
+          <QuestionScreen
+            questionText={question.val}
+            answers={answers.val}
+            currentDeadline={currentDeadline.val}
+            submittedAnswer={submittedAnswer}
             submitAnswer={submitAnswer}
-            
           />
         )
       }
       {
-        state.val === "finished" && <h2>The game has finished.</h2>
+          state.val === "finished" && <PlayerFinishedScreen getScoreboard={getScoreboard} getName={getName}/>
       }
+
     </div>
   )
 })
