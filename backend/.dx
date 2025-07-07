@@ -1,0 +1,13 @@
+use stage from #public.uix;
+
+endpoint: stage {
+    prod: @+quix
+},
+
+location: stage {
+    prod: @+quix_server
+},
+
+domain: stage {
+    prod: 'quix.campus.berlin'
+}
