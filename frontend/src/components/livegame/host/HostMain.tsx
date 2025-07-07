@@ -9,6 +9,7 @@ import { HostFinishedScreen } from "./HostFinishedScreen/HostFinishedScreen.tsx"
 import { Component, template } from "uix/components/Component.ts";
 import { Snackbar } from "frontend/src/components/utils/snackbar/Snackbar.tsx";
 import { quizzes } from "../../../../../backend/SaveQuiz.ts";
+import {HostSolutionScreen} from "./HostSolutionScreen/HostSolutionScreen.tsx";
 
   //TODO: Does it make any difference having the pointers and api outside vs inside of a component?
   //TODO: pause/reset timeout
@@ -44,7 +45,7 @@ import { quizzes } from "../../../../../backend/SaveQuiz.ts";
     }
 
     @property static submitAnswer(answer: any): number {
-      if(state.val !== "playing") throw new Error("Game has not started yet.")
+      if(state.val !== "question") throw new Error("Game has not started yet.")
 
       //TODO: change players object to dict? This would facilitate callerId, username check etc. (keys = player endpoint ids)
       const callerId = datex.meta?.caller
@@ -60,7 +61,7 @@ import { quizzes } from "../../../../../backend/SaveQuiz.ts";
     }
 
     @property static getCurrentQuestion(): GetCurrentQuestionReturn {
-      if (state.val !== "playing") throw new Error("Game has not started yet.")
+      if (state.val !== "question") throw new Error("Game has not started yet.")
       const { questionText, answers } = gameStateObjects.questions[currentRound.val].content
       return { questionText, answers, currentDeadline: gameStateObjects.currentDeadline }
     }
@@ -71,6 +72,7 @@ import { quizzes } from "../../../../../backend/SaveQuiz.ts";
 
   @property static getScoreboard(): { name: string; points: number }[] {
     if (state.val == "waiting") throw new Error("Cannot get scoreboard before the game started.");
+    if (state.val == "question") throw new Error("Cannot get scoreboard during question phase.");
     const scorebaord = gameStateObjects.players.map((player: Player) => ({ name: player.name, points: player.points }));
     return scorebaord
   }
@@ -107,14 +109,24 @@ import { quizzes } from "../../../../../backend/SaveQuiz.ts";
       gameStateObjects.questions = sampleQuestions
     }
 
+    function getScoreboard(): { name: string; points: number }[] {
+      if (state.val == "waiting") throw new Error("Cannot get scoreboard before the game started.");
+      if (state.val == "question") throw new Error("Cannot get scoreboard during question phase.");
+      const scoreboard = gameStateObjects.players.map((player: Player) => ({ name: player.name, points: player.points }));
+      return scoreboard
+    }
+
     return (
       <div class="container">
-        <Snackbar></Snackbar>
+        <Snackbar />
           {
             state.val === "waiting" && <HostWaitingScreen state={state} gameStateObjects={gameStateObjects} />
           }
           {
-            state.val === "playing" && <HostPlayingScreen state={state} currentRound={currentRound} gameStateObjects={gameStateObjects} />
+            state.val === "question" && <HostPlayingScreen state={state} currentRound={currentRound} gameStateObjects={gameStateObjects} />
+          }
+          {
+            state.val === "solution" && <HostSolutionScreen getScoreboard={getScoreboard} state={state} currentRound={currentRound} gameStateObjects={gameStateObjects}/>
           }
           {
             state.val === "finished" && <HostFinishedScreen state={state} currentRound={currentRound} />

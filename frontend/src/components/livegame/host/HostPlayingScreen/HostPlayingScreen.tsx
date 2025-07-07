@@ -18,15 +18,9 @@ type HostPlayingScreenProps = {
       updateDeadlineAndTimer();
     };
 
-    const nextRound = () => {
-      if (currentRound.val + 1 === gameStateObjects.questions.length) {
-        state.val = "finished";
-        return;
-      }
-
-      updateDeadlineAndTimer();
-      currentRound.val++;
-    };
+    const showSolutions = () => {
+      state.val = "solution"
+    }
 
     const updateDeadlineAndTimer = () => {
       // Can you do this more smoothly? an easy to understand one-liner perhaps?
@@ -38,8 +32,8 @@ type HostPlayingScreenProps = {
       gameStateObjects.currentDeadline = newDeadline;
 
       timeoutID.val = setTimeout(
-        nextRound,
-        gameStateObjects.currentDeadline.getTime() - Date.now(),
+          showSolutions,
+          gameStateObjects.currentDeadline.getTime() - Date.now(),
       );
     };
 
@@ -70,7 +64,7 @@ type HostPlayingScreenProps = {
           type="button"
           onclick={() => {
             clearTimeout(timeoutID.val);
-            nextRound();
+            showSolutions();
           }}
         >
           Skip Question

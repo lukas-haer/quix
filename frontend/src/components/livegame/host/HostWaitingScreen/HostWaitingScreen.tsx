@@ -105,7 +105,7 @@ type HostWaitingScreenProps = {
           >
             {invitelink}
           </p>
-          <button class="button" type="button" onclick={() => state.val = "playing"}>Start Game</button>
+          <button class="button" type="button" onclick={() => state.val = "question"}>Start Game</button>
         </div>
         <QuizImport gameStateObjects={gameStateObjects} />
       </section>

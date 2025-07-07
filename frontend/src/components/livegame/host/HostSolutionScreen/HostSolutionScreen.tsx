@@ -1,68 +1,80 @@
-type HostPlayingScreenProps = {
+import {Datex} from "datex-core-legacy/datex.ts";
+import {Component, template} from "uix/components/Component.ts";
+import {GameStateObjects} from "../../../../models/GameState.ts";
+import {ObjectRef} from "datex-core-legacy/runtime/pointers.ts";
+import {
+    MultipleChoiceQuestion,
+    SingleChoiceQuestion,
+} from "../../../../../../common/models/Question.ts";
+import {SingleChoiceQuestionSolution} from "./solutionComponents/SingleChoiceQuestionSolution.tsx";
+
+
+type HostSolutionScreenProps = {
     state: Datex.Pointer;
+    getScoreboard: () => { name: string; points: number }[];
     currentRound: Datex.Pointer;
     gameStateObjects: ObjectRef<GameStateObjects>;
 };
 
 @template(
-    function ({state, currentRound, gameStateObjects}: HostPlayingScreenProps) {
-
-        const topPlayers = [
-            {name: "PlayerOne", score: 3200},
-            {name: "PlayerTwo", score: 2900},
-            {name: "PlayerThree", score: 2600}
-        ];
-
-        const scoreboardContainer = document.getElementById('scoreboard');
-
-        topPlayers.forEach((player, index) => {
-            const entry = document.createElement('div');
-            entry.className = 'score-entry';
-            entry.innerHTML = `
-        <span>#${index + 1} ${player.name}</span>
-        <span>${player.score} pts</span>
-      `;
-            scoreboardContainer.appendChild(entry);
-        });
-
-        // Show alert when 10s countdown is over
-        setTimeout(() => {
-            alert("Time's up!");
-        }, 10000);
-
+    function ({state, getScoreboard, currentRound, gameStateObjects}: HostSolutionScreenProps) {
 
         function getCurrentQuestion() {
-            return gameStateObjects.questions[currentRound.val].content.questionText;;
+            return gameStateObjects.questions[currentRound.val].content;
         }
 
+        const nextRound = () => {
+            if (currentRound.val + 1 === gameStateObjects.questions.length) {
+                state.val = "finished";
+                return;
+            }
+            updateDeadlineAndTimer();
+            currentRound.val++;
+            state.val = "question"
+        };
+
+        const updateDeadlineAndTimer = () => {
+            // Can you do this more smoothly? an easy to understand one-liner perhaps?
+            const newDeadline = new Date();
+            newDeadline.setSeconds(
+                newDeadline.getSeconds() +
+                gameStateObjects.questions[currentRound.val].content.timeInSeconds,
+            );
+            gameStateObjects.currentDeadline = newDeadline;
+
+            setTimeout(
+                nextRound,
+                gameStateObjects.currentDeadline.getTime() - Date.now(),
+            );
+        };
+
+        const numberOfTopPlayersShown = 5;
+        const question = getCurrentQuestion()
+        const scoreboard = getScoreboard().slice(0, numberOfTopPlayersShown);
+
+        console.log(question)
 
         return (
-            <>
-                <div className="left">
-                    <h1>WHAT IS YOUR FAVORITE COLOR?</h1>
-                    <div className="answer-container">
-                        <div className="answer correct">Green</div>
-                        <div className="answer incorrect">Blue</div>
-                        <div className="answer incorrect">Yellow</div>
-                        <div className="answer incorrect">Red</div>
-                    </div>
+            <div class="solution-screen-container">
+                <div class="left">
+                    <SingleChoiceQuestionSolution currentRound={currentRound} gameStateObjects={gameStateObjects} style={{width: "100%"}} />
                 </div>
                 <div class="right">
-                    <div class="scoreboard-title">Top 3 Players</div>
+                    <div class="scoreboard-title">Top {Math.min(numberOfTopPlayersShown, scoreboard.length)} Players</div>
                     <div class="scoreboard" id="scoreboard"></div>
+                    {scoreboard.map((player, index) => (
+                        <div class="score-entry">
+                            <span>#{index + 1} {player.name} </span>
+                            <span>{player.points} pts</span>
+                        </div>
+                    ))}
                 </div>
-
-                <!-- Countdown bar -->
                 <div class="countdown-bar" id="countdownBar"></div>
-            </>
+            </div>
         );
     },
 )
-export class HostPlayingScreen extends Component<{
-    state: Datex.Pointer;
-    currentRound: Datex.Pointer;
-    gameStateObjects: ObjectRef<GameStateObjects>;
-}> {
+export class HostSolutionScreen extends Component<HostSolutionScreenProps> {
 }
 
 
