@@ -66,6 +66,21 @@ class PlayerAPI {
     return gameStateObjects.players;
   }
 
+  @property static getScoreboard(): { name: string; points: number }[] {
+    if (state.val == "waiting") throw new Error("Cannot get scoreboard before the game started.");
+    const scorebaord = gameStateObjects.players.map((player: Player) => ({ name: player.name, points: player.points }));
+    return scorebaord
+  }
+
+  @property static whoAmI(): string {
+    const callerId = datex.meta?.caller
+    const playerIndex = gameStateObjects.players.findIndex((player: Player) => player.endpointId === callerId)
+
+    if(playerIndex === -1) throw new Error("There is no player with that endpoint id.")
+
+    return gameStateObjects.players[playerIndex].name
+  }
+
   @property static version = "0.0.1";
 }
 
@@ -92,10 +107,10 @@ class PlayerAPI {
     <div class="container">
       <Snackbar></Snackbar>
         {
-          state.val === "waiting" && <HostWaitingScreen state={state} currentRound={currentRound} gameStateObjects={gameStateObjects} />
+          state.val === "waiting" && <HostWaitingScreen state={state} gameStateObjects={gameStateObjects} />
         }
         {
-          state.val === "playing" && <HostPlayingScreen currentRound={currentRound.val} gameStateObjects={gameStateObjects} />
+          state.val === "playing" && <HostPlayingScreen state={state} currentRound={currentRound} gameStateObjects={gameStateObjects} />
         }
         {
           state.val === "finished" && <HostFinishedScreen state={state} currentRound={currentRound} />
