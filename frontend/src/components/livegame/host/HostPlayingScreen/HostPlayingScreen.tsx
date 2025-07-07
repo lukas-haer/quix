@@ -47,18 +47,26 @@ type HostPlayingScreenProps = {
     function getCurrentQuestion() {
       return gameStateObjects.questions[currentRound.val].content.questionText;;
     }
+    function getCurrentAnswer(answerID : number){
+      return gameStateObjects.questions[currentRound.val].content.answers[answerID];;
+    }
 
     startGame();
 
     return (
-      <div>
-        <h2>Current Question:</h2>
-        <p>
-          {getCurrentQuestion()}
-        </p>
-        <h2>Current Deadline:</h2>
-        <p>{gameStateObjects.currentDeadline.toString()}</p>
+      <div class="section">
+        <h1>{getCurrentQuestion()}</h1>
+        <div class="answer-container">
+            <div class="answer answer1">{getCurrentAnswer(0)}</div>
+            <div class="answer answer2">{getCurrentAnswer(1)}</div>
+            <div class="answer answer3">{getCurrentAnswer(2)}</div>
+            <div class="answer answer4">{getCurrentAnswer(3)}</div>
+        </div>
+        <div class="timer" id="timer">Hier noch Logik für den Timer</div>
+        {/* <h2>Current Deadline:</h2>
+        <p>{gameStateObjects.currentDeadline.toString()}</p> */}
         <button
+          class="button"
           type="button"
           onclick={() => {
             clearTimeout(timeoutID.val);
@@ -67,6 +75,7 @@ type HostPlayingScreenProps = {
         >
           Skip Question
         </button>
+        <div class="countdown-bar" id="countdownBar"></div>
       </div>
     );
   },

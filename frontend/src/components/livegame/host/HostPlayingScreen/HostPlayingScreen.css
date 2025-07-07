@@ -138,3 +138,15 @@ h1 {
 		box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 	}
 }
+
+.button {
+	background-color: #007BFF;
+	color: white;
+	border: none;
+	padding: 0.75rem 1.5rem;
+	font-size: 1rem;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: background-color 0.3s ease, transform 0.15s cubic-bezier(0.23, 1, 0.32, 1);
+	margin-top: 1rem;
+}
