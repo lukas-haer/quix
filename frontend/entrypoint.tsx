@@ -11,7 +11,7 @@ export default {
     "/": () => <MainMenu />,
     "/join/:id": (_: any, { id }:{ id: string }) => <PlayerMain id={ id } />,
     "/join": () => redirect('/'),
-    "/host/:quizId": <HostMain/>,
+    "/host": <HostMain/>,
     "/createQuiz": () => <CreateQuiz />,
 	"/login": <UserLoginForm/>,
 	"/signup": <UserSignUpForm/>,
