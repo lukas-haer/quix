@@ -112,7 +112,7 @@ type PlayerFinishedScreenProps = {
             <h1>🎉 Game Over!</h1>
             <div class="main-info">You finished #{formatNumberToNumberWithSuffix(myRank)} with {myPoints} Point{myPoints !== 1 && "s"}</div>
 
-            <div class="cards-container">
+            {/* <div class="cards-container">
                 {nextRankInfo != null && (
                 <div class="player-card">
                     <div class="player-name"> 
@@ -133,7 +133,7 @@ type PlayerFinishedScreenProps = {
                     <div class="diff">-50 pts</div>
                 </div>
                 
-            </div>
+            </div> */}
                 <button class="button" onclick={navigateToJoinScreen}>
                     Join another quix
                 </button>
