@@ -125,27 +125,17 @@ import {HostSolutionScreen} from "./HostSolutionScreen/HostSolutionScreen.tsx";
       questionTimeoutID.val = setTimeout(showSolutions, seconds * 1000,);
     };
 
-    {
-    const newDeadline = new Date();
-    newDeadline.setSeconds(
-        newDeadline.getSeconds() +
-        gameStateObjects.questions[currentRound.val].content.timeInSeconds,
-    );
-    console.log(altercode: newDeadline)
-
-    }
-
     function createSolutionTimer():void{solutionTimeoutID.val = setTimeout(nextQuestion, 10000,);}
 
     function startGame():void {
-      state.val = "question";
       currentRound.val = 0
+      state.val = "question";
       updateQuestionDeadlineAndTimer();
     }
 
     function showSolutions():void {
-      state.val = "solution"
       clearTimeout(questionTimeoutID.val);
+      state.val = "solution"
       createSolutionTimer();
     }
 

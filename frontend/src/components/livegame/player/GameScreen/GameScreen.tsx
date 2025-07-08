@@ -6,6 +6,7 @@ import { PlayerAPIType } from "../PlayerMain.tsx";
 import { QuestionScreen } from "./QuestionScreen/QuestionScreen.tsx";
 import { LoadingScreen } from "frontend/src/components/utils/loadingscreen/LoadingScreen.tsx";
 import {PlayerFinishedScreen} from "./PlayerFinishedScreen/PlayerFinishedScreen.tsx";
+import {PlayerSolutionScreen} from "./PlayerSolutionScreen/PlayerSolutionScreen.tsx";
 
 type GameScreenProps = {
 	stateId: string;
@@ -40,7 +41,7 @@ type GameScreenProps = {
   }
 
   state.observe((v) => {
-    if(v !== "playing") return;
+    if(v !== "question" && v !== "solution") return;
     updateQuestionAndAnswers();
   })
   currentRound.observe(() => { updateQuestionAndAnswers() })
@@ -81,7 +82,8 @@ type GameScreenProps = {
         state.val === "waiting" && <LoadingScreen text="You're in!" subtext="Now wait for the game to start..." />
       }
       {
-        state.val === "playing" && (
+        state.val === "question" && (
+              console.log("state question.val {}    awnsers.val {}    currentDeadline.val {}  ",question.val, answers.val, currentDeadline.val),
           <QuestionScreen
             questionText={question.val}
             answers={answers.val}
@@ -89,6 +91,11 @@ type GameScreenProps = {
             submittedAnswer={submittedAnswer}
             submitAnswer={submitAnswer}
           />
+        )
+      }
+      {
+        state.val === "solution" && (
+          <PlayerSolutionScreen />
         )
       }
       {
