@@ -1,10 +1,10 @@
 import { Datex } from "datex-core-legacy/datex.ts";
 import { Component, template } from "uix/components/Component.ts";
-import {
-  StateOptions,
-} from "../../../../models/GameState.ts";
+import { ObjectRef } from "datex-core-legacy/runtime/pointers.ts";
+import { GameStateObjects } from "../../../../models/GameState.ts";
 
 type HostFinishedScreenProps = {
+
   state: Datex.Pointer<StateOptions>;
   currentRound: Datex.Pointer<number>;
 };
@@ -69,5 +69,4 @@ type HostFinishedScreenProps = {
   );
 })
 
-export class HostFinishedScreen extends Component<{ state: Datex.Pointer, currentRound: Datex.Pointer }> {
-}
+export class HostFinishedScreen extends Component<{ state: Datex.Pointer, currentRound: Datex.Pointer }> {}
