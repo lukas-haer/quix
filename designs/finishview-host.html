@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Game Finish Screen</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Avenir+Next:wght@700&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Avenir Next', Arial, sans-serif;
+      background: #ffffff;
+      height: 100vh;
+      overflow: hidden;
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 4rem;
+      margin-bottom: 3rem;
+      text-align: center;
+      animation: popIn 1s ease-out forwards;
+      color: #111;
+      text-shadow: 0 0 10px #00bfff50;
+      z-index: 2;
+    }
+
+    .podium {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 4rem;
+      z-index: 2;
+      margin-top: 2rem;
+    }
+
+    .place {
+      width: 220px;
+      border-radius: 20px 20px 0 0;
+      text-align: center;
+      background: #e9f6ff;
+      border: 3px solid #00bfff;
+      box-shadow: 0 0 20px #00bfff80;
+      animation: bounceUp 1s ease-out forwards;
+      position: relative;
+    }
+
+    .first {
+      height: 320px;
+      animation-delay: 0.2s;
+    }
+
+    .second {
+      height: 250px;
+      animation-delay: 0.4s;
+    }
+
+    .third {
+      height: 200px;
+      animation-delay: 0.6s;
+    }
+
+    .name {
+      font-size: 2rem;
+      font-weight: bold;
+      padding-top: 15px;
+      animation: pulse 2s infinite;
+      color: #007acc;
+    }
+
+    .score {
+      font-size: 1.4rem;
+      padding-bottom: 15px;
+      color: #333;
+    }
+
+    .place::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 10%;
+      width: 80%;
+      height: 10px;
+      background: #00bfff;
+      filter: blur(12px);
+      opacity: 0.6;
+      z-index: -1;
+    }
+
+    /* Particles */
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      background: #00bfff;
+      opacity: 0.3;
+      animation: float var(--duration) linear infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) translateX(0) scale(var(--scale));
+        opacity: 0;
+      }
+      50% {
+        opacity: var(--opacity);
+      }
+      100% {
+        transform: translateY(-10vh) translateX(var(--drift)) scale(var(--scale));
+        opacity: 0;
+      }
+    }
+
+    @keyframes popIn {
+      0% {
+        transform: scale(0.5);
+        opacity: 0;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes bounceUp {
+      0% {
+        transform: translateY(100px);
+        opacity: 0;
+      }
+      60% {
+        transform: translateY(-20px);
+        opacity: 1;
+      }
+      80% {
+        transform: translateY(10px);
+      }
+      100% {
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.08);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🏆 Final Standings</h1>
+
+  <div class="podium">
+    <div class="place second">
+      <div class="name" id="secondName"></div>
+      <div class="score" id="secondScore"></div>
+    </div>
+    <div class="place first">
+      <div class="name" id="firstName"></div>
+      <div class="score" id="firstScore"></div>
+    </div>
+    <div class="place third">
+      <div class="name" id="thirdName"></div>
+      <div class="score" id="thirdScore"></div>
+    </div>
+  </div>
+
+  <script>
+    const top3 = [
+      { name: "PlayerOne", score: 3200 },
+      { name: "PlayerTwo", score: 2900 },
+      { name: "PlayerThree", score: 2600 }
+    ];
+
+    document.getElementById("firstName").textContent = top3[0].name;
+    document.getElementById("firstScore").textContent = `${top3[0].score} pts`;
+    document.getElementById("secondName").textContent = top3[1].name;
+    document.getElementById("secondScore").textContent = `${top3[1].score} pts`;
+    document.getElementById("thirdName").textContent = top3[2].name;
+    document.getElementById("thirdScore").textContent = `${top3[2].score} pts`;
+
+    // Enhanced particle background
+    const numParticles = 200;
+    for (let i = 0; i < numParticles; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+
+      const size = Math.random() * 8 + 2; // 2px to 10px
+      const duration = 8 + Math.random() * 12; // 8s to 20s
+      const scale = Math.random() * 1.5;
+      const opacity = 0.2 + Math.random() * 0.6;
+      const drift = (Math.random() - 0.5) * 100 + "px";
+
+      p.style.width = `${size}px`;
+      p.style.height = `${size}px`;
+      p.style.left = `${Math.random() * 100}vw`;
+      p.style.top = `${Math.random() * 100}vh`;
+
+      p.style.setProperty('--duration', `${duration}s`);
+      p.style.setProperty('--scale', scale);
+      p.style.setProperty('--opacity', opacity);
+      p.style.setProperty('--drift', drift);
+
+      p.style.backgroundColor = `hsl(${190 + Math.random() * 40}, 100%, ${60 + Math.random() * 20}%)`;
+
+      document.body.appendChild(p);
+    }
+  </script>
+</body>
+</html>
