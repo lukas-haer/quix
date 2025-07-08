@@ -18,7 +18,7 @@ type GameScreenProps = {
   //TODO: error handling
   const state: Datex.Pointer<string> = await datex.get(`$${stateId}`)
   const currentRound: Datex.Pointer<number> = await datex.get(`$${currentRoundId}`)
-  const gameState: Datex.Pointer<string> = $("waiting");
+  const gameState: Datex.Pointer<string> = $("finished");
 
   //TODO: Maybe we can just grab the pointer references instead of manually calling the endpoint.
   const question: Datex.Pointer<string> = $("");
@@ -109,7 +109,8 @@ type GameScreenProps = {
       }
       {
         gameState.val === "solution" && (
-          <PlayerSolutionScreen />
+          /* <PlayerSolutionScreen /> Removed for now, till design is set */
+          <LoadingScreen text="Answers on the screen" subtext="Stay focused! The next question is comming up"></LoadingScreen>
         )
       }
       {

@@ -96,6 +96,7 @@ import { QuizImport } from "frontend/src/components/livegame/host/QuizImport/Qui
 
 
   @property static getScoreboard(): { name: string; points: number }[] {
+    return [] //TODO Remove
     if (state.val == "waiting") throw new Error("Cannot get scoreboard before the game started.");
     if (state.val == "question") throw new Error("Cannot get scoreboard during question phase.");
     const scorebaord = gameStateObjects.players.map((player: Player) => ({ name: player.name, points: player.points }));
