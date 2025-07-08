@@ -5,8 +5,9 @@ endpoint: stage {
 },
 
 location: stage {
-    prod: @+quix_server
+    prod: @+nwt1
 },
+
 
 domain: stage {
     prod: 'quix.campus.berlin'
