@@ -6,6 +6,7 @@ import { failureSnackbarMessage, Snackbar, successSnackbarMessage } from "fronte
 import { ImportButton } from "frontend/src/components/livegame/host/QuizImport/QuizImport.tsx";
 import { saveQuiz } from "backend/SaveQuiz.ts";
 import { Quiz } from "common/models/Quiz.ts";
+import { quizzes } from "backend/SaveQuiz.ts";
 
 /**
  * Example data for a quiz. In production, this would only contaion default values.
@@ -55,9 +56,7 @@ function addQuestion() {
     }
 }
 
-function refresh() {
-    quiz.questions = [...quiz.questions];
-}
+
 
 /**
  * 
@@ -150,8 +149,19 @@ function setQuiz(newQuiz: Quiz) {
     } catch (error) {
         throw error;
     }
-    
 }
+
+export function deleteQuiz (quizId : string, userId : string) {
+    if (quizzes[quizId] && quizzes[quizId].accountId === userId) {
+        delete quizzes[quizId];
+    }
+}
+
+function refresh() {
+    quiz.questions = [...quiz.questions];
+}
+
+
 
 @template(() => {
     UIX.Theme.useTheme("uix-light")
