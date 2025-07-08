@@ -1,4 +1,4 @@
-
+ /* 
 h1 {
     font-family: 'Avenir Next', Arial, sans-serif;
     color: white;
@@ -75,4 +75,125 @@ button:hover {
     100% {
         background: #ea2222;
     }
+}  */
+
+ * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Avenir Next', Arial, sans-serif;
+      background: #ffffff;
+      height: 100vh;
+      overflow: hidden;
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 3.5rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      animation: popIn 1s ease-out forwards;
+      color: #111;
+      text-shadow: 0 0 10px #00bfff50;
+      z-index: 2;
+    }
+
+    .main-info {
+      font-size: 2rem;
+      color: #007acc;
+      margin-bottom: 2rem;
+      animation: pulse 2s infinite;
+    }
+
+    .cards-container {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      z-index: 2;
+    }
+
+    .player-card {
+      background: #e9f6ff;
+      border: 3px solid #00bfff;
+      border-radius: 20px;
+      box-shadow: 0 0 20px #00bfff80;
+      padding: 1.5rem;
+      width: 280px;
+      text-align: center;
+      animation: bounceUp 1s ease-out forwards;
+    }
+
+    .player-name {
+      font-size: 1.6rem;
+      font-weight: bold;
+      color: #007acc;
+      margin-bottom: 0.5rem;
+    }
+
+    .player-score {
+      font-size: 1.2rem;
+      color: #333;
+    }
+
+    .diff {
+      font-size: 0.95rem;
+      color: #666;
+    }
+
+    @keyframes popIn {
+      0% {
+        transform: scale(0.5);
+        opacity: 0;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes bounceUp {
+      0% {
+        transform: translateY(100px);
+        opacity: 0;
+      }
+      60% {
+        transform: translateY(-20px);
+        opacity: 1;
+      }
+      80% {
+        transform: translateY(10px);
+      }
+      100% {
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.08);
+      }
+    } 
+
+    .button {
+	background-color: #007BFF;
+	color: white;
+	border: none;
+	padding: 0.75rem 1.5rem;
+	font-size: 1rem;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: background-color 0.3s ease, transform 0.15s cubic-bezier(0.23, 1, 0.32, 1);
+	margin-top: 1rem;
 }
