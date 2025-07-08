@@ -54,10 +54,16 @@ import {HostSolutionScreen} from "./HostSolutionScreen/HostSolutionScreen.tsx";
       if(playerIndex === -1) throw new Error("There is no player with that endpoint id.")
       //TODO: cache answers and evaluate at the end of a round
       const currentQuestion = gameStateObjects.questions[currentRound.val]
-      if(!currentQuestion.isCorrect(answer)) throw new Error("Wrong answer.")
 
-      gameStateObjects.players[playerIndex].points = gameStateObjects.players[playerIndex].points + 1
-      return gameStateObjects.players[playerIndex].points
+      if(!currentQuestion.isCorrect(answer)) throw new Error("Wrong answer.");
+
+
+      
+      const { currentDeadline } = PlayerAPI.getCurrentQuestion();
+
+      const currentPlayer = gameStateObjects.players[playerIndex];
+      currentPlayer.points = currentPlayer.points + this.calcPoints(Date.now(), currentDeadline.getTime());
+      return currentPlayer.points;
     }
 
     @property static getCurrentQuestion(): GetCurrentQuestionReturn {
@@ -66,9 +72,27 @@ import {HostSolutionScreen} from "./HostSolutionScreen/HostSolutionScreen.tsx";
       return { questionText, answers, currentDeadline: gameStateObjects.currentDeadline }
     }
 
-  @property static getPlayers() {
-    return gameStateObjects.players;
-  }
+    @property static getPlayers() {
+      return gameStateObjects.players;
+    }
+
+    @property static calcPoints (timeOfSubmit : number, questionDeadline : number) : number {
+
+      const maxTimeToAnswer = gameStateObjects.questions[currentRound.val].content.timeInSeconds * 1000; //in ms
+      const timeLeft = questionDeadline - timeOfSubmit; 
+      const timePast = maxTimeToAnswer - timeLeft;
+      
+      const maxPoints = 100;
+      const speedBonus = Math.pow(timeLeft / maxTimeToAnswer, 2);
+      const points = Math.round(maxPoints * (0.5 * speedBonus + 0.5));
+
+      if (timePast < 500) { //no reward for spamming the submit the button
+        return 0;
+      } else {
+        return points;
+      }
+    }
+
 
   @property static getScoreboard(): { name: string; points: number }[] {
     if (state.val == "waiting") throw new Error("Cannot get scoreboard before the game started.");
@@ -77,20 +101,20 @@ import {HostSolutionScreen} from "./HostSolutionScreen/HostSolutionScreen.tsx";
     return scorebaord
   }
 
-  @property static whoAmI(): string {
-    const callerId = datex.meta?.caller
-    const playerIndex = gameStateObjects.players.findIndex((player: Player) => player.endpointId === callerId)
+    @property static whoAmI(): string {
+      const callerId = datex.meta?.caller
+      const playerIndex = gameStateObjects.players.findIndex((player: Player) => player.endpointId === callerId)
 
-    if(playerIndex === -1) throw new Error("There is no player with that endpoint id.")
+      if(playerIndex === -1) throw new Error("There is no player with that endpoint id.")
 
-    return gameStateObjects.players[playerIndex].name
-  }
+      return gameStateObjects.players[playerIndex].name
+    }
 
     @property static version = "0.0.1";
-  }
+    }
 
-  (globalThis as any).PlayerAPI = PlayerAPI;
-  //(globalThis as any).gameStateObjects = gameStateObjects;
+    (globalThis as any).PlayerAPI = PlayerAPI;
+    //(globalThis as any).gameStateObjects = gameStateObjects;
 
   @template(() => {
  
