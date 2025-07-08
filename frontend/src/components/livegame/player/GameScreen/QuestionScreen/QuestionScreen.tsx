@@ -18,10 +18,7 @@ type ComponentQuestionScreenProps = DefaultQuestionScreenProps & { submittedAnsw
     //TODO: error handling
     submitAnswer(answerId);
     submittedAnswer.val = true;
-  }
-
-  console.log("CD: ",currentDeadline);
-  
+  }  
 
   return (
     <main>
@@ -43,7 +40,6 @@ type ComponentQuestionScreenProps = DefaultQuestionScreenProps & { submittedAnsw
           </main>
         )
 
-        
 }
 
  

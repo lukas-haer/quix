@@ -10,8 +10,7 @@ type HostPlayingScreenProps = {
   gameStateObjects: ObjectRef<GameStateObjects>;
 };
 
-@template(
-  function ({ state, currentRound, gameStateObjects }: HostPlayingScreenProps) {
+@template(({ state, currentRound, gameStateObjects }: HostPlayingScreenProps) => {
     const timeoutID: Datex.Pointer<number> = $(0);
 
     const startGame = () => {
@@ -24,17 +23,17 @@ type HostPlayingScreenProps = {
         return;
       }
 
+      console.log(currentQuestion);
+      
+
       updateDeadlineAndTimer();
       currentRound.val++;
     };
 
     const updateDeadlineAndTimer = () => {
-      // Can you do this more smoothly? an easy to understand one-liner perhaps?
-      const newDeadline = new Date();
-      newDeadline.setSeconds(
-        newDeadline.getSeconds() +
-          gameStateObjects.questions[currentRound.val].content.timeInSeconds,
-      );
+      
+      const newDeadline = new Date(Date.now() + gameStateObjects.questions[currentRound.val].content.timeInSeconds * 1000);
+
       gameStateObjects.currentDeadline = newDeadline;
 
       timeoutID.val = setTimeout(
@@ -43,24 +42,18 @@ type HostPlayingScreenProps = {
       );
     };
 
-    // This needs to exist because trying to get the questionText directly in html doesn't work with changing currentRound.val
-    function getCurrentQuestion() {
-      return gameStateObjects.questions[currentRound.val].content.questionText;;
-    }
-    function getCurrentAnswer(answerID : number){
-      return gameStateObjects.questions[currentRound.val].content.answers[answerID];;
-    }
+    const currentQuestion = always(() => gameStateObjects.questions[currentRound.val])
 
     startGame();
 
     return (
       <div class="section">
-        <h1>{getCurrentQuestion()}</h1>
+        <h1>{currentQuestion.content.questionText}</h1>
         <div class="answer-container">
-            <div class="answer answer1"><span class="icon icon0"/>{getCurrentAnswer(0)}</div>
-            <div class="answer answer2"><span class="icon icon1"/>{getCurrentAnswer(1)}</div>
-            <div class="answer answer3"><span class="icon icon2"/>{getCurrentAnswer(2)}</div>
-            <div class="answer answer4"><span class="icon icon3"/>{getCurrentAnswer(3)}</div>
+            <div class="answer answer1"><span class="icon icon0"/>{currentQuestion.content.answers[0]}</div>
+            <div class="answer answer2"><span class="icon icon1"/>{currentQuestion.content.answers[1]}</div>
+            <div class="answer answer3"><span class="icon icon2"/>{currentQuestion.content.answers[2]}</div>
+            <div class="answer answer4"><span class="icon icon3"/>{currentQuestion.content.answers[3]}</div>
         </div>
         <div class="timer" id="timer">Hier noch Logik für den Timer</div>
         {/* <h2>Current Deadline:</h2>
@@ -74,8 +67,9 @@ type HostPlayingScreenProps = {
           }}
         >
           Skip Question
-        </button>
-        <div class="countdown-bar" id="countdownBar"></div>
+        </button>currentQuestion
+
+        <div class="countdown-bar" id="countdownBar" style={`animation: countdown ${currentQuestion.content.timeInSeconds}s linear forwards`}/>
       </div>
     );
   },
