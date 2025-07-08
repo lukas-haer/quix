@@ -46,14 +46,14 @@ export class MultipleChoiceQuestion extends Question<MultipleChoiceQuestionType>
 }
 
 const question1 = new SingleChoiceQuestion({
-    questionText: "Frage 1: abcd?",
+    questionText: "Frage 1: a ist richtig?",
     answers: ["a","b","c","d"],
     correctAnswerId: 0,
     timeInSeconds: 30
 })
 
 const question2 = new SingleChoiceQuestion({
-    questionText: "Frage 2: abcd?",
+    questionText: "Frage 2: c ist richtig?",
     answers: ["a","b","c","d"],
     correctAnswerId: 2,
     timeInSeconds: 30
