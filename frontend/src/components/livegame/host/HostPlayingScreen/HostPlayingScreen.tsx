@@ -26,10 +26,10 @@ type HostPlayingScreenProps = {
       <div class="section">
         <h1>{getCurrentQuestion()}</h1>
         <div class="answer-container">
-            <div class="answer answer1">{getCurrentAnswer(0)}</div>
-            <div class="answer answer2">{getCurrentAnswer(1)}</div>
-            <div class="answer answer3">{getCurrentAnswer(2)}</div>
-            <div class="answer answer4">{getCurrentAnswer(3)}</div>
+            <div class="answer answer1"><span class="icon icon0"/>{getCurrentAnswer(0)}</div>
+            <div class="answer answer2"><span class="icon icon1"/>{getCurrentAnswer(1)}</div>
+            <div class="answer answer3"><span class="icon icon2"/>{getCurrentAnswer(2)}</div>
+            <div class="answer answer4"><span class="icon icon3"/>{getCurrentAnswer(3)}</div>
         </div>
         <div class="timer" id="timer">Hier noch Logik für den Timer</div>
         {/* <h2>Current Deadline:</h2>
