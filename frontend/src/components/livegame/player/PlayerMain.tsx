@@ -60,7 +60,7 @@ const apiObj: ObjectRef<{ playerApi?: PlayerAPIType }> = $({}); //encapsulate ap
                 console.log('ENDPOINT: ' + recievedEndpointId);
                 endpointId.val = recievedEndpointId.toString();
 
-                successSnackbarMessage('Lobby joined', 'Joined Lobby successfully');
+                successSnackbarMessage('Lobby found', 'Found lobby from your gamecode');
                 activeComponent.val = 'nameSelection';
             } catch (error) {
                 console.error('Error when attempting to find Lobby: ' + error);
