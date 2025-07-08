@@ -10,49 +10,23 @@ import {SingleChoiceQuestionSolution} from "./solutionComponents/SingleChoiceQue
 
 
 type HostSolutionScreenProps = {
-    state: Datex.Pointer;
+    nextQuestion: () => void;
     getScoreboard: () => { name: string; points: number }[];
+    state: Datex.Pointer;
     currentRound: Datex.Pointer;
     gameStateObjects: ObjectRef<GameStateObjects>;
 };
 
 @template(
-    function ({state, getScoreboard, currentRound, gameStateObjects}: HostSolutionScreenProps) {
+    function ({nextQuestion, getScoreboard, currentRound, gameStateObjects}: HostSolutionScreenProps) {
 
         function getCurrentQuestion() {
             return gameStateObjects.questions[currentRound.val].content;
         }
 
-        const nextRound = () => {
-            if (currentRound.val + 1 === gameStateObjects.questions.length) {
-                state.val = "finished";
-                return;
-            }
-            updateDeadlineAndTimer();
-            currentRound.val++;
-            state.val = "question"
-        };
-
-        const updateDeadlineAndTimer = () => {
-            // Can you do this more smoothly? an easy to understand one-liner perhaps?
-            const newDeadline = new Date();
-            newDeadline.setSeconds(
-                newDeadline.getSeconds() +
-                gameStateObjects.questions[currentRound.val].content.timeInSeconds,
-            );
-            gameStateObjects.currentDeadline = newDeadline;
-
-            setTimeout(
-                nextRound,
-                gameStateObjects.currentDeadline.getTime() - Date.now(),
-            );
-        };
-
         const numberOfTopPlayersShown = 5;
         const question = getCurrentQuestion()
         const scoreboard = getScoreboard().slice(0, numberOfTopPlayersShown);
-
-        console.log(question)
 
         return (
             <div class="solution-screen-container">

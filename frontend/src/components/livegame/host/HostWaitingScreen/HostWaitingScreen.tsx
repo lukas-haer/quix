@@ -16,13 +16,13 @@ import { Separator } from "frontend/src/components/utils/Separator/Separator.tsx
 type HostWaitingScreenProps = {
   state: Datex.Pointer<StateOptions>;
   gameStateObjects: ObjectRef<GameStateObjects>;
+  startGame: () => void;
 };
 
 @style("../HostMain.css") //TODO: replace and delete me
 @template(
-  async ({ state, gameStateObjects }: HostWaitingScreenProps) => {
+  async ({ state, gameStateObjects, startGame }: HostWaitingScreenProps) => {
     UIX.Theme.useTheme("uix-light-plain");
-
     let gamecode: string = "";
     try {
       const lobby = await registerLobby(); //Registers a Lobby on the Backend
@@ -105,7 +105,7 @@ type HostWaitingScreenProps = {
           >
             {invitelink}
           </p>
-          <button class="button" type="button" onclick={() => state.val = "question"}>Start Game</button>
+          <button class="button" type="button" onclick={() => startGame()}>Start Game</button>
         </div>
         <QuizImport gameStateObjects={gameStateObjects} />
       </section>
@@ -115,4 +115,5 @@ type HostWaitingScreenProps = {
 export class HostWaitingScreen extends Component<{
   state: Datex.Pointer;
   gameStateObjects: ObjectRef<GameStateObjects>;
+  startGame: () => void;
 }> {}

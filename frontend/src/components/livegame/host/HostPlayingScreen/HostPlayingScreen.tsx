@@ -8,34 +8,11 @@ type HostPlayingScreenProps = {
   state: Datex.Pointer;
   currentRound: Datex.Pointer;
   gameStateObjects: ObjectRef<GameStateObjects>;
+  showSolutions: () => void;
 };
 
 @template(
-  function ({ state, currentRound, gameStateObjects }: HostPlayingScreenProps) {
-    const timeoutID: Datex.Pointer<number> = $(0);
-
-    const startGame = () => {
-      updateDeadlineAndTimer();
-    };
-
-    const showSolutions = () => {
-      state.val = "solution"
-    }
-
-    const updateDeadlineAndTimer = () => {
-      // Can you do this more smoothly? an easy to understand one-liner perhaps?
-      const newDeadline = new Date();
-      newDeadline.setSeconds(
-        newDeadline.getSeconds() +
-          gameStateObjects.questions[currentRound.val].content.timeInSeconds,
-      );
-      gameStateObjects.currentDeadline = newDeadline;
-
-      timeoutID.val = setTimeout(
-          showSolutions,
-          gameStateObjects.currentDeadline.getTime() - Date.now(),
-      );
-    };
+  function ({ showSolutions, state, currentRound, gameStateObjects }: HostPlayingScreenProps) {
 
     // This needs to exist because trying to get the questionText directly in html doesn't work with changing currentRound.val
     function getCurrentQuestion() {
@@ -44,8 +21,6 @@ type HostPlayingScreenProps = {
     function getCurrentAnswer(answerID : number){
       return gameStateObjects.questions[currentRound.val].content.answers[answerID];;
     }
-
-    startGame();
 
     return (
       <div class="section">
@@ -63,7 +38,6 @@ type HostPlayingScreenProps = {
           class="button"
           type="button"
           onclick={() => {
-            clearTimeout(timeoutID.val);
             showSolutions();
           }}
         >
@@ -78,4 +52,5 @@ export class HostPlayingScreen extends Component<{
   state: Datex.Pointer;
   currentRound: Datex.Pointer;
   gameStateObjects: ObjectRef<GameStateObjects>;
+    showSolutions: () => void;
 }> {}

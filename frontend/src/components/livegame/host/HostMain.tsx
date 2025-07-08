@@ -116,17 +116,63 @@ import {HostSolutionScreen} from "./HostSolutionScreen/HostSolutionScreen.tsx";
       return scoreboard
     }
 
+    const questionTimeoutID: Datex.Pointer<number> = $(0);
+    const solutionTimeoutID: Datex.Pointer<number> = $(0);
+
+    const updateQuestionDeadlineAndTimer = () => {
+      const seconds = gameStateObjects.questions[currentRound.val].content.timeInSeconds;
+      gameStateObjects.currentDeadline  = new Date(Date.now() + seconds * 1000);
+      questionTimeoutID.val = setTimeout(showSolutions, seconds * 1000,);
+    };
+
+    {
+    const newDeadline = new Date();
+    newDeadline.setSeconds(
+        newDeadline.getSeconds() +
+        gameStateObjects.questions[currentRound.val].content.timeInSeconds,
+    );
+    console.log(altercode: newDeadline)
+
+    }
+
+    function createSolutionTimer():void{solutionTimeoutID.val = setTimeout(nextQuestion, 10000,);}
+
+    function startGame():void {
+      state.val = "question";
+      currentRound.val = 0
+      updateQuestionDeadlineAndTimer();
+    }
+
+    function showSolutions():void {
+      state.val = "solution"
+      clearTimeout(questionTimeoutID.val);
+      createSolutionTimer();
+    }
+
+    const nextQuestion = () => {
+      clearTimeout(solutionTimeoutID.val);
+      if (currentRound.val + 1 === gameStateObjects.questions.length) {
+        state.val = "finished";
+        return;
+      }
+      updateQuestionDeadlineAndTimer();
+      currentRound.val++;
+      state.val = "question"
+    };
+
+
+
     return (
       <div class="container">
         <Snackbar />
           {
-            state.val === "waiting" && <HostWaitingScreen state={state} gameStateObjects={gameStateObjects} />
+            state.val === "waiting" && <HostWaitingScreen state={state} gameStateObjects={gameStateObjects} startGame={startGame}/>
           }
           {
-            state.val === "question" && <HostPlayingScreen state={state} currentRound={currentRound} gameStateObjects={gameStateObjects} />
+            state.val === "question" && <HostPlayingScreen showSolutions={showSolutions} state={state} currentRound={currentRound} gameStateObjects={gameStateObjects} />
           }
           {
-            state.val === "solution" && <HostSolutionScreen getScoreboard={getScoreboard} state={state} currentRound={currentRound} gameStateObjects={gameStateObjects}/>
+            state.val === "solution" && <HostSolutionScreen nextQuestion={nextQuestion} getScoreboard={getScoreboard} state={state} currentRound={currentRound} gameStateObjects={gameStateObjects}/>
           }
           {
             state.val === "finished" && <HostFinishedScreen state={state} currentRound={currentRound} />
