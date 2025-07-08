@@ -189,7 +189,7 @@ import {HostSolutionScreen} from "./HostSolutionScreen/HostSolutionScreen.tsx";
             state.val === "solution" && <HostSolutionScreen nextQuestion={nextQuestion} getScoreboard={getScoreboard} state={state} currentRound={currentRound} gameStateObjects={gameStateObjects}/>
           }
           {
-            state.val === "finished" && <HostFinishedScreen state={state} currentRound={currentRound} gameStateObjects={gameStateObjects} />
+            state.val === "finished" && <HostFinishedScreen state={state} currentRound={currentRound}  />
           }
       </div>
       )
