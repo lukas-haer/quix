@@ -1,6 +1,6 @@
-import { Datex, div } from "datex-core-legacy/datex.ts";
+import { Datex } from "datex-core-legacy/datex.ts";
 import { ObjectRef } from "datex-core-legacy/runtime/pointers.ts";
-import { sampleQuestions, SingleChoiceQuestion, MultipleChoiceQuestion } from "common/models/Question.ts";
+import { sampleQuestions } from "common/models/Question.ts";
 import { Player, GameStateObjects, StateOptions } from "../../../models/GameState.ts";
 import { JoinGameReturn, GetCurrentQuestionReturn } from "../../../models/PlayerApiReturns.ts";
 import { HostWaitingScreen } from "./HostWaitingScreen/HostWaitingScreen.tsx";
@@ -8,7 +8,6 @@ import { HostPlayingScreen } from "./HostPlayingScreen/HostPlayingScreen.tsx";
 import { HostFinishedScreen } from "./HostFinishedScreen/HostFinishedScreen.tsx";
 import { Component, template } from "uix/components/Component.ts";
 import { Snackbar } from "frontend/src/components/utils/snackbar/Snackbar.tsx";
-import { quizzes } from "../../../../../backend/SaveQuiz.ts";
 import {HostSolutionScreen} from "./HostSolutionScreen/HostSolutionScreen.tsx";
 import { QuizImport } from "frontend/src/components/livegame/host/QuizImport/QuizImport.tsx";
 
@@ -129,9 +128,6 @@ import { QuizImport } from "frontend/src/components/livegame/host/QuizImport/Qui
         currentRound.val = 0;
         state.val = "waiting";
       
-      //TODO: This is already done through HostFinishedScreen, except resetting the players list.
-      //TODO: This is broken.
-      //TODO: resetting the pointer values multiple times breaks the page (with currentRound it breaks immediately)
     }
 
     function getScoreboard(): { name: string; points: number }[] {
@@ -146,6 +142,9 @@ import { QuizImport } from "frontend/src/components/livegame/host/QuizImport/Qui
     const updateQuestionDeadlineAndTimer = () => {
       const seconds = gameStateObjects.questions[currentRound.val].content.timeInSeconds;   
       console.log("cr: ",currentRound.val);
+      console.log("questions",gameStateObjects.questions);
+      console.log("questionscontent",gameStateObjects.questions[currentRound.val].content);
+      
       console.log("SECONDS: ",gameStateObjects.questions[currentRound.val].content);
          
       gameStateObjects.currentDeadline  = new Date(Date.now() + seconds * 1000);
@@ -190,10 +189,10 @@ import { QuizImport } from "frontend/src/components/livegame/host/QuizImport/Qui
             state.val === "waiting" && <HostWaitingScreen state={state} gameStateObjects={gameStateObjects} startGame={startGame}/>
           }
           {
-            state.val === "question" && <HostPlayingScreen showSolutions={showSolutions} state={state} currentRound={currentRound} gameStateObjects={gameStateObjects} />
+            state.val === "question" && <HostPlayingScreen showSolutions={showSolutions} currentRound={currentRound.val} gameStateObjects={gameStateObjects} />
           }
           {
-            state.val === "solution" && <HostSolutionScreen nextQuestion={nextQuestion} getScoreboard={getScoreboard} state={state} currentRound={currentRound} gameStateObjects={gameStateObjects}/>
+            state.val === "solution" && <HostSolutionScreen nextQuestion={nextQuestion} getScoreboard={getScoreboard} state={state} currentRound={currentRound.val} gameStateObjects={gameStateObjects}/>
           }
           {
             state.val === "finished" && <HostFinishedScreen resetGame={resetGame} />

@@ -1,6 +1,6 @@
 import {Datex} from "datex-core-legacy/datex.ts";
 import {Component, template} from "uix/components/Component.ts";
-import {GameStateObjects} from "../../../../models/GameState.ts";
+import {GameStateObjects} from "frontend/src/models/GameState.ts";
 import {ObjectRef} from "datex-core-legacy/runtime/pointers.ts";
 import {SingleChoiceQuestionSolution} from "./solutionComponents/SingleChoiceQuestionSolution.tsx";
 
@@ -9,19 +9,14 @@ type HostSolutionScreenProps = {
     nextQuestion: () => void;
     getScoreboard: () => { name: string; points: number }[];
     state: Datex.Pointer;
-    currentRound: Datex.Pointer;
+    currentRound: number;
     gameStateObjects: ObjectRef<GameStateObjects>;
 };
 
 @template(
     function ({nextQuestion, getScoreboard, currentRound, gameStateObjects}: HostSolutionScreenProps) {
 
-        function getCurrentQuestion() {
-            return gameStateObjects.questions[currentRound.val].content;
-        }
-
         const numberOfTopPlayersShown = 5;
-        const question = getCurrentQuestion()
         const scoreboard = getScoreboard().slice(0, numberOfTopPlayersShown);
 
         return (

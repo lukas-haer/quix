@@ -1,19 +1,19 @@
-import { Datex } from "datex-core-legacy/datex.ts";
 import { ObjectRef } from "datex-core-legacy/runtime/pointers.ts";
 import { GameStateObjects } from "frontend/src/models/GameState.ts";
 import { Component, template } from "uix/components/Component.ts";
 
 //TODO: why does pointer to currentRound not update this component anymore after changing to uix format?
 type HostPlayingScreenProps = {
-  state: Datex.Pointer;
-  currentRound: Datex.Pointer;
+  currentRound: number;
   gameStateObjects: ObjectRef<GameStateObjects>;
   showSolutions: () => void;
 };
 
-@template( ({ showSolutions, state, currentRound, gameStateObjects }: HostPlayingScreenProps) => {
+@template( ({ showSolutions, currentRound, gameStateObjects }: HostPlayingScreenProps) => {
 
-    const currentQuestion = always(() => gameStateObjects.questions[currentRound.val]) 
+    const currentQuestion = always(() => gameStateObjects.questions[currentRound])
+     
+    
     const timeLeft = $(Math.floor((gameStateObjects.currentDeadline.getTime() - Date.now() )/ 1000)+1)
 
     const updateTimerIntervalId = setInterval(() => {
@@ -46,9 +46,4 @@ type HostPlayingScreenProps = {
     );
   },
 )
-export class HostPlayingScreen extends Component<{
-  state: Datex.Pointer;
-  currentRound: Datex.Pointer;
-  gameStateObjects: ObjectRef<GameStateObjects>;
-    showSolutions: () => void;
-}> {}
+export class HostPlayingScreen extends Component<HostPlayingScreenProps> {}

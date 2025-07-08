@@ -1,7 +1,5 @@
-import { Datex } from "datex-core-legacy/datex.ts";
 import { Component, template } from "uix/components/Component.ts";
-import { ObjectRef } from "datex-core-legacy/runtime/pointers.ts";
-import { StateOptions } from "frontend/src/models/GameState.ts";
+
 
 type HostFinishedScreenProps = {
   resetGame: () => void

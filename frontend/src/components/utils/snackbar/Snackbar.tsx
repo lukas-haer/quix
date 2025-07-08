@@ -33,6 +33,8 @@ function showSnackbarMessage (
     durationInMs?: number
 ) {
 	if (!durationInMs) {
+        console.log("MY Snackbar message");
+        
 		durationInMs = 10_000 // Default duration of 10 seconds
 	}
 

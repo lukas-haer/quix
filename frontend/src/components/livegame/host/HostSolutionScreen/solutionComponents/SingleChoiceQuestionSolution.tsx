@@ -10,14 +10,9 @@ type SingleChoiceQuestionComponentProps = {
     gameStateObjects: ObjectRef<GameStateObjects>;
 };
 
-@template(
-    async function ({currentRound, gameStateObjects}: SingleChoiceQuestionComponentProps) {
+@template(({currentRound, gameStateObjects}: SingleChoiceQuestionComponentProps) => {
 
-        function getCurrentQuestion() {
-            return gameStateObjects.questions[currentRound.val];
-        }
-
-        const question = getCurrentQuestion() as SingleChoiceQuestion;
+        const question =  gameStateObjects.questions[currentRound.val] as SingleChoiceQuestion
         const questionText = question.content.questionText
         const answers = question.content.answers
         const correctAnswer = question.content.correctAnswerId

@@ -9,7 +9,7 @@ import {
 import { registerLobby } from "backend/lobbyManagement/LobbyManagement.ts";
 import { QrCode } from "frontend/src/components/utils/qrcode/qrcode.tsx";
 import { UIX } from "uix";
-import { successSnackbarMessage } from "frontend/src/components/utils/snackbar/Snackbar.tsx";
+import { failureSnackbarMessage, successSnackbarMessage } from "frontend/src/components/utils/snackbar/Snackbar.tsx";
 import { Separator } from "frontend/src/components/utils/Separator/Separator.tsx";
 
 type HostWaitingScreenProps = {
@@ -20,7 +20,7 @@ type HostWaitingScreenProps = {
 
 @style("../HostMain.css") //TODO: replace and delete me
 @template(
-  async ({state, gameStateObjects, startGame }: HostWaitingScreenProps) => {
+  async ({gameStateObjects, startGame }: HostWaitingScreenProps) => {
     UIX.Theme.useTheme("uix-light-plain");
     let gamecode: string = "";
     try {
@@ -28,7 +28,7 @@ type HostWaitingScreenProps = {
       gamecode = lobby.code;
     } catch (error) {
       console.error("An Error occured: " + error);
-      alert("Unable to load gamecode"); //TODO Replace with snackbar
+      failureSnackbarMessage("Error when loading gamecode","Was unable to load gamecode. Please try again")
     }
 
     const hostname = globalThis.location.hostname;

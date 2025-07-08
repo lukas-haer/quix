@@ -64,7 +64,7 @@ const apiObj: ObjectRef<{ playerApi?: PlayerAPIType }> = $({}); //encapsulate ap
                 activeComponent.val = 'nameSelection';
             } catch (error) {
                 console.error('Error when attempting to find Lobby: ' + error);
-                failureSnackbarMessage('Lobby not found', 'There is no lobby for this gamecode.', 30_000);
+                redirect(`/?error=LobbyNotFound`)
                 return;
             }
         } catch (error) {
