@@ -117,7 +117,7 @@ import { quizzes } from "../../../../../backend/SaveQuiz.ts";
             state.val === "playing" && <HostPlayingScreen state={state} currentRound={currentRound} gameStateObjects={gameStateObjects} />
           }
           {
-            state.val === "finished" && <HostFinishedScreen state={state} currentRound={currentRound} />
+            state.val === "finished" && <HostFinishedScreen state={state} currentRound={currentRound} gameStateObjects={gameStateObjects} />
           }
       </div>
       )
