@@ -79,7 +79,7 @@ type PlayerFinishedScreenProps = {
     const myRank = getMyRank(rankedScoreboard, myName)
     const myPoints = getMyPoints(rankedScoreboard, myName)    
 
-    return (
+    /* return (
         <div class="color-fade player-finished-container">
             <div>
                 <h1>
@@ -104,7 +104,43 @@ type PlayerFinishedScreenProps = {
                 </button>
             </div>
         </div>
-    );
+    ); */
+
+    return (
+        <body>
+            <h1>🎉 Game Over!</h1>
+            <div class="main-info">You finished #{formatNumberToNumberWithSuffix(myRank)} with {myPoints} Point{myPoints !== 1 && "s"}</div>
+
+            {/* <div class="cards-container">
+                {nextRankInfo != null && (
+                <div class="player-card">
+                    <div class="player-name"> 
+                        {formatNumberToNumberWithSuffix(nextRankInfo.nextRank)} place 
+                    </div>
+                    <div class="player-score">
+                        {myPoints+nextRankInfo.pointsNeeded}pts
+                    </div>
+                    <div class="diff">
+                        {nextRankInfo.pointsNeeded} point{nextRankInfo.pointsNeeded !== 1 && "s"}
+                    </div>
+                </div>
+                )}
+
+                <div class="player-card">
+                    <div class="player-name">#5 Maya</div>
+                    <div class="player-score">2350 pts</div>
+                    <div class="diff">-50 pts</div>
+                </div>
+                
+            </div> */}
+                <button class="button" onclick={navigateToJoinScreen}>
+                    Join another quix
+                </button>
+                <button class="button" onclick={navigateToMainMenu}>
+                    Create your own quix for free
+                </button>
+        </body>
+    ); 
 })
 
 export class PlayerFinishedScreen extends Component<PlayerFinishedScreenProps> {
