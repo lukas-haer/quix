@@ -6,6 +6,7 @@ import { PlayerAPIType } from "../PlayerMain.tsx";
 import { QuestionScreen } from "./QuestionScreen/QuestionScreen.tsx";
 import { LoadingScreen } from "frontend/src/components/utils/loadingscreen/LoadingScreen.tsx";
 import {PlayerFinishedScreen} from "./PlayerFinishedScreen/PlayerFinishedScreen.tsx";
+import {PlayerSolutionScreen} from "./PlayerSolutionScreen/PlayerSolutionScreen.tsx";
 
 type GameScreenProps = {
 	stateId: string;
@@ -57,7 +58,7 @@ type GameScreenProps = {
 
   
   currentRound.observe(() => { 
-    if (gameState.valueOf() === "finished") return;
+    if (gameState.val === "finished") return;
     updateQuestionAndAnswers();
   })
 
@@ -92,12 +93,11 @@ type GameScreenProps = {
 
   return (
     <div>
- 
       {
         gameState.val === "waiting" && <LoadingScreen text="You're in!" subtext="Now wait for the game to start..." />
       }
       {
-        gameState.val === "playing" && (
+        gameState.val === "question" && (
           <QuestionScreen
             questionText={question.val}
             answers={answers.val}
@@ -108,9 +108,13 @@ type GameScreenProps = {
         )
       }
       {
+        gameState.val === "solution" && (
+          <PlayerSolutionScreen />
+        )
+      }
+      {
         gameState.val == "finished" && <PlayerFinishedScreen getScoreboard={getScoreboard} getName={getName}/> 
       }
-
     </div>
   )
 })

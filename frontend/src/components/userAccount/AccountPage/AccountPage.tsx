@@ -4,29 +4,22 @@ import { users } from "backend/UserAccounts/UserAuthentication.ts";
 import { Quiz } from "common/models/Quiz.ts";
 import { quizzes } from "backend/SaveQuiz.ts";
 import { Component, template } from "uix/components/Component.ts";
+import { deleteQuiz } from "../../gamecreation/createQuiz/CreateQuiz.tsx";
 
 @template(function ({ userId }) {
 
 	const currentUser = userId;
 	console.log("Log Accountpage current user: ", currentUser);
 
-	if (!currentUser) {
-		console.error("LOG AccountPage: no user logged in");
-		//return provideRedirect("/login");
+	if (!users[currentUser] ) {
+		throw new Error("User needs to be logged in to view his Account Page")
 	}
 
-	const userQuizzes = Object.values(quizzes).filter(quiz => quiz.accountId === currentUser);
-		
-	console.log("LOG AccountPage");
-	console.log("Quiz of user", currentUser);
+	//get quizzes to render
+	const userQuizzes = $(Object.values(quizzes).filter(quiz => quiz.accountId === currentUser));
 
-	for (const quiz of userQuizzes) {
-		console.log("Quiz ID:", quiz.quizId);
-		console.log("Title:", quiz.title);
-		console.log("Description:", quiz.description);
-		console.log("Questions:", quiz.questions);
-		console.log("-----------------------------");
-	}
+	//modal for delete Quiz button
+	const showModal = $(false);
 
 	return (
 		<body>
@@ -56,7 +49,19 @@ import { Component, template } from "uix/components/Component.ts";
 								<div>
 									<button class="button" type="button">Edit</button>
 									<a href={`/host/${quiz.quizId}`}><button class="button" type="button">Host</button></a>
-									<button class="button delete-button" type="button">Delete</button>
+									<button class="button delete-button" type="button" onclick={()=> (showModal.val = true)}>Delete</button>
+									{showModal.val && (
+										<div class="modal-overlay">
+											<div class="modal">
+												<h3>Are you sure you want to delete your Quiz "{quiz.title}"</h3>
+												<div class="modal-btn">
+													<button class="close-btn" type="button" onclick={() => { showModal.val = false;}}>Cancel</button>
+													<button type="button" class="confirm-btn" onclick={() => {deleteQuiz(quiz.quizId, currentUser); showModal.val = false; redirect(`/account/${userId}`)}}>
+														Delete Quiz</button>
+												</div>
+											</div>
+										</div>
+									)}
 								</div>
 							</div>
 						))}

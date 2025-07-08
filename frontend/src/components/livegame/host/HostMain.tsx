@@ -9,6 +9,7 @@ import { HostFinishedScreen } from "./HostFinishedScreen/HostFinishedScreen.tsx"
 import { Component, template } from "uix/components/Component.ts";
 import { Snackbar } from "frontend/src/components/utils/snackbar/Snackbar.tsx";
 import { quizzes } from "../../../../../backend/SaveQuiz.ts";
+import {HostSolutionScreen} from "./HostSolutionScreen/HostSolutionScreen.tsx";
 
   //TODO: Does it make any difference having the pointers and api outside vs inside of a component?
   //TODO: pause/reset timeout
@@ -44,7 +45,7 @@ import { quizzes } from "../../../../../backend/SaveQuiz.ts";
     }
 
     @property static submitAnswer(answer: any): number {
-      if(state.val !== "playing") throw new Error("Game has not started yet.")
+      if(state.val !== "question") throw new Error("Game has not started yet.")
 
       //TODO: change players object to dict? This would facilitate callerId, username check etc. (keys = player endpoint ids)
       const callerId = datex.meta?.caller
@@ -53,42 +54,67 @@ import { quizzes } from "../../../../../backend/SaveQuiz.ts";
       if(playerIndex === -1) throw new Error("There is no player with that endpoint id.")
       //TODO: cache answers and evaluate at the end of a round
       const currentQuestion = gameStateObjects.questions[currentRound.val]
-      if(!currentQuestion.isCorrect(answer)) throw new Error("Wrong answer.")
 
-      gameStateObjects.players[playerIndex].points = gameStateObjects.players[playerIndex].points + 1
-      return gameStateObjects.players[playerIndex].points
+      if(!currentQuestion.isCorrect(answer)) throw new Error("Wrong answer.");
+
+
+      
+      const { currentDeadline } = PlayerAPI.getCurrentQuestion();
+
+      const currentPlayer = gameStateObjects.players[playerIndex];
+      currentPlayer.points = currentPlayer.points + this.calcPoints(Date.now(), currentDeadline.getTime());
+      return currentPlayer.points;
     }
 
     @property static getCurrentQuestion(): GetCurrentQuestionReturn {
-      if (state.val !== "playing") throw new Error("Game has not started yet.")
+      if (state.val !== "question") throw new Error("Game has not started yet.")
       const { questionText, answers } = gameStateObjects.questions[currentRound.val].content
       return { questionText, answers, currentDeadline: gameStateObjects.currentDeadline }
     }
 
-  @property static getPlayers() {
-    return gameStateObjects.players;
-  }
+    @property static getPlayers() {
+      return gameStateObjects.players;
+    }
+
+    @property static calcPoints (timeOfSubmit : number, questionDeadline : number) : number {
+
+      const maxTimeToAnswer = gameStateObjects.questions[currentRound.val].content.timeInSeconds * 1000; //in ms
+      const timeLeft = questionDeadline - timeOfSubmit; 
+      const timePast = maxTimeToAnswer - timeLeft;
+      
+      const maxPoints = 100;
+      const speedBonus = Math.pow(timeLeft / maxTimeToAnswer, 2);
+      const points = Math.round(maxPoints * (0.5 * speedBonus + 0.5));
+
+      if (timePast < 500) { //no reward for spamming the submit the button
+        return 0;
+      } else {
+        return points;
+      }
+    }
+
 
   @property static getScoreboard(): { name: string; points: number }[] {
     if (state.val == "waiting") throw new Error("Cannot get scoreboard before the game started.");
+    if (state.val == "question") throw new Error("Cannot get scoreboard during question phase.");
     const scorebaord = gameStateObjects.players.map((player: Player) => ({ name: player.name, points: player.points }));
     return scorebaord
   }
 
-  @property static whoAmI(): string {
-    const callerId = datex.meta?.caller
-    const playerIndex = gameStateObjects.players.findIndex((player: Player) => player.endpointId === callerId)
+    @property static whoAmI(): string {
+      const callerId = datex.meta?.caller
+      const playerIndex = gameStateObjects.players.findIndex((player: Player) => player.endpointId === callerId)
 
-    if(playerIndex === -1) throw new Error("There is no player with that endpoint id.")
+      if(playerIndex === -1) throw new Error("There is no player with that endpoint id.")
 
-    return gameStateObjects.players[playerIndex].name
-  }
+      return gameStateObjects.players[playerIndex].name
+    }
 
     @property static version = "0.0.1";
-  }
+    }
 
-  (globalThis as any).PlayerAPI = PlayerAPI;
-  //(globalThis as any).gameStateObjects = gameStateObjects;
+    (globalThis as any).PlayerAPI = PlayerAPI;
+    //(globalThis as any).gameStateObjects = gameStateObjects;
 
   @template(() => {
  
@@ -107,14 +133,60 @@ import { quizzes } from "../../../../../backend/SaveQuiz.ts";
       gameStateObjects.questions = sampleQuestions
     }
 
+    function getScoreboard(): { name: string; points: number }[] {
+      if (state.val == "waiting") throw new Error("Cannot get scoreboard before the game started.");
+      if (state.val == "question") throw new Error("Cannot get scoreboard during question phase.");
+      const scoreboard = gameStateObjects.players.map((player: Player) => ({ name: player.name, points: player.points }));
+      return scoreboard
+    }
+
+    const questionTimeoutID: Datex.Pointer<number> = $(0);
+    const solutionTimeoutID: Datex.Pointer<number> = $(0);
+
+    const updateQuestionDeadlineAndTimer = () => {
+      const seconds = gameStateObjects.questions[currentRound.val].content.timeInSeconds;
+      gameStateObjects.currentDeadline  = new Date(Date.now() + seconds * 1000);
+      questionTimeoutID.val = setTimeout(showSolutions, seconds * 1000,);
+    };
+
+    function createSolutionTimer():void{solutionTimeoutID.val = setTimeout(nextQuestion, 10000,);}
+
+    function startGame():void {
+      currentRound.val = 0
+      state.val = "question";
+      updateQuestionDeadlineAndTimer();
+    }
+
+    function showSolutions():void {
+      clearTimeout(questionTimeoutID.val);
+      state.val = "solution"
+      createSolutionTimer();
+    }
+
+    const nextQuestion = () => {
+      clearTimeout(solutionTimeoutID.val);
+      if (currentRound.val + 1 === gameStateObjects.questions.length) {
+        state.val = "finished";
+        return;
+      }
+      updateQuestionDeadlineAndTimer();
+      currentRound.val++;
+      state.val = "question"
+    };
+
+
+
     return (
       <div class="container">
-        <Snackbar></Snackbar>
+        <Snackbar />
           {
-            state.val === "waiting" && <HostWaitingScreen state={state} gameStateObjects={gameStateObjects} />
+            state.val === "waiting" && <HostWaitingScreen state={state} gameStateObjects={gameStateObjects} startGame={startGame}/>
           }
           {
-            state.val === "playing" && <HostPlayingScreen state={state} currentRound={currentRound} gameStateObjects={gameStateObjects} />
+            state.val === "question" && <HostPlayingScreen showSolutions={showSolutions} state={state} currentRound={currentRound} gameStateObjects={gameStateObjects} />
+          }
+          {
+            state.val === "solution" && <HostSolutionScreen nextQuestion={nextQuestion} getScoreboard={getScoreboard} state={state} currentRound={currentRound} gameStateObjects={gameStateObjects}/>
           }
           {
             state.val === "finished" && <HostFinishedScreen state={state} currentRound={currentRound} gameStateObjects={gameStateObjects} />
