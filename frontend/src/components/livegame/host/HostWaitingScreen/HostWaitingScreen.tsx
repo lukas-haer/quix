@@ -10,7 +10,6 @@ import { registerLobby } from "backend/lobbyManagement/LobbyManagement.ts";
 import { QrCode } from "frontend/src/components/utils/qrcode/qrcode.tsx";
 import { UIX } from "uix";
 import { successSnackbarMessage } from "frontend/src/components/utils/snackbar/Snackbar.tsx";
-import { QuizImport } from "frontend/src/components/livegame/host/QuizImport/QuizImport.tsx";
 import { Separator } from "frontend/src/components/utils/Separator/Separator.tsx";
 
 type HostWaitingScreenProps = {
@@ -21,7 +20,7 @@ type HostWaitingScreenProps = {
 
 @style("../HostMain.css") //TODO: replace and delete me
 @template(
-  async ({ state, gameStateObjects, startGame }: HostWaitingScreenProps) => {
+  async ({state, gameStateObjects, startGame }: HostWaitingScreenProps) => {
     UIX.Theme.useTheme("uix-light-plain");
     let gamecode: string = "";
     try {
@@ -107,7 +106,6 @@ type HostWaitingScreenProps = {
           </p>
           <button class="button" type="button" onclick={() => startGame()}>Start Game</button>
         </div>
-        <QuizImport gameStateObjects={gameStateObjects} />
       </section>
     );
   },

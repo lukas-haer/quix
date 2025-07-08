@@ -1,15 +1,13 @@
 import { Datex } from "datex-core-legacy/datex.ts";
 import { Component, template } from "uix/components/Component.ts";
 import { ObjectRef } from "datex-core-legacy/runtime/pointers.ts";
-import { GameStateObjects } from "../../../../models/GameState.ts";
+import { StateOptions } from "frontend/src/models/GameState.ts";
 
 type HostFinishedScreenProps = {
-
-  state: Datex.Pointer<StateOptions>;
-  currentRound: Datex.Pointer<number>;
+  resetGame: () => void
 };
 
-@template(function ({ state, currentRound }: HostFinishedScreenProps) {
+@template(({ resetGame }: HostFinishedScreenProps) => {
 
   function showParticle(){
 
@@ -61,12 +59,9 @@ type HostFinishedScreenProps = {
           <div class="score" id="thirdScore"></div>
         </div>
       </div>
-      <button type="button" onclick={() => {
-        currentRound.val = 0;
-        state.val = "waiting";
-      }}>New Round</button>
+      <button type="button" onclick={resetGame}>New Round</button>
     </body>
   );
 })
 
-export class HostFinishedScreen extends Component<{ state: Datex.Pointer, currentRound: Datex.Pointer }> {}
+export class HostFinishedScreen extends Component<HostFinishedScreenProps> {}

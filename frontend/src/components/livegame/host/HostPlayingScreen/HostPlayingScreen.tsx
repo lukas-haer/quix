@@ -11,19 +11,17 @@ type HostPlayingScreenProps = {
   showSolutions: () => void;
 };
 
-@template(
-  function ({ showSolutions, state, currentRound, gameStateObjects }: HostPlayingScreenProps) {
+@template( ({ showSolutions, state, currentRound, gameStateObjects }: HostPlayingScreenProps) => {
 
-    // This needs to exist because trying to get the questionText directly in html doesn't work with changing currentRound.val
-    function getCurrentQuestion() {
-      return gameStateObjects.questions[currentRound.val].content.questionText;
-    }
-    function getCurrentAnswer(answerID : number){
-      return gameStateObjects.questions[currentRound.val].content.answers[answerID];;
-    }
+    const currentQuestion = always(() => gameStateObjects.questions[currentRound.val]) 
+    const timeLeft = $(Math.floor((gameStateObjects.currentDeadline.getTime() - Date.now() )/ 1000)+1)
+
+    const updateTimerIntervalId = setInterval(() => {
+      timeLeft.val = Math.floor((gameStateObjects.currentDeadline.getTime() - Date.now() )/ 1000) + 1
+    },50)
 
     return (
-      <div class="section">
+      <main>
         <h1>{currentQuestion.content.questionText}</h1>
         <div class="answer-container">
             <div class="answer answer1"><span class="icon icon0"/>{currentQuestion.content.answers[0]}</div>
@@ -31,21 +29,20 @@ type HostPlayingScreenProps = {
             <div class="answer answer3"><span class="icon icon2"/>{currentQuestion.content.answers[2]}</div>
             <div class="answer answer4"><span class="icon icon3"/>{currentQuestion.content.answers[3]}</div>
         </div>
-        <div class="timer" id="timer">Hier noch Logik für den Timer</div>
-        {/* <h2>Current Deadline:</h2>
-        <p>{gameStateObjects.currentDeadline.toString()}</p> */}
+        <div class="timer" id="timer">{timeLeft}</div>      
         <button
           class="button"
           type="button"
           onclick={() => {
+            clearInterval(updateTimerIntervalId)
             showSolutions();
           }}
         >
           Skip Question
-        </button>currentQuestion
+        </button>
 
         <div class="countdown-bar" id="countdownBar" style={`animation: countdown ${currentQuestion.content.timeInSeconds}s linear forwards`}/>
-      </div>
+      </main>
     );
   },
 )
