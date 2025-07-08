@@ -8,6 +8,7 @@ location: stage {
     prod: @+nwt1
 },
 
+
 domain: stage {
     prod: 'quix.campus.berlin'
 }
