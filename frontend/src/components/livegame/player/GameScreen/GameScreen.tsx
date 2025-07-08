@@ -18,6 +18,7 @@ type GameScreenProps = {
   //TODO: error handling
   const state: Datex.Pointer<string> = await datex.get(`$${stateId}`)
   const currentRound: Datex.Pointer<number> = await datex.get(`$${currentRoundId}`)
+  const gameState: Datex.Pointer<string> = $("waiting");
 
   //TODO: Maybe we can just grab the pointer references instead of manually calling the endpoint.
   const question: Datex.Pointer<string> = $("");
@@ -35,16 +36,31 @@ type GameScreenProps = {
     question.val = res.questionText;
     answers.val = res.answers.join(";"); //To avoid using ObjectRef
     currentDeadline.val = res.currentDeadline.getTime(); //To avoid using ObjectRef
-    console.log("DCD: ",currentDeadline.val);
+    // console.log("DCD: ",currentDeadline.val);
 
     submittedAnswer.val = false;
   }
 
+  // gameState keeps the player in finished screen even if host starts a new round
   state.observe((v) => {
-    if(v !== "question" && v !== "solution") return;
+    if(v === "finished" || gameState.val === "finished") {
+      gameState.val = "finished";
+      return;
+    }
+    else if (v === "waiting") {
+      return;
+    }
+
+    
+    gameState.val = v;
     updateQuestionAndAnswers();
   })
-  currentRound.observe(() => { updateQuestionAndAnswers() })
+
+  
+  currentRound.observe(() => { 
+    if (gameState.val === "finished") return;
+    updateQuestionAndAnswers();
+  })
 
   async function submitAnswer(answerId: number){
     if(!apiObj.playerApi) throw Error("PlayerAPI not defined.")
@@ -77,13 +93,11 @@ type GameScreenProps = {
 
   return (
     <div>
- 
       {
-        state.val === "waiting" && <LoadingScreen text="You're in!" subtext="Now wait for the game to start..." />
+        gameState.val === "waiting" && <LoadingScreen text="You're in!" subtext="Now wait for the game to start..." />
       }
       {
-        state.val === "question" && (
-              console.log("state question.val {}    awnsers.val {}    currentDeadline.val {}  ",question.val, answers.val, currentDeadline.val),
+        gameState.val === "question" && (
           <QuestionScreen
             questionText={question.val}
             answers={answers.val}
@@ -94,14 +108,13 @@ type GameScreenProps = {
         )
       }
       {
-        state.val === "solution" && (
+        gameState.val === "solution" && (
           <PlayerSolutionScreen />
         )
       }
       {
-          state.val === "finished" && <PlayerFinishedScreen getScoreboard={getScoreboard} getName={getName}/>
+        gameState.val == "finished" && <PlayerFinishedScreen getScoreboard={getScoreboard} getName={getName}/> 
       }
-
     </div>
   )
 })

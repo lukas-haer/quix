@@ -1,6 +1,5 @@
 import {Datex} from "datex-core-legacy/datex.ts";
 import {Component, template} from "uix/components/Component.ts";
-import {frontendRouter} from "uix/routing/"
 
 type PlayerFinishedScreenProps = {
     getScoreboard: () => Promise<{ name: string; points: number }[]>;
@@ -78,11 +77,11 @@ type PlayerFinishedScreenProps = {
 
     const nextRankInfo = pointsToNextRankAndPlace(rankedScoreboard, myName);
     const myRank = getMyRank(rankedScoreboard, myName)
-    const myPoints = getMyPoints(rankedScoreboard, myName)
+    const myPoints = getMyPoints(rankedScoreboard, myName)    
 
     return (
         <div class="color-fade player-finished-container">
-            <>
+            <div>
                 <h1>
                     {formatNumberToNumberWithSuffix(myRank)} Place
                 </h1>
@@ -95,7 +94,7 @@ type PlayerFinishedScreenProps = {
                         from {formatNumberToNumberWithSuffix(nextRankInfo.nextRank)} place
                     </h4>
                 )}
-            </>
+            </div>
             <div class="button-container">
                 <button onclick={navigateToJoinScreen}>
                     Join another quix
