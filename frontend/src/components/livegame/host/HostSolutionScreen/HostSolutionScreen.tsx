@@ -8,7 +8,6 @@ import {SingleChoiceQuestionSolution} from "./solutionComponents/SingleChoiceQue
 type HostSolutionScreenProps = {
     nextQuestion: () => void;
     getScoreboard: () => { name: string; points: number }[];
-    state: Datex.Pointer;
     currentRound: number;
     gameStateObjects: ObjectRef<GameStateObjects>;
 };

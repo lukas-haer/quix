@@ -38,31 +38,33 @@ type HostFinishedScreenProps = {
         return particleDiv;
     }
 
-    const scorebaord = getScoreboard();
+    const scoreboard = getScoreboard();
 
     return (
         <main>
-            <h1>🏆 Final Standings</h1>
-            <div class="podium">
-                {scorebaord[1] && (
+            <h1>🏆 The Game is over</h1>
+            {/* <div class="podium">
+                {namen[1] && points[1] && (
                     <div class="place second">
-                        <div class="name" id="secondName">{scorebaord[1].name}</div>
-                        <div class="score" id="secondScore">{scorebaord[1].points}</div>
+                        <div class="name" id="secondName">{namen[1]}</div>
+                        <div class="score" id="secondScore">{points[1]}</div>
                     </div>
                 )}
-                {scorebaord[0] && (
+                {namen[0] && points[0] && (
                     <div class="place first">
-                        <div class="name" id="firstName">{scorebaord[0].name}</div>
-                        <div class="score" id="firstScore">{scorebaord[0].points}</div>
+                        <div class="name" id="firstName">{namen[0]}</div>
+                        <div class="score" id="firstScore">{points[0]}</div>
                     </div>
                 )}
-                {scorebaord[2] && (
+                {namen[2] && points[2] && (
                     <div class="place third">
-                        <div class="name" id="thirdName">{scorebaord[2].name}</div>
-                        <div class="score" id="thirdScore">{scorebaord[2].points}</div>
+                        <div class="name" id="thirdName">{namen[2]}</div>
+                        <div class="score" id="thirdScore">{points[2]}</div>
                     </div>
-                )}
-            </div>
+                )} 
+
+
+            </div> */}
             <button type="button" onclick={resetGame}>
                 New Round
             </button>

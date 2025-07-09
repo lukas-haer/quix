@@ -12,14 +12,6 @@ type PlayerFinishedScreenProps = {
     type Player = { name: string; points: number };
     type PlayerWithRank = Player & { rank: number };
 
-    function navigateToMainMenu() {
-        window.location.href = "/host"
-    }
-
-    function navigateToJoinScreen() {
-        window.location.href = "/"
-    }
-
     function getRankedScoreboard(scoreboard: { name: string; points: number }[]): PlayerWithRank[] {
         const sorted = [...scoreboard].sort((a, b) => b.points - a.points);
         let rank = 1;
@@ -34,7 +26,7 @@ type PlayerFinishedScreenProps = {
         });
     }
 
-    function getMyRank(rankedScoreboard: PlayerWithRank[], myName: string): number {
+    function getMyRank(rankedScoreboard: PlayerWithRank[], myName: string): number {       
         const me = rankedScoreboard.find(p => p.name === myName);
         return me ? me.rank : -1;
     }
@@ -107,11 +99,11 @@ type PlayerFinishedScreenProps = {
     ); */
 
     return (
-        <body>
+        <main>
             <h1>🎉 Game Over!</h1>
             <div class="main-info">You finished #{formatNumberToNumberWithSuffix(myRank)} with {myPoints} Point{myPoints !== 1 && "s"}</div>
-
-            {/* <div class="cards-container">
+{/* 
+            <div class="cards-container">
                 {nextRankInfo != null && (
                 <div class="player-card">
                     <div class="player-name"> 
@@ -132,14 +124,18 @@ type PlayerFinishedScreenProps = {
                     <div class="diff">-50 pts</div>
                 </div>
                 
-            </div> */}
-                <button class="button" onclick={navigateToJoinScreen}>
+            </div>  */}
+                <button type="button" class="button" onclick={() => redirect('/')}>
                     Join another quix
                 </button>
-                <button class="button" onclick={navigateToMainMenu}>
+                <button type="button" class="button" onclick={() => redirect('/host')}>
                     Create your own quix for free
                 </button>
-        </body>
+                            <div class="shape rectangle"></div>
+            <div class="shape circle"></div>
+            <div class="shape triangle"></div>
+            <div class="shape star"></div>
+        </main>
     ); 
 })
 

@@ -68,7 +68,7 @@ import { QuizImport } from "frontend/src/components/livegame/host/QuizImport/Qui
     }
 
     @property static getCurrentQuestion(): GetCurrentQuestionReturn {
-      if (state.val !== "question") throw new Error("Game has not started yet.")
+      if (state.val !== "question") throw new Error(`Cannot get currentQuestion, because state is: ${state.val}`)
       const { questionText, answers } = gameStateObjects.questions[currentRound.val].content
       return { questionText, answers, currentDeadline: gameStateObjects.currentDeadline }
     }
@@ -96,7 +96,6 @@ import { QuizImport } from "frontend/src/components/livegame/host/QuizImport/Qui
 
 
   @property static getScoreboard(): { name: string; points: number }[] {
-    return [] //TODO Remove
     if (state.val == "waiting") throw new Error("Cannot get scoreboard before the game started.");
     if (state.val == "question") throw new Error("Cannot get scoreboard during question phase.");
     const scorebaord = gameStateObjects.players.map((player: Player) => ({ name: player.name, points: player.points }));
@@ -134,6 +133,8 @@ import { QuizImport } from "frontend/src/components/livegame/host/QuizImport/Qui
     function getScoreboard(): { name: string; points: number }[] {
       if (state.val == "waiting") throw new Error("Cannot get scoreboard before the game started.");
       if (state.val == "question") throw new Error("Cannot get scoreboard during question phase.");
+      
+      
       const scoreboard = gameStateObjects.players
         .map((player: Player) => ({ name: player.name, points: player.points }))
         .sort((a, b) => b.points - a.points);
@@ -183,13 +184,13 @@ import { QuizImport } from "frontend/src/components/livegame/host/QuizImport/Qui
             )  //TODO Move to component
           }
           {
-            state.val === "waiting" && <HostWaitingScreen state={state} gameStateObjects={gameStateObjects} startGame={startGame}/>
+            state.val === "waiting" && <HostWaitingScreen gameStateObjects={gameStateObjects} startGame={startGame}/>
           }
           {
             state.val === "question" && <HostPlayingScreen showSolutions={showSolutions} currentRound={currentRound.val} gameStateObjects={gameStateObjects} />
           }
           {
-            state.val === "solution" && <HostSolutionScreen nextQuestion={nextQuestion} getScoreboard={getScoreboard} state={state} currentRound={currentRound.val} gameStateObjects={gameStateObjects}/>
+            state.val === "solution" && <HostSolutionScreen nextQuestion={nextQuestion} getScoreboard={getScoreboard} currentRound={currentRound.val} gameStateObjects={gameStateObjects}/>
           }
           {
             state.val === "finished" && <HostFinishedScreen resetGame={resetGame} getScoreboard={getScoreboard}/>

@@ -13,7 +13,6 @@ import { failureSnackbarMessage, successSnackbarMessage } from "frontend/src/com
 import { Separator } from "frontend/src/components/utils/Separator/Separator.tsx";
 
 type HostWaitingScreenProps = {
-  state: Datex.Pointer<StateOptions>;
   gameStateObjects: ObjectRef<GameStateObjects>;
   startGame: () => void;
 };
@@ -111,7 +110,6 @@ type HostWaitingScreenProps = {
   },
 )
 export class HostWaitingScreen extends Component<{
-  state: Datex.Pointer;
   gameStateObjects: ObjectRef<GameStateObjects>;
   startGame: () => void;
 }> {}

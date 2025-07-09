@@ -79,118 +79,256 @@ button:hover {
 
 
 
-    body {
-      font-family: 'Avenir Next', Arial, sans-serif;
-      background: #ffffff;
-      height: 100vh;
-      overflow: hidden;
-      color: #000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      position: relative;
-    }
+ main {
+   font-family: 'Avenir Next', Arial, sans-serif;
+   height: 100vh;
+   overflow: hidden;
+   color: #000;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   flex-direction: column;
+   position: relative;
+ }
 
-    h1 {
-      font-size: 3.5rem;
-      margin-bottom: 1.5rem;
-      text-align: center;
-      animation: popIn 1s ease-out forwards;
-      color: #111;
-      text-shadow: 0 0 10px #00bfff50;
-      z-index: 2;
-    }
+ h1 {
+   font-size: 3.5rem;
+   margin-bottom: 1.5rem;
+   text-align: center;
+   animation: popIn 1s ease-out forwards;
+   color: #111;
+   --text-shadow: 0 0 10px #00bfff50;
+   z-index: 2;
+   word-break: break-word;
+   max-width: 95vw;
+ }
 
-    .main-info {
-      font-size: 2rem;
-      color: #007acc;
-      margin-bottom: 2rem;
-      animation: pulse 2s infinite;
-    }
+ .main-info {
+   font-size: 2rem;
+   color: #000000;
+   margin-bottom: 2rem;
+   animation: pulse 2s infinite;
+   word-break: break-word;
+   max-width: 95vw;
+ }
 
-    .cards-container {
-      display: flex;
-      gap: 2rem;
-      justify-content: center;
-      flex-wrap: wrap;
-      z-index: 2;
-      margin-bottom: 20px;
-    }
+ .cards-container {
+   display: flex;
+   gap: 2rem;
+   justify-content: center;
+   flex-wrap: wrap;
+   z-index: 2;
+   margin-bottom: 20px;
+   max-width: 98vw;
+ }
 
-    .player-card {
-      background: #e9f6ff;
-      border: 3px solid #00bfff;
-      border-radius: 20px;
-      box-shadow: 0 0 20px #00bfff80;
-      padding: 1.5rem;
-      width: 280px;
-      text-align: center;
-      animation: bounceUp 1s ease-out forwards;
-    }
+ .player-card {
+   background: #e9f6ff;
+   border: 3px solid #00bfff;
+   border-radius: 20px;
+   box-shadow: 0 0 20px #00bfff80;
+   padding: 1.5rem;
+   width: 280px;
+   max-width: 90vw;
+   text-align: center;
+   animation: bounceUp 1s ease-out forwards;
+   word-break: break-word;
+ }
 
-    .player-name {
-      font-size: 1.6rem;
-      font-weight: bold;
-      color: #007acc;
-      margin-bottom: 0.5rem;
-    }
+ .player-name {
+   font-size: 1.6rem;
+   font-weight: bold;
+   color: #007acc;
+   margin-bottom: 0.5rem;
+   word-break: break-word;
+   max-width: 90vw;
+ }
 
-    .player-score {
-      font-size: 1.2rem;
-      color: #333;
-    }
+ .player-score {
+   font-size: 1.2rem;
+   color: #333;
+   word-break: break-word;
+   max-width: 90vw;
+ }
 
-    .diff {
-      font-size: 0.95rem;
-      color: #666;
-    }
+ .diff {
+   font-size: 0.95rem;
+   color: #666;
+   word-break: break-word;
+   max-width: 90vw;
+ }
 
-    @keyframes popIn {
-      0% {
-        transform: scale(0.5);
-        opacity: 0;
-      }
-      100% {
-        transform: scale(1);
-        opacity: 1;
-      }
-    }
+ @keyframes fadeIn {
 
-    @keyframes bounceUp {
-      0% {
-        transform: translateY(100px);
-        opacity: 0;
-      }
-      60% {
-        transform: translateY(-20px);
-        opacity: 1;
-      }
-      80% {
-        transform: translateY(10px);
-      }
-      100% {
-        transform: translateY(0);
-      }
-    }
+   0%,
+   100% {
+     opacity: 1;
+   }
 
-    @keyframes pulse {
-      0%, 100% {
-        transform: scale(1);
-      }
-      50% {
-        transform: scale(1.08);
-      }
-    } 
+   50% {
+     opacity: 0.4;
+   }
+ }
 
-.button {
-	background-color: #007BFF;
-	color: white;
-	border: none;
-	padding: 0.75rem 1.5rem;
-	font-size: 1rem;
-	border-radius: 8px;
-	cursor: pointer;
-	transition: background-color 0.3s ease, transform 0.15s cubic-bezier(0.23, 1, 0.32, 1);
-	margin-top: 1rem;
-}
+ .shape {
+   position: absolute;
+   width: 140vmax;
+   height: 140vmax;
+   opacity: 0.75;
+   z-index: -1;
+   filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.2));
+ }
+
+ .rectangle {
+   top: -105vmax;
+   left: -105vmax;
+   background: #007BFF;
+   border-radius: 15px;
+   box-shadow: 0 0 50px rgba(0, 123, 255, 0.5);
+   animation: rotate 50s linear infinite;
+
+ }
+
+ .circle {
+   top: -105vmax;
+   right: -105vmax;
+   background: #28a745;
+   border-radius: 50%;
+   box-shadow: 0 0 50px rgba(40, 167, 69, 0.5);
+   animation: rotate 30s linear infinite;
+
+ }
+
+ .triangle {
+   bottom: -70vmax;
+   left: -70vmax;
+   width: 110vmax;
+   height: 110vmax;
+   background: #ffc107;
+   clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+   animation: rotate 30s linear infinite;
+   filter: drop-shadow(0 0 50px rgba(255, 193, 7, 0.5));
+ }
+
+
+ .star {
+   bottom: -65vmax;
+   right: -75vmax;
+   width: 140vmax;
+   height: 140vmax;
+   background: #dc3545;
+   clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%,
+       79% 91%, 50% 70%, 21% 91%, 32% 57%,
+       2% 35%, 39% 35%);
+   animation: rotate 45s linear infinite reverse;
+   box-shadow: 0 0 50px rgba(220, 53, 69, 0.5);
+ }
+
+ @keyframes rotate {
+   from {
+     transform: rotate(0deg);
+   }
+
+   to {
+     transform: rotate(360deg);
+   }
+ }
+
+ @media (max-width: 600px) {
+   h1 {
+     font-size: 2rem;
+     padding: 0 10px;
+   }
+
+   .main-info {
+     font-size: 1.2rem;
+     padding: 0 10px;
+   }
+
+   .cards-container {
+     gap: 0.7rem;
+     flex-direction: column;
+     align-items: center;
+   }
+
+   .player-card {
+     width: 95vw;
+     padding: 1rem;
+     font-size: 1rem;
+   }
+
+   .player-name {
+     font-size: 1.1rem;
+   }
+
+   .player-score {
+     font-size: 1rem;
+   }
+
+   .diff {
+     font-size: 0.9rem;
+   }
+
+   button,
+   .button {
+     width: 90vw;
+     font-size: 1rem;
+     padding: 0.7rem 0.5rem;
+   }
+ }
+
+ @keyframes popIn {
+   0% {
+     transform: scale(0.5);
+     opacity: 0;
+   }
+
+   100% {
+     transform: scale(1);
+     opacity: 1;
+   }
+ }
+
+ @keyframes bounceUp {
+   0% {
+     transform: translateY(100px);
+     opacity: 0;
+   }
+
+   60% {
+     transform: translateY(-20px);
+     opacity: 1;
+   }
+
+   80% {
+     transform: translateY(10px);
+   }
+
+   100% {
+     transform: translateY(0);
+   }
+ }
+
+ @keyframes pulse {
+
+   0%,
+   100% {
+     transform: scale(1);
+   }
+
+   50% {
+     transform: scale(1.08);
+   }
+ }
+
+ .button {
+   background-color: #007BFF;
+   color: white;
+   border: none;
+   padding: 0.75rem 1.5rem;
+   font-size: 1rem;
+   border-radius: 8px;
+   cursor: pointer;
+   transition: background-color 0.3s ease, transform 0.15s cubic-bezier(0.23, 1, 0.32, 1);
+   margin-top: 1rem;
+ }
