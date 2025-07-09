@@ -28,6 +28,7 @@
     font-family: Arial, sans-serif;
     background-color:#fff;
     color: #000;
+    border-radius: 8px;
 }
 
 #signup-section, #login-section {

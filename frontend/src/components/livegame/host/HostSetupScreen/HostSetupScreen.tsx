@@ -4,7 +4,7 @@ import { Toggle } from 'frontend/src/components/utils/Toggle/Toggle.tsx';
 import { QuizImport } from "frontend/src/components/livegame/host/QuizImport/QuizImport.tsx";
 import { ObjectRef } from "datex-core-legacy/runtime/pointers.ts";
 import { GameStateObjects } from "frontend/src/models/GameState.ts";
-import { successSnackbarMessage, failureSnackbarMessage } from "frontend/src/components/utils/snackbar/Snackbar.tsx";
+import { failureSnackbarMessage } from "frontend/src/components/utils/snackbar/Snackbar.tsx";
 import { UserLoginPanel } from "frontend/src/components/userAccount/AccountAccess/UserLoginForm.tsx";
 //import { getUserQuizzes } from "/backend/SaveQuiz.ts";
 
@@ -27,11 +27,15 @@ type HostSetupScreenProps = {
 
 	//TODO: check if user is already logged in
 	//TODO: display user quizzes if logged in
+	//TODO: create unified theme for font sizes, border radiuses etc.
 	return (
 		<section class="l-row flex">
         <div class="host-bg-shape-main"></div>
         <div class="host-bg-shape-circle"></div>
 		<div style={{display: "flex", flexDirection: "column", gap: "2rem"}}>
+			{
+				//TODO: only display Login Panel if user is not logged in
+			}
 			<UserLoginPanel text={"LOG IN TO BROWSE YOUR QUIZZES"} />
 			<QuizImport gameStateObjects={gameStateObjects} />
 			<button class="button" onclick={proceedToWaiting}>Proceed to Lobby</button>
