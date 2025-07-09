@@ -118,7 +118,7 @@ import { Quiz } from "common/models/Quiz.ts";
     (globalThis as any).PlayerAPI = PlayerAPI;
     //(globalThis as any).gameStateObjects = gameStateObjects;
 
-  @template(({id}:{id: string}) => {
+  @template(({quizId}:{quizId: Datex.Pointer | string}) => {
  
 
     //TODO: intermediary screen that detects if host already has a game running and asks if the host wishes to create a new game or view the old one.
@@ -126,14 +126,18 @@ import { Quiz } from "common/models/Quiz.ts";
     initQuiz();
 
     function initQuiz(){
+      //TODO: why is quizId sometimes handed as Pointer and other times as string? fix this
+      let id;
+      try{
+        id = typeof quizId === "string" ? quizId : quizId.val
+      }catch{
+        return;
+      }
       if(id == "") return;
-      console.log(Object.values(quizzes))
-      console.log(id)
       const quiz = Object.values(quizzes).find((quiz: Quiz) => {
         console.log(quiz.quizId)
         return quiz.quizId === id
       })
-      console.log(quiz)
       if(!quiz) return;
       gameStateObjects.questions = quiz.questions;
       state.val = "waiting";
@@ -215,5 +219,5 @@ import { Quiz } from "common/models/Quiz.ts";
       </div>
       )
   })
-  export class HostMain extends Component<{id: string}> {}
+  export class HostMain extends Component<{quizId: Datex.Pointer | string}> {}
 
