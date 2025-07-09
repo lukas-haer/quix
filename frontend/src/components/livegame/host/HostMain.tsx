@@ -9,7 +9,9 @@ import { HostFinishedScreen } from "./HostFinishedScreen/HostFinishedScreen.tsx"
 import { Component, template } from "uix/components/Component.ts";
 import { Snackbar } from "frontend/src/components/utils/snackbar/Snackbar.tsx";
 import { quizzes } from "../../../../../backend/SaveQuiz.ts";
-import {HostSolutionScreen} from "./HostSolutionScreen/HostSolutionScreen.tsx";
+import { HostSolutionScreen } from "./HostSolutionScreen/HostSolutionScreen.tsx";
+import { HostSetupScreen } from "./HostSetupScreen/HostSetupScreen.tsx";
+import { Quiz } from "common/models/Quiz.ts";
 
   //TODO: Does it make any difference having the pointers and api outside vs inside of a component?
   //TODO: pause/reset timeout
@@ -17,13 +19,13 @@ import {HostSolutionScreen} from "./HostSolutionScreen/HostSolutionScreen.tsx";
   
 
   //TODO: Do we want these as eternal variables? -> If yes, how do we handle recovery of the next question timer and api calls while host is offline.
-  const state: Datex.Pointer<StateOptions> = $("waiting");
+  const state: Datex.Pointer<StateOptions> = $("setup");
   const currentRound: Datex.Pointer<number> = $(0);
 
   //This ObjectRef encapsules all the gamestate variables, that are some kind of object type. This is necessary to guarantee reactivity.
   const gameStateObjects: ObjectRef<GameStateObjects> = $({
     currentDeadline: new Date(),
-    questions: sampleQuestions, //TODO hier stattdessen aktuelles user quiz oder importiertes Quiz
+    questions: [],
     players: []
   })
 
@@ -116,10 +118,26 @@ import {HostSolutionScreen} from "./HostSolutionScreen/HostSolutionScreen.tsx";
     (globalThis as any).PlayerAPI = PlayerAPI;
     //(globalThis as any).gameStateObjects = gameStateObjects;
 
-  @template(() => {
+  @template(({id}:{id: string}) => {
  
 
     //TODO: intermediary screen that detects if host already has a game running and asks if the host wishes to create a new game or view the old one.
+
+    initQuiz();
+
+    function initQuiz(){
+      if(id == "") return;
+      console.log(Object.values(quizzes))
+      console.log(id)
+      const quiz = Object.values(quizzes).find((quiz: Quiz) => {
+        console.log(quiz.quizId)
+        return quiz.quizId === id
+      })
+      console.log(quiz)
+      if(!quiz) return;
+      gameStateObjects.questions = quiz.questions;
+      state.val = "waiting";
+    }
 
     const resetGame = () => {
       //TODO: This is already done through HostFinishedScreen, except resetting the players list.
@@ -179,6 +197,9 @@ import {HostSolutionScreen} from "./HostSolutionScreen/HostSolutionScreen.tsx";
     return (
       <div class="container">
         <Snackbar />
+        {
+          state.val === "setup" && <HostSetupScreen state={state} gameStateObjects={gameStateObjects} />
+        }
           {
             state.val === "waiting" && <HostWaitingScreen state={state} gameStateObjects={gameStateObjects} startGame={startGame}/>
           }
@@ -194,5 +215,5 @@ import {HostSolutionScreen} from "./HostSolutionScreen/HostSolutionScreen.tsx";
       </div>
       )
   })
-  export class HostMain extends Component {}
+  export class HostMain extends Component<{id: string}> {}
 

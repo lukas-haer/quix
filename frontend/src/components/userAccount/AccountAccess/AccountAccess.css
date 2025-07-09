@@ -24,6 +24,12 @@
     align-items: center;
 }
 
+#login-section {
+    font-family: Arial, sans-serif;
+    background-color:#fff;
+    color: #000;
+}
+
 #signup-section, #login-section {
     display: flex;
     flex-direction: column;
