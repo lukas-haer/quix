@@ -71,3 +71,23 @@
   }
 }
 
+
+@media (max-width: 600px) {
+  .snackbar-message {
+    min-width: 0;
+    max-width: 90vw;
+    width: 95vw;
+    font-size: 1rem;
+    padding: 12px 8px 16px 8px;
+    word-break: break-word;
+  }
+  .snackbar-message-title {
+    font-size: 1.1rem;
+  }
+  .snackbar-message-text {
+    font-size: 0.95rem;
+  }
+  .snackbar-icon {
+    height: 20px;
+  }
+}

@@ -6,7 +6,7 @@ import {GameStateObjects} from "../../../../../models/GameState.ts";
 
 
 type SingleChoiceQuestionComponentProps = {
-    currentRound: Datex.Pointer;
+    currentRound: number;
     gameStateObjects: ObjectRef<GameStateObjects>;
 };
 

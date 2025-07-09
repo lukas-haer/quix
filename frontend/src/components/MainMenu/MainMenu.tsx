@@ -122,6 +122,7 @@ import { failureSnackbarMessage, Snackbar, successSnackbarMessage } from 'fronte
                 <div id="code-input-container" class={{ 'code-input-container': true, live: activeSection.val == 'joinSection' }}>
                     {codeInputFields.map(inputfield => inputfield)}
                 </div>
+                <button onclick={() => successSnackbarMessage("ASDF","asdFASDFASDFASDFASDFASDFASDFASDFasdf",120000)}>ASDF</button>
             </section>
 
             <section

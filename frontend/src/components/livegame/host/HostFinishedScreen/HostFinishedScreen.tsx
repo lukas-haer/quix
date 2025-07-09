@@ -44,19 +44,25 @@ type HostFinishedScreenProps = {
         <main>
             <h1>🏆 Final Standings</h1>
             <div class="podium">
-                <div class="place second">
-                    <div class="name" id="secondName">{scorebaord.name[1]}</div>
-                    <div class="score" id="secondScore">{scorebaord.points[0]}</div>
-                </div>
-                <div class="place first">
-                    <div class="name" id="firstName">{scorebaord.name[0]}</div>
-                    <div class="score" id="firstScore">{scorebaord.points[0]}</div>
-                </div>
-                <div class="place third">
-                    <div class="name" id="thirdName">{scorebaord.name[2]}</div>
-                    <div class="score" id="thirdScore"{scorebaord.points[2]}></div>
-                </div>
-            </div> 
+                {scorebaord[1] && (
+                    <div class="place second">
+                        <div class="name" id="secondName">{scorebaord[1].name}</div>
+                        <div class="score" id="secondScore">{scorebaord[1].points}</div>
+                    </div>
+                )}
+                {scorebaord[0] && (
+                    <div class="place first">
+                        <div class="name" id="firstName">{scorebaord[0].name}</div>
+                        <div class="score" id="firstScore">{scorebaord[0].points}</div>
+                    </div>
+                )}
+                {scorebaord[2] && (
+                    <div class="place third">
+                        <div class="name" id="thirdName">{scorebaord[2].name}</div>
+                        <div class="score" id="thirdScore">{scorebaord[2].points}</div>
+                    </div>
+                )}
+            </div>
             <button type="button" onclick={resetGame}>
                 New Round
             </button>
