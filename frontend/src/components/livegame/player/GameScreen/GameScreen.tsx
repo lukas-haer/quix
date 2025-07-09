@@ -18,7 +18,7 @@ type GameScreenProps = {
   //TODO: error handling
   const state: Datex.Pointer<string> = await datex.get(`$${stateId}`)
   const currentRound: Datex.Pointer<number> = await datex.get(`$${currentRoundId}`)
-  const gameState: Datex.Pointer<string> = $("finished");
+  const gameState: Datex.Pointer<string> = $("waiting");
 
   //TODO: Maybe we can just grab the pointer references instead of manually calling the endpoint.
   const question: Datex.Pointer<string> = $("");

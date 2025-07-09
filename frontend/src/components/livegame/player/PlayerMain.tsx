@@ -56,7 +56,6 @@ const apiObj: ObjectRef<{ playerApi?: PlayerAPIType }> = $({}); //encapsulate ap
             }
             try {
                 const recievedEndpointId = await getHostIdFromGamecode(gamecode);
-                console.log('ENDPOINT: ' + recievedEndpointId);
                 endpointId.val = recievedEndpointId.toString();
 
                 successSnackbarMessage('Lobby found', 'Found lobby from your gamecode');

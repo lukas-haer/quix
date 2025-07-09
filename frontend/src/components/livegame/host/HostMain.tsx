@@ -124,7 +124,7 @@ import { QuizImport } from "frontend/src/components/livegame/host/QuizImport/Qui
     //TODO: intermediary screen that detects if host already has a game running and asks if the host wishes to create a new game or view the old one.
 
     const resetGame = () => {
-      console.log("Resettet game");
+      console.log("Reset game");
       
         currentRound.val = 0;
         state.val = "waiting";
@@ -134,20 +134,16 @@ import { QuizImport } from "frontend/src/components/livegame/host/QuizImport/Qui
     function getScoreboard(): { name: string; points: number }[] {
       if (state.val == "waiting") throw new Error("Cannot get scoreboard before the game started.");
       if (state.val == "question") throw new Error("Cannot get scoreboard during question phase.");
-      const scoreboard = gameStateObjects.players.map((player: Player) => ({ name: player.name, points: player.points }));
+      const scoreboard = gameStateObjects.players
+        .map((player: Player) => ({ name: player.name, points: player.points }))
+        .sort((a, b) => b.points - a.points);
       return scoreboard
     }
 
     let questionTimeoutID: number | undefined = undefined
 
     const updateQuestionDeadlineAndTimer = () => {
-      const seconds = gameStateObjects.questions[currentRound.val].content.timeInSeconds;   
-      console.log("cr: ",currentRound.val);
-      console.log("questions",gameStateObjects.questions);
-      console.log("questionscontent",gameStateObjects.questions[currentRound.val].content);
-      
-      console.log("SECONDS: ",gameStateObjects.questions[currentRound.val].content);
-         
+      const seconds = gameStateObjects.questions[currentRound.val].content.timeInSeconds;            
       gameStateObjects.currentDeadline  = new Date(Date.now() + seconds * 1000);
       questionTimeoutID = setTimeout(showSolutions, seconds * 1000,);
     };
@@ -196,7 +192,7 @@ import { QuizImport } from "frontend/src/components/livegame/host/QuizImport/Qui
             state.val === "solution" && <HostSolutionScreen nextQuestion={nextQuestion} getScoreboard={getScoreboard} state={state} currentRound={currentRound.val} gameStateObjects={gameStateObjects}/>
           }
           {
-            state.val === "finished" && <HostFinishedScreen resetGame={resetGame} />
+            state.val === "finished" && <HostFinishedScreen resetGame={resetGame} getScoreboard={getScoreboard}/>
           }
       </div>
       )

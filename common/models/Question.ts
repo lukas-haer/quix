@@ -73,6 +73,6 @@ const question4 = new SingleChoiceQuestion({
     timeInSeconds: 120
 })
 
-export const sampleQuestions: Question<QuestionType>[] = [question1, question2, question3, question4];
+export const sampleQuestions: Question<QuestionType>[] = [question1];
 
 export const sampleQuestion: SingleChoiceQuestion = question1;

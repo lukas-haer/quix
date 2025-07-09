@@ -33,7 +33,7 @@ type HostSolutionScreenProps = {
                             <span>{player.points} pts</span>
                         </div>
                     ))}
-                    <button type="button" onclick={nextQuestion}>Next</button>
+                    <button type="button" class="button" onclick={nextQuestion}>Next</button>
                 </div>
             </div>
         );

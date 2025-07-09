@@ -12,7 +12,7 @@ type SingleChoiceQuestionComponentProps = {
 
 @template(({currentRound, gameStateObjects}: SingleChoiceQuestionComponentProps) => {
 
-        const question =  gameStateObjects.questions[currentRound.val] as SingleChoiceQuestion
+        const question =  gameStateObjects.questions[currentRound] as SingleChoiceQuestion        
         const questionText = question.content.questionText
         const answers = question.content.answers
         const correctAnswer = question.content.correctAnswerId
