@@ -10,7 +10,9 @@ import { registerLobby } from "backend/lobbyManagement/LobbyManagement.ts";
 import { QrCode } from "frontend/src/components/utils/qrcode/qrcode.tsx";
 import { UIX } from "uix";
 import { failureSnackbarMessage, successSnackbarMessage } from "frontend/src/components/utils/snackbar/Snackbar.tsx";
+
 import { Separator } from "frontend/src/components/utils/Separator/Separator.tsx";
+
 
 type HostWaitingScreenProps = {
   gameStateObjects: ObjectRef<GameStateObjects>;
@@ -27,7 +29,8 @@ type HostWaitingScreenProps = {
       gamecode = lobby.code;
     } catch (error) {
       console.error("An Error occured: " + error);
-      failureSnackbarMessage("Error when loading gamecode","Was unable to load gamecode. Please try again")
+      failureSnackbarMessage("Lobby creation failed",`The server did not respont with a valid lobby code. Please reload the page. (${error})`,60_000)
+
     }
 
     const hostname = globalThis.location.hostname;

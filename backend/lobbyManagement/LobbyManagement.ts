@@ -9,14 +9,32 @@ export async function registerLobby() {
 			throw new Error("No caller ID found. Cannot register lobby.");
 		}
 
-		// Generate a random 6-digit lobby code
-		const lobbyCode = Math.floor(100000 + Math.random() * 900000).toString();
+		
+	   const gameCodeRegex = /^\d{6}$/;
+	   let lobbyCode: string | undefined = undefined;
+	   // Try to generate a valid, unique 6-digit code, up to 20 attempts
+	   const maxTries = 20;
+	   let tries = 0;
+	   while (tries < maxTries) {
+		   const candidate = Math.floor(100000 + Math.random() * 900000).toString();
+		   if (!gameCodeRegex.test(candidate)) {
+			   throw new Error("Generated game code is not a 6 digit number.");
+		   }
+		   if (lobbies.some(lobby => lobby.code === candidate)) {
+			   tries++;
+			   continue;
+		   }
+		   lobbyCode = candidate;
+		   break;
+	   }
+	   if (!lobbyCode) {
+		   throw new Error(`Failed to generate a unique lobby code after ${maxTries} attempts.`);
+	   }
+	   
+	   if (!lobbyCode) {
+		   throw new Error("Failed to generate a valid lobby code.");
+	   }
 
-		//Checks if gamecode consists of exactly 6 numbers. This is currently pointless, but a safety feature, we may sometime appriciate
-		const gameCodeRegex = /^\d{6}$/; 
-        if (!gameCodeRegex.test(lobbyCode.toString())) {
-			throw new Error("Gamecode is not a 6 digit number")
-        }
 		
 		const newLobby: Lobby = {
 			id: crypto.randomUUID(),
@@ -33,7 +51,7 @@ export async function registerLobby() {
 		return newLobby;
 	} catch (error) {
 		console.error("Error registering lobby:", error);
-		throw new Error("Failed to register lobby. Please try again.");
+		throw new Error(String(error));
 	}
 }
 
