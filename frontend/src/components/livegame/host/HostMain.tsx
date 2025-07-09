@@ -1,6 +1,6 @@
 import { Datex } from "datex-core-legacy/datex.ts";
 import { ObjectRef } from "datex-core-legacy/runtime/pointers.ts";
-import { sampleQuestions, SingleChoiceQuestion, MultipleChoiceQuestion } from "common/models/Question.ts";
+import { sampleQuestions } from "common/models/Question.ts";
 import { Player, GameStateObjects, StateOptions } from "../../../models/GameState.ts";
 import { JoinGameReturn, GetCurrentQuestionReturn } from "../../../models/PlayerApiReturns.ts";
 import { HostWaitingScreen } from "./HostWaitingScreen/HostWaitingScreen.tsx";
@@ -9,7 +9,9 @@ import { HostFinishedScreen } from "./HostFinishedScreen/HostFinishedScreen.tsx"
 import { Component, template } from "uix/components/Component.ts";
 import { Snackbar } from "frontend/src/components/utils/snackbar/Snackbar.tsx";
 import { quizzes } from "../../../../../backend/SaveQuiz.ts";
-import {HostSolutionScreen} from "./HostSolutionScreen/HostSolutionScreen.tsx";
+import { HostSolutionScreen } from "./HostSolutionScreen/HostSolutionScreen.tsx";
+import { HostSetupScreen } from "./HostSetupScreen/HostSetupScreen.tsx";
+import { Quiz } from "common/models/Quiz.ts";
 
   //TODO: Does it make any difference having the pointers and api outside vs inside of a component?
   //TODO: pause/reset timeout
@@ -17,13 +19,13 @@ import {HostSolutionScreen} from "./HostSolutionScreen/HostSolutionScreen.tsx";
   
 
   //TODO: Do we want these as eternal variables? -> If yes, how do we handle recovery of the next question timer and api calls while host is offline.
-  const state: Datex.Pointer<StateOptions> = $("waiting");
+  const state: Datex.Pointer<StateOptions> = $("setup");
   const currentRound: Datex.Pointer<number> = $(0);
 
   //This ObjectRef encapsules all the gamestate variables, that are some kind of object type. This is necessary to guarantee reactivity.
   const gameStateObjects: ObjectRef<GameStateObjects> = $({
     currentDeadline: new Date(),
-    questions: sampleQuestions, //TODO hier stattdessen aktuelles user quiz oder importiertes Quiz
+    questions: [],
     players: []
   })
 
@@ -67,7 +69,7 @@ import {HostSolutionScreen} from "./HostSolutionScreen/HostSolutionScreen.tsx";
     }
 
     @property static getCurrentQuestion(): GetCurrentQuestionReturn {
-      if (state.val !== "question") throw new Error("Game has not started yet.")
+      if (state.val !== "question") throw new Error(`Cannot get currentQuestion, because state is: ${state.val}`)
       const { questionText, answers } = gameStateObjects.questions[currentRound.val].content
       return { questionText, answers, currentDeadline: gameStateObjects.currentDeadline }
     }
@@ -116,40 +118,57 @@ import {HostSolutionScreen} from "./HostSolutionScreen/HostSolutionScreen.tsx";
     (globalThis as any).PlayerAPI = PlayerAPI;
     //(globalThis as any).gameStateObjects = gameStateObjects;
 
-  @template(() => {
+  @template(({quizId}:{quizId: Datex.Pointer | string}) => {
  
 
     //TODO: intermediary screen that detects if host already has a game running and asks if the host wishes to create a new game or view the old one.
 
-    const resetGame = () => {
-      //TODO: This is already done through HostFinishedScreen, except resetting the players list.
-      //TODO: This is broken.
-      //TODO: resetting the pointer values multiple times breaks the page (with currentRound it breaks immediately)
-      state.val = "waiting"
-      currentRound.val = 0
+    initQuiz();
 
-      gameStateObjects.players.splice(0)
-      //gameStateObjects.currentDeadline = new Date()
-      gameStateObjects.questions = sampleQuestions
+    function initQuiz(){
+      //TODO: why is quizId sometimes handed as Pointer and other times as string? fix this
+      let id;
+      try{
+        id = typeof quizId === "string" ? quizId : quizId.val
+      }catch{
+        return;
+      }
+      if(id == "") return;
+      const quiz = Object.values(quizzes).find((quiz: Quiz) => {
+        console.log(quiz.quizId)
+        return quiz.quizId === id
+      })
+      if(!quiz) return;
+      gameStateObjects.questions = quiz.questions;
+      state.val = "waiting";
+    }
+
+    const resetGame = () => {
+      console.log("Reset game");
+      
+        currentRound.val = 0;
+        state.val = "waiting";
+      
     }
 
     function getScoreboard(): { name: string; points: number }[] {
       if (state.val == "waiting") throw new Error("Cannot get scoreboard before the game started.");
       if (state.val == "question") throw new Error("Cannot get scoreboard during question phase.");
-      const scoreboard = gameStateObjects.players.map((player: Player) => ({ name: player.name, points: player.points }));
+      
+      
+      const scoreboard = gameStateObjects.players
+        .map((player: Player) => ({ name: player.name, points: player.points }))
+        .sort((a, b) => b.points - a.points);
       return scoreboard
     }
 
-    const questionTimeoutID: Datex.Pointer<number> = $(0);
-    const solutionTimeoutID: Datex.Pointer<number> = $(0);
+    let questionTimeoutID: number | undefined = undefined
 
     const updateQuestionDeadlineAndTimer = () => {
-      const seconds = gameStateObjects.questions[currentRound.val].content.timeInSeconds;
+      const seconds = gameStateObjects.questions[currentRound.val].content.timeInSeconds;            
       gameStateObjects.currentDeadline  = new Date(Date.now() + seconds * 1000);
-      questionTimeoutID.val = setTimeout(showSolutions, seconds * 1000,);
+      questionTimeoutID = setTimeout(showSolutions, seconds * 1000,);
     };
-
-    function createSolutionTimer():void{solutionTimeoutID.val = setTimeout(nextQuestion, 10000,);}
 
     function startGame():void {
       currentRound.val = 0
@@ -158,19 +177,17 @@ import {HostSolutionScreen} from "./HostSolutionScreen/HostSolutionScreen.tsx";
     }
 
     function showSolutions():void {
-      clearTimeout(questionTimeoutID.val);
+      clearTimeout(questionTimeoutID);
       state.val = "solution"
-      createSolutionTimer();
     }
 
-    const nextQuestion = () => {
-      clearTimeout(solutionTimeoutID.val);
+    function nextQuestion () {
       if (currentRound.val + 1 === gameStateObjects.questions.length) {
         state.val = "finished";
         return;
       }
-      updateQuestionDeadlineAndTimer();
       currentRound.val++;
+      updateQuestionDeadlineAndTimer();
       state.val = "question"
     };
 
@@ -180,19 +197,22 @@ import {HostSolutionScreen} from "./HostSolutionScreen/HostSolutionScreen.tsx";
       <div class="container">
         <Snackbar />
           {
-            state.val === "waiting" && <HostWaitingScreen state={state} gameStateObjects={gameStateObjects} startGame={startGame}/>
+            state.val === "setup" && <HostSetupScreen state={state} gameStateObjects={gameStateObjects} />
           }
           {
-            state.val === "question" && <HostPlayingScreen showSolutions={showSolutions} state={state} currentRound={currentRound} gameStateObjects={gameStateObjects} />
+            state.val === "waiting" && <HostWaitingScreen gameStateObjects={gameStateObjects} startGame={startGame}/>
           }
           {
-            state.val === "solution" && <HostSolutionScreen nextQuestion={nextQuestion} getScoreboard={getScoreboard} state={state} currentRound={currentRound} gameStateObjects={gameStateObjects}/>
+            state.val === "question" && <HostPlayingScreen showSolutions={showSolutions} currentRound={currentRound.val} gameStateObjects={gameStateObjects} />
           }
           {
-            state.val === "finished" && <HostFinishedScreen state={state} currentRound={currentRound}  />
+            state.val === "solution" && <HostSolutionScreen nextQuestion={nextQuestion} getScoreboard={getScoreboard} currentRound={currentRound.val} gameStateObjects={gameStateObjects}/>
+          }
+          {
+            state.val === "finished" && <HostFinishedScreen resetGame={resetGame} getScoreboard={getScoreboard}/>
           }
       </div>
       )
   })
-  export class HostMain extends Component {}
+  export class HostMain extends Component<{quizId: Datex.Pointer | string}> {}
 

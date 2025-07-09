@@ -1,7 +1,7 @@
 import { Datex } from "datex-core-legacy/datex.ts";
 import { Question, QuestionType } from "common/models/Question.ts";
 
-export type StateOptions = "waiting" | "question" | "solution" | "finished" | "aborted";
+export type StateOptions = "setup" | "waiting" | "question" | "solution" | "finished" | "aborted";
 
 export type Player = {name: string; endpointId: Datex.Endpoint; points: number;}
 

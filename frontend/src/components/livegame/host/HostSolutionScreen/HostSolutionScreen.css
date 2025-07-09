@@ -4,6 +4,22 @@
     box-sizing: border-box;
 }
 
+.button {
+    width: 120px;
+    height: 50px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
 .solution-screen-container {
     font-family: 'Avenir Next', Arial, sans-serif;
     background-color: #f0f0f0;

@@ -6,18 +6,13 @@ import {GameStateObjects} from "../../../../../models/GameState.ts";
 
 
 type SingleChoiceQuestionComponentProps = {
-    currentRound: Datex.Pointer;
+    currentRound: number;
     gameStateObjects: ObjectRef<GameStateObjects>;
 };
 
-@template(
-    async function ({currentRound, gameStateObjects}: SingleChoiceQuestionComponentProps) {
+@template(({currentRound, gameStateObjects}: SingleChoiceQuestionComponentProps) => {
 
-        function getCurrentQuestion() {
-            return gameStateObjects.questions[currentRound.val];
-        }
-
-        const question = getCurrentQuestion() as SingleChoiceQuestion;
+        const question =  gameStateObjects.questions[currentRound] as SingleChoiceQuestion        
         const questionText = question.content.questionText
         const answers = question.content.answers
         const correctAnswer = question.content.correctAnswerId

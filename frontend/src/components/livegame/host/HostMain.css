@@ -58,6 +58,20 @@ p {
 	flex-wrap: wrap;
 }
 
+.setupSection {
+	display: flex;
+	flex-direction: "column";
+	height: 100vh;
+	justify-content: center;
+	align-items: center;
+	background: var(--background-light);
+	text-align: center;
+	padding: 2rem;
+	box-sizing: border-box;
+	gap: 2rem;
+	flex-wrap: wrap;
+}
+
 .l-col {
 	flex: 1 1 45%;
 	box-sizing: border-box;

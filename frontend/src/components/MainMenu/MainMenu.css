@@ -75,6 +75,10 @@ h1 {
     font-size: 2rem;
     font-weight: bold;
     transition: all 0.3s ease;
+    -webkit-appearance: none;
+    appearance: textfield;
+    margin: 0;
+    -moz-appearance: textfield;
 }
 
 .code-input.pulsing {
@@ -161,4 +165,52 @@ h1 {
 
 .pb-30 {
     padding-bottom: 30px;
+}
+
+/* 
+@media (max-width: 900px) {
+    h1 {
+        font-size: 2.5rem;
+    }
+    .button {
+        font-size: 1.1rem;
+        padding: 0.8rem 1.2rem;
+    }
+    .code-input {
+        width: 38px;
+        height: 54px;
+        font-size: 1.3rem;
+    }
+    .section {
+        height: 22vh;
+    }
+    .section.live {
+        height: 60vh !important;
+    }
+    #code-input-container {
+        gap: 0.5rem;
+        margin-top: 1.2rem;
+    }
+} */
+
+@media (max-width: 600px) {
+    h1 {
+        font-size: 2.5rem;
+    }
+    .button {
+        font-size: 1.4rem;
+        padding: 0.6rem 0.8rem;
+    }
+    .code-input {
+        width: 45px;
+        height: 60px;
+        font-size: 1.4rem;
+    }
+    #code-input-container {
+        gap: 0.3rem;
+        margin-top: 0.7rem;
+    }
+    .section-text {
+        padding-top: 1rem;
+    }
 }

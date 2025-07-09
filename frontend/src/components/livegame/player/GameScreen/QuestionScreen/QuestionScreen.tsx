@@ -27,8 +27,8 @@ type ComponentQuestionScreenProps = DefaultQuestionScreenProps & { submittedAnsw
                     <h1>{questionText}</h1>
                     <div class="button-container">
                         {
-                            answers.split(";").map((answer: string, index: number) =>
-                                <AnswerButton answerText={answer} answerId={index} handleSubmit={() => handleAnswerClick(index)}/>)
+                            answers.split(";").map(( _ , index: number) =>
+                                <AnswerButton answerId={index} handleSubmit={() => handleAnswerClick(index)}/>)
                         }
                     </div>
                     <div class="countdown-bar" id="countdownBar"
@@ -48,12 +48,11 @@ export class QuestionScreen extends Component<ComponentQuestionScreenProps> {}
 
 
 type AnswerButtonProps = {
-    answerText: string;
     answerId: number;
     handleSubmit: () => void;
 }
 
-@template(({answerText, answerId, handleSubmit}: AnswerButtonProps) => {
+@template(({answerId, handleSubmit}: AnswerButtonProps) => {
     return (
         <button
             type="button"

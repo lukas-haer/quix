@@ -24,6 +24,13 @@
     align-items: center;
 }
 
+#login-section {
+    font-family: Arial, sans-serif;
+    background-color:#fff;
+    color: #000;
+    border-radius: 8px;
+}
+
 #signup-section, #login-section {
     display: flex;
     flex-direction: column;
@@ -36,7 +43,7 @@
 
 h1 {
     font-family: 'Avenir Next', Arial, sans-serif;
-    font-size: 4rem;
+    font-size: 2rem;
     font-weight: bold;
     font-style: italic;
     margin-bottom: 2rem;

@@ -15,13 +15,12 @@ type ImportButtonProps = {
 
 @style("../HostMain.css")
 @template(({ gameStateObjects }: QuizImportProps) => {
-	//TODO: move me into setup screen instead of host waiting screen
 	const currentQuizName = $("")
 
 	return (
-		<div class="l-col l-col-6 center-vertically">
-			<Separator text={"Manually import quiz"} />
-			<span>{currentQuizName.val}</span>
+		<div class="l-col l-col-6 center-vertically" >
+			<Separator text={"or manually import quiz"} />
+			<span style={{ marginBottom: "1.5vh" }}>{currentQuizName.val}</span>
 			<ImportButton callback={(quiz: Quiz) => {
 				gameStateObjects.questions = quiz.questions
 				currentQuizName.val = quiz.title
@@ -33,8 +32,6 @@ export class QuizImport extends Component<QuizImportProps> {}
 
 @style("../HostMain.css")
 @template(({ callback }: ImportButtonProps) => {
-	//TODO: move me into setup screen instead of host waiting screen
-	const currentQuizName = $("")
 
     async function handleImportQuiz() {
         const importInput = document.getElementById("import-quiz-input") as HTMLInputElement

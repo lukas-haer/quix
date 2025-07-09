@@ -3,7 +3,7 @@ import {Component, template} from "uix/components/Component.ts";
 type PlayerSolutionScreenProps = {};
 
 
-@template(async function () {
+@template(function () {
 
     return (
         <div class="player-solution-container">

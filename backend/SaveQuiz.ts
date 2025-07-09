@@ -4,7 +4,7 @@ import { Quiz } from "../common/models/Quiz.ts";
 import { provideRedirect } from "uix/providers/common.tsx";
 import { SingleChoiceQuestion, MultipleChoiceQuestion } from "common/models/Question.ts";
 
-export const quizzes = eternal ?? $({} as Record<string, Quiz>);
+export const quizzes = eternal ?? $({} as Record<string, Quiz>); //TODO: make quizzes object unavailable for frontend import. Use getUserQuizzes instead
 
 export async function saveQuiz (ctx: Context) {
 
@@ -58,4 +58,20 @@ export async function saveQuiz (ctx: Context) {
 	}
 
 	return provideRedirect(`/account/${currentUser}`);
+}
+
+export async function getUserQuizzes() {
+	const session = await Context.getPrivateData(datex.meta.caller);
+	const currentUser = session.userId;
+
+	if(!currentUser || !(currentUser in users)) {
+		console.error("LOG getUserQuizzes: User not found or not logged in.");
+		//TODO: throw error for user feedback in frontend?
+		return provideRedirect("/");
+	}
+
+	//TODO: race conditions? what happens if quiz is modified/deleted while filtering?
+	const userQuizzes = quizzes.filter((quiz: Quiz) => quiz.accountId === currentUser);
+
+	return userQuizzes
 }

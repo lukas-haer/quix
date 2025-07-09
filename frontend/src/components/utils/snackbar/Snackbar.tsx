@@ -32,7 +32,7 @@ function showSnackbarMessage (
     text: string,
     durationInMs?: number
 ) {
-	if (!durationInMs) {
+	if (!durationInMs) {        
 		durationInMs = 10_000 // Default duration of 10 seconds
 	}
 
