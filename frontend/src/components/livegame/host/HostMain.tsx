@@ -1,6 +1,6 @@
 import { Datex } from "datex-core-legacy/datex.ts";
 import { ObjectRef } from "datex-core-legacy/runtime/pointers.ts";
-import { sampleQuestions } from "common/models/Question.ts";
+import { type SingleChoiceQuestion } from "common/models/Question.ts";
 import { Player, GameStateObjects, StateOptions } from "../../../models/GameState.ts";
 import { JoinGameReturn, GetCurrentQuestionReturn } from "../../../models/PlayerApiReturns.ts";
 import { HostWaitingScreen } from "./HostWaitingScreen/HostWaitingScreen.tsx";
@@ -12,6 +12,7 @@ import { quizzes } from "../../../../../backend/SaveQuiz.ts";
 import { HostSolutionScreen } from "./HostSolutionScreen/HostSolutionScreen.tsx";
 import { HostSetupScreen } from "./HostSetupScreen/HostSetupScreen.tsx";
 import { Quiz } from "common/models/Quiz.ts";
+import { UIX } from "uix";
 
   //TODO: Does it make any difference having the pointers and api outside vs inside of a component?
   //TODO: pause/reset timeout
@@ -47,6 +48,9 @@ import { Quiz } from "common/models/Quiz.ts";
     }
 
     @property static submitAnswer(answer: any): number {
+
+      console.log("ANSWER SUBMITTED");
+      
       if(state.val !== "question") throw new Error("Game has not started yet.")
 
       //TODO: change players object to dict? This would facilitate callerId, username check etc. (keys = player endpoint ids)
@@ -55,11 +59,10 @@ import { Quiz } from "common/models/Quiz.ts";
       
       if(playerIndex === -1) throw new Error("There is no player with that endpoint id.")
       //TODO: cache answers and evaluate at the end of a round
-      const currentQuestion = gameStateObjects.questions[currentRound.val]
+      const currentQuestion = (gameStateObjects.questions[currentRound.val] as SingleChoiceQuestion )      
 
-      if(!currentQuestion.isCorrect(answer)) throw new Error("Wrong answer.");
-
-
+      //Make fit for different question types
+      if(!currentQuestion.content.correctAnswerId == answer) throw new Error("Wrong answer.");
       
       const { currentDeadline } = PlayerAPI.getCurrentQuestion();
 
@@ -191,7 +194,7 @@ import { Quiz } from "common/models/Quiz.ts";
       state.val = "question"
     };
 
-
+    UIX.Theme.useTheme('uix-light-plain')
 
     return (
       <div class="container">

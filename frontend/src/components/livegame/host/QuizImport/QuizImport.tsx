@@ -46,7 +46,7 @@ export class QuizImport extends Component<QuizImportProps> {}
         
 		//TODO: check if quizObject is actually a valid quiz. Currently a lazy check is implemented.
 		if (typeof quizObject !== "object" || !quizObject.questions) return failureSnackbarMessage("Error", "The file does not contain a valid quiz object.")
-
+		
 		callback(quizObject)
         successSnackbarMessage("Success", "Quiz import succeeded.", 2000)
     }
