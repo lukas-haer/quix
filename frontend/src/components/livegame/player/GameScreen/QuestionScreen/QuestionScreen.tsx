@@ -24,7 +24,13 @@ type ComponentQuestionScreenProps = DefaultQuestionScreenProps & { submittedAnsw
         <main>
             {!submittedAnswer.val ? (
                 <section class="section">
-                    <h1>{questionText}</h1>
+                            <div class="host-bg-shape-main"></div>
+        <div class="host-bg-shape-circle"></div>
+                    <div class="question-container">
+                        <div class="question-title-container ">
+                        <h1>{questionText}</h1>
+                        </div>
+                    </div>
                     <div class="button-container">
                         {
                             answers.split(";").map(( _ , index: number) =>
