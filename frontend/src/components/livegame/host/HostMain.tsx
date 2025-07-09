@@ -8,9 +8,10 @@ import { HostPlayingScreen } from "./HostPlayingScreen/HostPlayingScreen.tsx";
 import { HostFinishedScreen } from "./HostFinishedScreen/HostFinishedScreen.tsx";
 import { Component, template } from "uix/components/Component.ts";
 import { Snackbar } from "frontend/src/components/utils/snackbar/Snackbar.tsx";
-import {HostSolutionScreen} from "./HostSolutionScreen/HostSolutionScreen.tsx";
-import { QuizImport } from "frontend/src/components/livegame/host/QuizImport/QuizImport.tsx";
-
+import { quizzes } from "../../../../../backend/SaveQuiz.ts";
+import { HostSolutionScreen } from "./HostSolutionScreen/HostSolutionScreen.tsx";
+import { HostSetupScreen } from "./HostSetupScreen/HostSetupScreen.tsx";
+import { Quiz } from "common/models/Quiz.ts";
 
   //TODO: Does it make any difference having the pointers and api outside vs inside of a component?
   //TODO: pause/reset timeout
@@ -18,13 +19,13 @@ import { QuizImport } from "frontend/src/components/livegame/host/QuizImport/Qui
   
 
   //TODO: Do we want these as eternal variables? -> If yes, how do we handle recovery of the next question timer and api calls while host is offline.
-  const state: Datex.Pointer<StateOptions> = $("waiting");
+  const state: Datex.Pointer<StateOptions> = $("setup");
   const currentRound: Datex.Pointer<number> = $(0);
 
   //This ObjectRef encapsules all the gamestate variables, that are some kind of object type. This is necessary to guarantee reactivity.
   const gameStateObjects: ObjectRef<GameStateObjects> = $({
     currentDeadline: new Date(),
-    questions: sampleQuestions, //TODO hier stattdessen aktuelles user quiz oder importiertes Quiz
+    questions: [],
     players: []
   })
 
@@ -117,10 +118,30 @@ import { QuizImport } from "frontend/src/components/livegame/host/QuizImport/Qui
     (globalThis as any).PlayerAPI = PlayerAPI;
     //(globalThis as any).gameStateObjects = gameStateObjects;
 
-  @template(() => {
+  @template(({quizId}:{quizId: Datex.Pointer | string}) => {
  
 
     //TODO: intermediary screen that detects if host already has a game running and asks if the host wishes to create a new game or view the old one.
+
+    initQuiz();
+
+    function initQuiz(){
+      //TODO: why is quizId sometimes handed as Pointer and other times as string? fix this
+      let id;
+      try{
+        id = typeof quizId === "string" ? quizId : quizId.val
+      }catch{
+        return;
+      }
+      if(id == "") return;
+      const quiz = Object.values(quizzes).find((quiz: Quiz) => {
+        console.log(quiz.quizId)
+        return quiz.quizId === id
+      })
+      if(!quiz) return;
+      gameStateObjects.questions = quiz.questions;
+      state.val = "waiting";
+    }
 
     const resetGame = () => {
       console.log("Reset game");
@@ -176,12 +197,7 @@ import { QuizImport } from "frontend/src/components/livegame/host/QuizImport/Qui
       <div class="container">
         <Snackbar />
           {
-            state.val === "setup" && (
-              <div>
-                <QuizImport gameStateObjects={gameStateObjects} />
-                <button type="button" onclick={() => { state.val = "waiting" }}> Start Lobby </button> 
-              </div>
-            )  //TODO Move to component
+            state.val === "setup" && <HostSetupScreen state={state} gameStateObjects={gameStateObjects} />
           }
           {
             state.val === "waiting" && <HostWaitingScreen gameStateObjects={gameStateObjects} startGame={startGame}/>
@@ -198,5 +214,5 @@ import { QuizImport } from "frontend/src/components/livegame/host/QuizImport/Qui
       </div>
       )
   })
-  export class HostMain extends Component {}
+  export class HostMain extends Component<{quizId: Datex.Pointer | string}> {}
 

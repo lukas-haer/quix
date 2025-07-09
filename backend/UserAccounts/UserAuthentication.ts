@@ -4,7 +4,7 @@ import { quizzes } from "../SaveQuiz.ts";
 
 import * as argon2 from "jsr:@felix/argon2";
 import { provideRedirect } from "uix/providers/common.tsx";
-import { InvalidPasswordError, UsernameTakenError, UserNotFoundError, WeakPasswordError, InvalidPasswordRepeatError } from "common/models/errors/accountErrors.ts";
+import { InvalidPasswordError, UsernameTakenError, UserNotFoundError, WeakPasswordError, InvalidPasswordRepeatError, InvalidPasswordOrUsernameError } from "common/models/errors/accountErrors.ts";
 
 export const users = eternal ?? $({} as Record<string, User>);
 
@@ -19,12 +19,12 @@ export async function userLogin(username: string, password: string) {
 	
 	//user doesn't exist
 	if (!(username in users)) {
-		throw new UserNotFoundError();
+		throw new InvalidPasswordOrUsernameError();
 	}	
 
 	//wrong password for user
 	if (!await argon2.verify(users[username].password, password)) {
-		throw new InvalidPasswordError();
+		throw new InvalidPasswordOrUsernameError();
 	}
 
 	console.log(`Logging in user ${username}`);
