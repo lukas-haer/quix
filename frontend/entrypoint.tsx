@@ -13,6 +13,7 @@ export default {
     "/join": () => redirect('/'),
     "/host/:quizId": (_: any, { quizId }:{ quizId: string }) => <HostMain quizId={ quizId } />,
     "/host": <HostMain quizId={""}/>,
+   
     "/createQuiz": () => <CreateQuiz />,
 	"/login": <UserLoginForm/>,
 	"/signup": <UserSignUpForm/>,
