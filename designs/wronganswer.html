@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Your Final Position</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Avenir+Next:wght@700&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Avenir Next', Arial, sans-serif;
+      background: #ffffff;
+      height: 100vh;
+      overflow: hidden;
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 3.5rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      animation: popIn 1s ease-out forwards;
+      color: #111;
+      text-shadow: 0 0 10px #00bfff50;
+      z-index: 2;
+    }
+
+    .main-info {
+      font-size: 2rem;
+      color: #007acc;
+      margin-bottom: 2rem;
+      animation: pulse 2s infinite;
+    }
+
+    .cards-container {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      z-index: 2;
+    }
+
+    .player-card {
+      background: #e9f6ff;
+      border: 3px solid #00bfff;
+      border-radius: 20px;
+      box-shadow: 0 0 20px #00bfff80;
+      padding: 1.5rem;
+      width: 280px;
+      text-align: center;
+      animation: bounceUp 1s ease-out forwards;
+    }
+
+    .player-name {
+      font-size: 1.6rem;
+      font-weight: bold;
+      color: #007acc;
+      margin-bottom: 0.5rem;
+    }
+
+    .player-score {
+      font-size: 1.2rem;
+      color: #333;
+    }
+
+    .diff {
+      font-size: 0.95rem;
+      color: #666;
+    }
+
+    @keyframes popIn {
+      0% {
+        transform: scale(0.5);
+        opacity: 0;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes bounceUp {
+      0% {
+        transform: translateY(100px);
+        opacity: 0;
+      }
+      60% {
+        transform: translateY(-20px);
+        opacity: 1;
+      }
+      80% {
+        transform: translateY(10px);
+      }
+      100% {
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.08);
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>🎉 Game Over!</h1>
+  <div class="main-info">You finished #4 with 2400 points</div>
+
+  <div class="cards-container">
+    <div class="player-card">
+      <div class="player-name">#3 Sam</div>
+      <div class="player-score">2500 pts</div>
+      <div class="diff">+100 pts</div>
+    </div>
+
+    <div class="player-card">
+      <div class="player-name">#5 Maya</div>
+      <div class="player-score">2350 pts</div>
+      <div class="diff">-50 pts</div>
+    </div>
+  </div>
+
+  <script>
+    const player = {
+      position: 4,
+      score: 2400,
+      above: { position: 3, name: "Sam", score: 2500 },
+      below: { position: 5, name: "Maya", score: 2350 }
+    };
+
+    document.querySelector(".main-info").textContent = `You finished #${player.position} with ${player.score} points`;
+
+    const cards = document.querySelectorAll(".player-card");
+
+    cards[0].querySelector(".player-name").textContent = `#${player.above.position} ${player.above.name}`;
+    cards[0].querySelector(".player-score").textContent = `${player.above.score} pts`;
+    cards[0].querySelector(".diff").textContent = `+${player.above.score - player.score} pts`;
+
+    cards[1].querySelector(".player-name").textContent = `#${player.below.position} ${player.below.name}`;
+    cards[1].querySelector(".player-score").textContent = `${player.below.score} pts`;
+    cards[1].querySelector(".diff").textContent = `-${player.score - player.below.score} pts`;
+  </script>
+</body>
+</html>

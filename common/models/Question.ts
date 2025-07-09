@@ -46,19 +46,33 @@ export class MultipleChoiceQuestion extends Question<MultipleChoiceQuestionType>
 }
 
 const question1 = new SingleChoiceQuestion({
-        questionText: "Frage 1: abcd?", 
-        answers: ["a","b","c","d"], 
-        correctAnswerId: 0, 
-        timeInSeconds: 30
-    })
+    questionText: "Was ist das beste UIX Projekt",
+    answers: ["Quix","Es ist Quix","Ich würde sagen Quix","Auch Quix"],
+    correctAnswerId: 0,
+    timeInSeconds: 30
+})
 
 const question2 = new SingleChoiceQuestion({
-        questionText: "Frage 2: abcd?", 
-        answers: ["a","b","c","d"], 
-        correctAnswerId: 2, 
-        timeInSeconds: 30
-    })
+    questionText: "Wer der erste deutsche Bundeskanzler?",
+    answers: ["Angela Merkel","Axel Küpper","Konrad Adenauer","Theodor Heuss"],
+    correctAnswerId: 2,
+    timeInSeconds: 15
+})
 
-export const sampleQuestions: Question<QuestionType>[] = [question1, question2];
+const question3 = new SingleChoiceQuestion({
+    questionText: "D ist richtig",
+    answers: ["A","D","C","B"],
+    correctAnswerId: 1,
+    timeInSeconds: 5
+})
+
+const question4 = new SingleChoiceQuestion({
+    questionText: "A ist richtig",
+    answers: ["A","D","C","B"],
+    correctAnswerId: 0,
+    timeInSeconds: 120
+})
+
+export const sampleQuestions: Question<QuestionType>[] = [question1];
 
 export const sampleQuestion: SingleChoiceQuestion = question1;

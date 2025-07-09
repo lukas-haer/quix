@@ -1,2 +1,3 @@
 name: "Quix",
-description: "The UIX base project";
+description: "A peer-to-peer live Quiz game based on UIX",
+icon: "./common/public/img/facivon.png"

@@ -18,9 +18,18 @@ h1 {
     font-size: 4rem;
     font-weight: bold;
     font-style: italic;
+    text-align: center;
 }
 
-.nameselection-container{
+.ps-20 {
+    padding-left: 20px;
+}
+
+.pe-20 {
+    padding-right: 20px;
+}
+
+.nameselection-container {
     display: flex;
     height: 100vh;
     flex-direction: column;
@@ -104,5 +113,16 @@ h1 {
 
     100% {
         background-position: -200% 0;
+    }
+}
+
+@media (max-width: 600px) {
+    h1 {
+        font-size: 2.5rem;
+    }
+
+    .button {
+        font-size: 1.4rem;
+        padding: 0.6rem 0.8rem;
     }
 }

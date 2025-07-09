@@ -24,6 +24,8 @@ export type PlayerAPIType = {
     joinGame: (name: string) => JoinGameReturn;
     getCurrentQuestion: () => GetCurrentQuestionReturn;
     submitAnswer: (answerId: number) => number;
+    getScoreboard: () => { name: string; points: number }[];
+    whoAmI: () => string;
 };
 
 const apiObj: ObjectRef<{ playerApi?: PlayerAPIType }> = $({}); //encapsulate api in ObjectRef to guarantee reactivity
@@ -54,14 +56,13 @@ const apiObj: ObjectRef<{ playerApi?: PlayerAPIType }> = $({}); //encapsulate ap
             }
             try {
                 const recievedEndpointId = await getHostIdFromGamecode(gamecode);
-                console.log('ENDPOINT: ' + recievedEndpointId);
                 endpointId.val = recievedEndpointId.toString();
 
-                successSnackbarMessage('Lobby joined', 'Joined Lobby successfully');
+                successSnackbarMessage('Lobby found', 'Found lobby from your gamecode');
                 activeComponent.val = 'nameSelection';
             } catch (error) {
                 console.error('Error when attempting to find Lobby: ' + error);
-                failureSnackbarMessage('Lobby not found', 'There is no lobby for this gamecode.', 30_000);
+                redirect(`/?error=LobbyNotFound`);
                 return;
             }
         } catch (error) {
@@ -100,38 +101,38 @@ const apiObj: ObjectRef<{ playerApi?: PlayerAPIType }> = $({}); //encapsulate ap
             );
         }
     };
-
     const renderComponent = () => {
         switch (activeComponent.val) {
             case 'liveGame':
                 return <GameScreen stateId={stateId.val} currentRoundId={currentRoundId.val} apiObj={apiObj} />;
             case 'nameSelection':
                 return (
-                    <div class="nameselection-container">
-                        <h1>WHAT SHOULD WE CALL YOU?</h1>
-                        <div class="name-input-container">
-                            <input
-                                type="text"
-                                class="name-input"
-                                id="nameInput"
-                                value={name}
-                                maxlength="12"
-                                placeholder="Enter your name"
-                                autofocus
-                                required
-                            />
-                            <div class="glowing-line" id="glowingLine"></div>
+                    <div
+                        class="nameselection-container"
+                        onkeydown={(event: KeyboardEvent) => {
+                            if (event.key === 'Enter') {
+                                joinGame();
+                            }
+                        }}
+                    >
+                        <div class="ps-20 pe-20">
+                            <h1>WHAT SHOULD WE CALL YOU?</h1>
+                            <div class="name-input-container">
+                                <input
+                                    type="text"
+                                    class="name-input"
+                                    id="nameInput"
+                                    value={name}
+                                    maxlength="12"
+                                    placeholder="Enter your name"
+                                    autofocus
+                                    required
+                                />
+                                <div class="glowing-line" id="glowingLine"></div>
+                            </div>
                         </div>
-                        <button
-                            type="button"
-                            class="button"
-                            onclick={() => joinGame()}
-                            onkeydown={(event: KeyboardEvent) => {
-                                if (event.key === 'Enter') {
-                                    joinGame();
-                                }
-                            }}
-                        >
+
+                        <button type="button" class="button" onclick={() => joinGame()}>
                             JOIN
                         </button>
                     </div>

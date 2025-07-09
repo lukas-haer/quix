@@ -1,0 +1,126 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.button {
+    width: 120px;
+    height: 50px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.solution-screen-container {
+    font-family: 'Avenir Next', Arial, sans-serif;
+    background-color: #f0f0f0;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    animation: fadeInUp 1s ease-out;
+    position: relative;
+}
+
+.left, .right {
+    width: 50%;
+    height: 100%;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.left {
+    border-right: 2px solid #ccc;
+}
+
+h1 {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    color: #333;
+    text-align: center;
+}
+
+.scoreboard-title {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: #333;
+}
+
+.scoreboard {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.score-entry {
+    background-color: #007BFF;
+    color: #fff;
+    font-size: 1.5rem;
+    padding: 1rem;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    animation: pulse 2s infinite;
+    width: 80%;
+    margin-bottom: 1rem;
+}
+
+/* Countdown bar */
+.countdown-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 15px;
+    background-color: #007BFF;
+    width: 0%;
+    animation: countdown 10s linear forwards;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    0% {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    50% {
+        transform: scale(1.03);
+        box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+}
+
+@keyframes countdown {
+    from {
+        width: 0%;
+    }
+    to {
+        width: 100%;
+    }
+}

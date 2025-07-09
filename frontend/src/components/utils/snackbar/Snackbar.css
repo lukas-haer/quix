@@ -8,3 +8,10 @@
 	z-index: 9999;
 	min-width: 400px;
 }
+
+@media (max-width: 600px) {
+  .snackbar {
+	min-width: unset;
+	max-width: 90vw;
+  }
+}

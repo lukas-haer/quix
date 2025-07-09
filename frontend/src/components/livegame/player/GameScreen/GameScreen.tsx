@@ -5,6 +5,8 @@ import { GetCurrentQuestionReturn } from "../../../../models/PlayerApiReturns.ts
 import { PlayerAPIType } from "../PlayerMain.tsx";
 import { QuestionScreen } from "./QuestionScreen/QuestionScreen.tsx";
 import { LoadingScreen } from "frontend/src/components/utils/loadingscreen/LoadingScreen.tsx";
+import {PlayerFinishedScreen} from "./PlayerFinishedScreen/PlayerFinishedScreen.tsx";
+import {PlayerSolutionScreen} from "./PlayerSolutionScreen/PlayerSolutionScreen.tsx";
 
 type GameScreenProps = {
 	stateId: string;
@@ -16,6 +18,7 @@ type GameScreenProps = {
   //TODO: error handling
   const state: Datex.Pointer<string> = await datex.get(`$${stateId}`)
   const currentRound: Datex.Pointer<number> = await datex.get(`$${currentRoundId}`)
+  const gameState: Datex.Pointer<string> = $("waiting");
 
   //TODO: Maybe we can just grab the pointer references instead of manually calling the endpoint.
   const question: Datex.Pointer<string> = $("");
@@ -33,16 +36,31 @@ type GameScreenProps = {
     question.val = res.questionText;
     answers.val = res.answers.join(";"); //To avoid using ObjectRef
     currentDeadline.val = res.currentDeadline.getTime(); //To avoid using ObjectRef
-    console.log("DCD: ",currentDeadline.val);
-    
+    // console.log("DCD: ",currentDeadline.val);
+
     submittedAnswer.val = false;
   }
 
+  // gameState keeps the player in finished screen even if host starts a new round
   state.observe((v) => {
-    if(v !== "playing") return;
+    if(v === "finished" || gameState.val === "finished") {
+      gameState.val = "finished";
+      return;
+    }
+    else if (v === "waiting") {
+      return;
+    }
+
+    
+    gameState.val = v;
     updateQuestionAndAnswers();
   })
-  currentRound.observe(() => { updateQuestionAndAnswers() })
+
+  
+  currentRound.observe(() => { 
+    if (gameState.val === "finished") return;
+    updateQuestionAndAnswers();
+  })
 
   async function submitAnswer(answerId: number){
     if(!apiObj.playerApi) throw Error("PlayerAPI not defined.")
@@ -50,6 +68,18 @@ type GameScreenProps = {
     if(newPoints > points.val){
       points.val = newPoints;
     }
+  }
+
+  async function getScoreboard(){
+    if(!apiObj.playerApi) throw Error("PlayerAPI not defined.")
+    const scoreboard = await apiObj.playerApi.getScoreboard();
+    return scoreboard
+  }
+
+  async function getName(){
+    if(!apiObj.playerApi) throw Error("PlayerAPI not defined.")
+    const name = await apiObj.playerApi.whoAmI();
+    return name
   }
 
 
@@ -63,24 +93,28 @@ type GameScreenProps = {
 
   return (
     <div>
- 
       {
-        state.val === "waiting" && <LoadingScreen text="You're in!" subtext="Now wait for the game to start..." />
+        gameState.val === "waiting" && <LoadingScreen text="You're in!" subtext="Now wait for the game to start..." />
       }
       {
-        state.val === "playing" && (
-          <QuestionScreen 
-            questionText={question.val} 
-            answers={answers.val} 
-            currentDeadline={currentDeadline.val} 
-            submittedAnswer={submittedAnswer} 
+        gameState.val === "question" && (
+          <QuestionScreen
+            questionText={question.val}
+            answers={answers.val}
+            currentDeadline={currentDeadline.val}
+            submittedAnswer={submittedAnswer}
             submitAnswer={submitAnswer}
-            
           />
         )
       }
       {
-        state.val === "finished" && <h2>The game has finished.</h2>
+        gameState.val === "solution" && (
+          /* <PlayerSolutionScreen /> Removed for now, till design is set */
+          <LoadingScreen text="Answers on the screen" subtext="Stay focused! The next question is comming up"></LoadingScreen>
+        )
+      }
+      {
+        gameState.val == "finished" && <PlayerFinishedScreen getScoreboard={getScoreboard} getName={getName}/> 
       }
     </div>
   )
