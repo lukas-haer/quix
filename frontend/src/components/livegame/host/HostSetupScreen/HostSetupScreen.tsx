@@ -1,11 +1,9 @@
 import { Datex } from "datex-core-legacy/datex.ts";
-import { Component, template } from 'uix/components/Component.ts';
+import { Component, template, style } from 'uix/components/Component.ts';
 import { Toggle } from 'frontend/src/components/utils/Toggle/Toggle.tsx';
 import { QuizImport } from "frontend/src/components/livegame/host/QuizImport/QuizImport.tsx";
 import { ObjectRef } from "datex-core-legacy/runtime/pointers.ts";
-import {
-  GameStateObjects
-} from "frontend/src/models/GameState.ts";
+import { GameStateObjects } from "frontend/src/models/GameState.ts";
 import { successSnackbarMessage, failureSnackbarMessage } from "frontend/src/components/utils/snackbar/Snackbar.tsx";
 import { UserLoginPanel } from "frontend/src/components/userAccount/AccountAccess/UserLoginForm.tsx";
 //import { getUserQuizzes } from "/backend/SaveQuiz.ts";
@@ -16,7 +14,7 @@ type HostSetupScreenProps = {
 }
 
 //TODO: use toggles for optional features
-
+@style("../HostMain.css")
 @template(async ({ state, gameStateObjects }: HostSetupScreenProps) => {
 
 	// const userQuizzes = await getUserQuizzes();
@@ -30,12 +28,15 @@ type HostSetupScreenProps = {
 	//TODO: check if user is already logged in
 	//TODO: display user quizzes if logged in
 	return (
-		<div style={{display: "flex", flexDirection: "column", alignItems: "center", gap: "2vh"}}>
-			<h2>Setup</h2>
-			<button onclick={proceedToWaiting}>Proceed to Lobby</button>
+		<section class="l-row flex">
+        <div class="host-bg-shape-main"></div>
+        <div class="host-bg-shape-circle"></div>
+		<div style={{display: "flex", flexDirection: "column", gap: "2rem"}}>
 			<UserLoginPanel text={"LOG IN TO BROWSE YOUR QUIZZES"} />
 			<QuizImport gameStateObjects={gameStateObjects} />
+			<button class="button" onclick={proceedToWaiting}>Proceed to Lobby</button>
 		</div>
+		</section>
 	);
 })
 export class HostSetupScreen extends Component<HostSetupScreenProps> {}
