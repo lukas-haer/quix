@@ -17,7 +17,10 @@ import { UIX } from 'uix';
             <div class="shape rectangle"></div>
             <div class="shape circle"></div>
             <div class="shape triangle"></div>
-            <div class="shape star"></div>
+            <div class="shape x">
+                <div class="x-bar"></div>
+                <div class="x-bar"></div>
+            </div>
         </section>
     );
 })
