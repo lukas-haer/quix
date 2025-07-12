@@ -20,54 +20,46 @@ type HostPlayingScreenProps = {
 
     function getQuestionTextFontSize(): string {
         const questionLength = currentQuestion.content.questionText.length;
-        let fontSize = "35px";
+        let fontSize = '37px';
         if (questionLength > 200) {
-          fontSize = "30px"
-        } 
-        if (questionLength > 250) {
-          fontSize = "26px"
+            fontSize = '30px';
         }
-        return fontSize
+        if (questionLength > 250) {
+            fontSize = '26px';
+        }
+        return fontSize;
     }
 
     return (
         <main>
-          <div class="top flex-center">
-            <div class="host-question-container">
-                <h1 style={{ fontSize: getQuestionTextFontSize() }}>{currentQuestion.content.questionText}</h1>
-            </div>
-          </div>
-          <div class="horizontally-center">
-            <div class="answer-container flex-center">
-                <div class="answer answer1">
-                    <span class="icon icon0" />
-                    <p class="answer-text">
-                      {currentQuestion.content.answers[0]}
-                    </p>
-                </div>
-                <div class="answer answer2">
-                    <span class="icon icon1" />
-                    <p class="answer-text">
-                      {currentQuestion.content.answers[1]}
-                    </p>
-                </div>
-                <div class="answer answer3">
-                    <span class="icon icon2" />
-                    <p class="answer-text">
-                      {currentQuestion.content.answers[2]}
-                    </p>
-                </div>
-                <div class="answer answer4">
-                    <span class="icon icon3" />
-                    <p class="answer-text">
-                      {currentQuestion.content.answers[3]}
-                    </p>
+            <div class="top flex-center">
+                <div class="host-question-container">
+                    <h1 style={{ fontSize: getQuestionTextFontSize() }}>{currentQuestion.content.questionText}</h1>
                 </div>
             </div>
-          </div>
+            <div class="horizontally-center">
+                <div class="answer-container flex-center">
+                    <div class="answer answer1">
+                        <span class="icon icon0" />
+                        <p class="answer-text">{currentQuestion.content.answers[0]}</p>
+                    </div>
+                    <div class="answer answer2">
+                        <span class="icon icon1" />
+                        <p class="answer-text">{currentQuestion.content.answers[1]}</p>
+                    </div>
+                    <div class="answer answer3">
+                        <span class="icon icon2" />
+                        <p class="answer-text">{currentQuestion.content.answers[2]}</p>
+                    </div>
+                    <div class="answer answer4">
+                        <span class="icon icon3" />
+                        <p class="answer-text">{currentQuestion.content.answers[3]}</p>
+                    </div>
+                </div>
+            </div>
             <div class="top-right-controls">
                 <div class="timer flex-center" id="timer">
-                    300
+                    {timeLeft}
                 </div>
                 <button
                     class="skip-button flex-center"
