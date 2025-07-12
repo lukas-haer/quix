@@ -1,41 +1,75 @@
 section {
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     height: 100vh;
+    display: block;
+    position: relative;
+    background: #fff;
+    color: #fff;
+    overflow: hidden;
+}
+
+.top {
+    height: 45vh;
+    padding: 30px 30px 0px 30px; 
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.bottom{
+    height: 55vh;
+}
+
+.flex-center{
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
-    position: relative;
-    background: #ffffff;
-    color: #000;
+}
+
+.question-title-container {
+    grid-area: question;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    height: calc(100% - 4rem); /* Subtract the 2rem top + 2rem bottom padding */
+    width: calc(100% - 4rem);
+    z-index: 2;
+    scroll-behavior: smooth;
 }
 
 h1 {
-    font-family: 'Avenir Next', Arial, sans-serif;
-    font-size: 5vw;
-    /* Adjust font size based on viewport width */
-    font-weight: bold;
-    font-style: italic;
-    margin-bottom: 1rem;
-    max-width: 90%;
-    /* Limit width to prevent overflow */
-    word-wrap: break-word;
-    /* Break long words */
+    font-size: clamp(1.1rem, 3vw, 2rem);
+    font-weight: 600;
+    line-height: 1.4;
+    margin: 0;
+    color: #2d3748;
+    text-align: center;
+    max-height: 100%;
 }
 
 .button-container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-    margin-top: 2rem;  
+    gap: 1rem; 
+    justify-items: center;
+    align-items: center;
+    padding: 1rem;
 }
 
-.button {
-    width: 150px;
-    height: 150px;
+.answer-button {
+    width: 20vh;
+    height: 20vh;
     font-size: 2rem;
     font-weight: bold;
     color: #fff;
+    margin: 0; /* Remove any margins that could affect spacing */
     border: none;
     border-radius: 10px;
     cursor: pointer;
@@ -98,15 +132,15 @@ h1 {
 }
 
 .icon {
-	position: absolute;
-	top: 50%;
-	transform: translateY(-50%);
-	width: 100%;              
-	height: 100%;           
-	display: flex;           
-	justify-content: center; 
-	align-items: center;     
-	color: #ffffffe8;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ffffffe8;
 }
 
 .icon0::before {
@@ -158,25 +192,71 @@ h1 {
     }
 }
 
+.host-bg-shape-main {
+	position: absolute;
+	top: -50vmax;
+	left: -60vmax;
+	width: 90vmax;
+	height: 94vmax;
+	background: #007BFF;
+	opacity: 0.15;
+	border-radius: 10%;
+	filter: blur(10px) drop-shadow(0 0 40px rgba(0, 123, 255, 0.38));
+	z-index: 0;
+	animation: hostBgRotate 38s linear infinite;
+	pointer-events: none;
+}
+
+.host-bg-shape-circle {
+	position: absolute;
+	bottom: -9vmax;
+	right: -15vmax;
+	width: 50vmax;
+	height: 50vmax;
+	background: #28a745;
+	opacity: 0.13;
+	border-radius: 30%;
+	filter: blur(12px) drop-shadow(0 0 30px rgba(40, 167, 69, 0.23));
+	z-index: 0;
+	animation: hostBgPulse 5s ease-in-out infinite alternate;
+	pointer-events: none;
+}
+
 @media (max-width: 600px) {
     h1 {
-        font-size: 1.3rem;
-        padding: 0 30px;
+        font-size: clamp(1.1rem, 4vw, 1.3rem); 
+        width: 100%;
     }
-    .button {
-        font-size: 1.4rem;
-        padding: 0.6rem 0.8rem;
+
+    .top {
+        padding: 30px; 
+        height: 45vh;
     }
+
+    .bottom {
+        height: 55vh;
+    }
+
+    .question-title-container {
+        width: 75vw;
+        height: calc(100% - 3rem); 
+        padding: 1.5rem;
+        overflow-y: auto; 
+    }
+
+    .button-container {
+        gap: 1rem; 
+        padding: 1rem 1rem 100px 1rem; 
+    }
+
     .code-input {
         width: 45px;
         height: 60px;
         font-size: 1.4rem;
     }
+
     #code-input-container {
         gap: 0.3rem;
         margin-top: 0.7rem;
-    }
-    .section-text {
-        padding-top: 1rem;
     }
 }

@@ -52,7 +52,8 @@ h1 {
 	height: 100px;
 	font-size: 1.5rem;
 	font-weight: bold;
-	color: #000000;
+
+	color: #FFFFFF;
 	border: none;
 	border-radius: 10px;
 	display: flex;
@@ -60,6 +61,7 @@ h1 {
 	justify-content: center;
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 	/* Subtle shadow */
+	text-shadow: 0px 0px 1px #333;
 	opacity: 0;
 	/* Start with hidden */
 	animation: fadeIn 1s ease-in-out forwards;

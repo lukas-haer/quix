@@ -110,7 +110,7 @@ type GameScreenProps = {
       {
         gameState.val === "solution" && (
           /* <PlayerSolutionScreen /> Removed for now, till design is set */
-          <LoadingScreen text="Answers on the screen" subtext="Stay focused! The next question is comming up"></LoadingScreen>
+            <LoadingScreen text="Answers on the screen" subtext="Stay focused! The next question is coming up"></LoadingScreen>
         )
       }
       {
