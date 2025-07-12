@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Component mit Rechtecken</title>
+  <style>
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px; /* Abstand zwischen den Rechtecken */
+      width: 300px; /* Breite des Containers */
+      margin: 50px auto;
+    }
+
+    .box {
+      background-color: #e0e0e0;
+      border-radius: 12px;
+      height: 100px; /* Höhe der Rechtecke */
+      padding: 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="box">Erstes Rechteck</div>
+    <div class="box">Zweites Rechteck</div>
+  </div>
+
+</body>
+</html>
