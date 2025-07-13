@@ -16,10 +16,10 @@ import { Component, template } from "uix/components/Component.ts";
 
 	//Diffent color depending on the type
     let bgColor = "#8e0000";
-    let imgSource = 'common/public/img/failure.svg'
+    let imgSource = 'frontend/public/img/failure.svg'
     if (props.type === "success") {
         bgColor = "#4caf50";
-        imgSource = 'common/public/img/success.svg'
+        imgSource = 'frontend/public/img/success.svg'
     }
 
     return (
