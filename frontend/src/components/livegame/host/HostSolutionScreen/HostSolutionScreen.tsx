@@ -3,7 +3,7 @@ import {Component, template} from "uix/components/Component.ts";
 import {GameStateObjects} from "frontend/src/models/GameState.ts";
 import {ObjectRef} from "datex-core-legacy/runtime/pointers.ts";
 import {SingleChoiceQuestionSolution} from "./solutionComponents/SingleChoiceQuestionSolution.tsx";
-
+import { BackgroundMusicButton } from "frontend/src/components/utils/music/BackgroundMusicButton.tsx";
 
 type HostSolutionScreenProps = {
     nextQuestion: () => void;
@@ -20,6 +20,7 @@ type HostSolutionScreenProps = {
 
         return (
             <div class="solution-screen-container">
+                <div class="bg-music-btn"><BackgroundMusicButton /></div>
                 <div class="left">
                     <SingleChoiceQuestionSolution currentRound={currentRound} gameStateObjects={gameStateObjects} style={{width: "100%"}} />
                 </div>

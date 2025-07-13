@@ -1,6 +1,7 @@
 import { ObjectRef } from 'datex-core-legacy/runtime/pointers.ts';
 import { GameStateObjects } from 'frontend/src/models/GameState.ts';
 import { Component, template } from 'uix/components/Component.ts';
+import { BackgroundMusicButton } from "frontend/src/components/utils/music/BackgroundMusicButton.tsx";
 
 //TODO: why does pointer to currentRound not update this component anymore after changing to uix format?
 type HostPlayingScreenProps = {
@@ -61,7 +62,8 @@ type HostPlayingScreenProps = {
                 <div class="timer flex-center" id="timer">
                     {timeLeft}
                 </div>
-                <button
+                <div class="top-right-controls-buttons">
+                  <button
                     class="skip-button flex-center"
                     type="button"
                     onclick={() => {
@@ -71,6 +73,9 @@ type HostPlayingScreenProps = {
                 >
                     Skip
                 </button>
+                <div><BackgroundMusicButton /></div>
+                </div>
+
             </div>
             <div
                 class="countdown-bar"

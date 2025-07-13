@@ -216,20 +216,30 @@ p {
 }
 
 .skip-button {
-	font-size: 1.2rem;
-	font-weight: bold;
-	background-color: #000000;
-	color: #fff;
-	border: none;
-	padding: 10px 15px;
-	border-radius: 8px;
-	cursor: pointer;
-	transition: background-color 0.3s ease;
-	white-space: nowrap;
+    font-size: 1.2rem;
+    font-weight: bold;
+    background-color: #000000;
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+	height: 42px;
+	max-width: 69px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    white-space: nowrap;
+
 	animation: fadeIn 1s ease-in-out;
 }
 
 .skip-button:hover {
-	background-color: #015cbd;
-	;
+    background-color: #015cbd;
 }
+
+.top-right-controls-buttons {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	gap: 10px;
+}
+

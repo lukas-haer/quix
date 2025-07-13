@@ -89,6 +89,12 @@ h1 {
     animation: countdown 10s linear forwards;
 }
 
+.bg-music-btn {
+	position: fixed;
+	top: 20px;
+	right: 20px;
+}
+
 /* Animations */
 @keyframes fadeInUp {
     0% {
