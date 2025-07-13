@@ -220,6 +220,8 @@ h1 {
     color: #fff;
     border: none;
     padding: 10px 15px;
+	height: 42px;
+	max-width: 69px;
     border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.3s ease;
@@ -229,5 +231,11 @@ h1 {
 
 .skip-button:hover {
     background-color: #015cbd;
-    ;
+}
+
+.top-right-controls-buttons {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	gap: 10px;
 }

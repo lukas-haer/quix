@@ -1,26 +1,12 @@
 import { Component, template } from 'uix/components/Component.ts';
+import { toggleMusic, isPlaying } from 'frontend/src/components/utils/music/BackgroundMusic.tsx';
 
-@template(() => {
-    const audio = (
-        <audio class="background-music" autoplay loop>
-            <source src="frontend/public/audio/lobbymusic.mp3" type="audio/mpeg" />{' '}
-        </audio>
-    ) as HTMLAudioElement;
-
-    function toggleMusic() {
-        if (audio.paused) {
-            audio.play();
-        } else {
-            audio.pause();
-        }
-    }
-
-    return (
-        <div>
-            <button type="button" onclick={toggleMusic}>
-                Play Music
-            </button>
-        </div>
-    );
-})
-export class AudioButton extends Component {}
+@template(() => (
+    <div>
+        <button type="button" class="background-music-button" onclick={toggleMusic}>
+            <div class={{ hidden: isPlaying }}>🔊</div>
+            <div class={{ hidden: !isPlaying.val }}>🔈</div>
+        </button>
+    </div>
+))
+export class BackgroundMusicButton extends Component {}

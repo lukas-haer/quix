@@ -11,6 +11,7 @@ import { QrCode } from "frontend/src/components/utils/qrcode/qrcode.tsx";
 import { UIX } from "uix";
 import { failureSnackbarMessage, successSnackbarMessage } from "frontend/src/components/utils/snackbar/Snackbar.tsx";
 import { Separator } from "frontend/src/components/utils/Separator/Separator.tsx";
+import { BackgroundMusicButton } from "frontend/src/components/utils/music/BackgroundMusicButton.tsx";
 
 type HostWaitingScreenProps = {
   gameStateObjects: ObjectRef<GameStateObjects>;
@@ -40,6 +41,7 @@ type HostWaitingScreenProps = {
       <section class="l-row flex">
         <div class="host-bg-shape-main"></div>
         <div class="host-bg-shape-circle"></div>
+        <div class="bg-music-btn"><BackgroundMusicButton /></div>
         <div class="l-col l-col-6 block">
           <h1>Lobby</h1>
           <div class="waiting to join">Waiting for players to join...</div>
