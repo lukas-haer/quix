@@ -1,16 +1,14 @@
 import { Component, template } from "uix/components/Component.ts";
-import { qrcode } from "https://unyt.land/x/qrcode@v2.0.0/mod.ts";
+//import QrCreator from 'https://cdn.jsdelivr.net/npm/qr-creator/dist/qr-creator.es6.min.js';
 
-@template(function () {
-  return <img src={this.code} />;
+@template((props) => {
+  const url = props.url  
+
+  return (
+    <div>
+
+    </div>
+  )
 })
 
-export class QrCode extends Component<{ url: string }> {
-  @property
-  code!: string;
-  protected override onConstruct(): Promise<void> | void {
-    qrcode(this.properties.url).then((qr) => {
-      this.code = qr as unknown as string;
-    });
-  }
-}
+export class QrCode extends Component<{ url: string }> {}
