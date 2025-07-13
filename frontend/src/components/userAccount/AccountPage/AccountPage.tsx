@@ -34,7 +34,7 @@ import { deleteQuiz } from "../../gamecreation/createQuiz/CreateQuiz.tsx";
 					<div class="quiz-container">
 						<div class="create-card">
 							<h3>Create your First Quiz</h3>
-							<a href="/createQuiz"><button class="button" type="button" id="createQuiz-btn">Create</button></a>
+							<a href="/create"><button class="button" type="button" id="createQuiz-btn">Create</button></a>
 						</div>
 					</div>
 				</div>
@@ -67,7 +67,7 @@ import { deleteQuiz } from "../../gamecreation/createQuiz/CreateQuiz.tsx";
 						))}
 						<div class="create-card">
 							<h3>Create another Quiz</h3>
-							<a href="/createQuiz"><button class="button" type="button" id="createQuiz-btn">Create</button></a>
+							<a href="/create"><button class="button" type="button" id="createQuiz-btn">Create</button></a>
 						</div>	
 					</div>			
 				</div>

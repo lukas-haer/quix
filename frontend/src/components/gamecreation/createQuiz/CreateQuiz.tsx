@@ -23,7 +23,6 @@ let quiz = $(Quiz ({
     title: "",
     description: "",
     accountId: "", //beim backend speichern gesetzt
-    //endpointId: "",
     questions: [] //as SingleChoiceQuestion[] ? //später noch um weitere Typen erweitern
 }));
 
@@ -156,19 +155,10 @@ export function deleteQuiz (quizId : string, userId : string) {
         delete quizzes[quizId];
     }
 }
-
-function refresh() {
-    quiz.questions = [...quiz.questions];
-}
-
-
-
 @template(() => {
-    UIX.Theme.useTheme("uix-light")
 
     return(
     <section>
-    <form action={saveQuiz} method="post">
         <header class="gc-row">
             <div class="gc-col gc-col-9">
                 <h2>Create a Quiz</h2>
@@ -229,8 +219,7 @@ function refresh() {
                 content: q.content
             })))}
         />
-        <button type="submit" onclick={refresh}>Save Quiz</button>
-    </form>
+        <button type="button" onclick={() => saveQuiz(quiz)}>Save Quiz</button>
             <Snackbar/>
     </section>  
     )

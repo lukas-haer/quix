@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Gamecreation</title>
+	<style>
+		.body {
+			font-family: 'Avenir Next', Arial, sans-serif;
+			padding: 1rem;
+			font-size: 1rem;
+
+		}
+
+		h1,
+		h2,
+		h3 {
+			margin: 0 0 10px;
+		}
+
+		label {
+			display: block;
+			margin: 10px 0 5px;
+			padding: 0px 0px 0px 0.5rem;
+
+		}
+
+		input {
+			display: block;
+			width: 100%;
+			background-color: white;
+			border: solid 1px #DDD;
+			padding: 0.75rem;
+			border-radius: 7px;
+			box-shadow: 0 1px 5px rgba(0, 0, 0, 0.15);
+			z-index: 1;
+		}
+
+		button {
+			background-color: #007BFF;
+			font-weight: bold;
+			font-size: 1rem;
+			border: none;
+			color: #fff;
+			padding: 0.75rem 1.5rem;
+			border-radius: 10px;
+			cursor: pointer;
+
+		}
+
+		button:hover {
+			background-color: #0061c9;
+		}
+
+		.card {
+			padding: 2rem 2rem 2rem 2rem;
+			background-color: rgba(255, 255, 255, 0.80);
+			border-radius: 10px;
+			margin-bottom: 30px;
+			box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+		}
+
+		.header-container {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.shadow {
+			box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
+
+		}
+
+		.header-button-group {
+			display: flex;
+			gap: 0.5em;
+		}
+
+		.flex {
+			display: flex;
+			flex-direction: column;
+		}
+
+		.v-center {
+			align-items: center;
+		}
+
+		.h-center {
+			justify-content: center;
+		}
+
+	   .row {
+		   display: flex;
+		   flex-wrap: wrap;
+		   margin: 10px 0px;
+		   gap: 1rem;
+	   }
+
+		.col-3 {
+			width: calc(25% - 0.753rem);
+		}
+
+		.col-6 {
+			width: calc(50% - 0.5rem);
+		}
+
+		.col-9 {
+			width: calc(75% - 0.25rem);
+		}
+
+		.col-12 {
+			width: 100%;
+		}
+
+		.bg-shape-main {
+			position: absolute;
+			top: -60vmax;
+			left: -60vmax;
+			width: 110vmax;
+			height: 110vmax;
+			background: #007BFF;
+			opacity: 0.15;
+			border-radius: 10%;
+			filter: blur(10px) drop-shadow(0 0 40px rgba(0, 123, 255, 0.38));
+			z-index: -1;
+			animation: hostBgRotate 38s linear infinite;
+			pointer-events: none;
+		}
+
+		.bg-shape-circle {
+			position: absolute;
+			bottom: -20vmax;
+			right: -15vmax;
+			width: 45vmax;
+			height: 45vmax;
+			background: #28a745;
+			opacity: 0.13;
+			border-radius: 30%;
+			filter: blur(12px) drop-shadow(0 0 30px rgba(40, 167, 69, 0.23));
+			z-index: -1;
+			animation: hostBgPulse 5s ease-in-out infinite alternate;
+			pointer-events: none;
+		}
+
+		@media (max-width: 600px) {
+
+			.col-3,
+			.col-6,
+			.col-9 {
+				width: 100%;
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<div class="body">
+
+		<div class="bg-shape-main"></div>
+		<div class="bg-shape-circle"></div>
+		<header>
+			<div class="header-container card">
+
+				<div>
+					<h2>Create a Quiz</h2>
+					<h1>My first Quiz</h1>
+				</div>
+				<div class="header-button-group">
+					<button type="button">
+						Import
+					</button>
+					<button type="button">
+						Export
+					</button>
+				</div>
+			</div>
+		</header>
+		<div class="card">
+			<div class="row">
+				<div class="col col-6">
+					<label for="quizTitle">Quiz Title</label>
+					<input type="text" id="quizTitle" name="title" value={quiz.title} />
+				</div>
+				<div class="col col-6">
+					<label for="quizTitle">Quiz Title</label>
+					<input type="text" id="quizTitle" name="title" value={quiz.title} />
+				</div>
+			</div>
+		</div>
+		<main>
+
+		</main>
+
+	</div>
+</body>
+
+</html>

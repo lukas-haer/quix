@@ -2,11 +2,10 @@ import { Context } from "uix/routing/context.ts";
 import { users } from "backend/UserAccounts/UserAuthentication.ts";
 import { Quiz } from "../common/models/Quiz.ts";
 import { provideRedirect } from "uix/providers/common.tsx";
-import { SingleChoiceQuestion, MultipleChoiceQuestion } from "common/models/Question.ts";
 
 export const quizzes = eternal ?? $({} as Record<string, Quiz>); //TODO: make quizzes object unavailable for frontend import. Use getUserQuizzes instead
 
-export async function saveQuiz (ctx: Context) {
+export async function saveQuiz (quiz: Quiz) {
 
 	const session = await Context.getPrivateData(datex.meta.caller);
 	const currentUser = session.userId;
@@ -18,23 +17,12 @@ export async function saveQuiz (ctx: Context) {
 		console.error("LOG SaveQuiz: User not found or not logged in."); //TODO Zugriffsbegrenzung?
 		return provideRedirect("/");
 	}
-
-	const data = await ctx.request.formData();
 	
-	const quizId = data.get("quizId") as string;
-	const title = data.get("title") as string;
-	const description = data.get("description") as string;
+	const quizId = quiz.quizId as string;
+	const title = quiz.title as string;
+	const description = quiz.description;
 	const accountId = currentUser;
-	//questions
-	const rawQuestions = JSON.parse(data.get("questions") as string);
-	const mappedQuestions = rawQuestions.map((q: any) => {
-    	if (q.type === "single-choice") {
-        	return new SingleChoiceQuestion(q.content);
-    	} else if (q.type === "multiple-choice") {
-        	return new MultipleChoiceQuestion(q.content);
-    	}
-	});
-	const questions = mappedQuestions;
+	const questions = quiz.questions;
 	
 	quizzes[quizId] = Quiz ({
 		quizId: quizId,
@@ -46,9 +34,8 @@ export async function saveQuiz (ctx: Context) {
 
 	//quizzes of user x
 	const userQuizzes = Object.values(quizzes).filter(quiz => quiz.accountId === currentUser);
-
 	
-	for (const quiz of userQuizzes) {
+	for (const quiz of userQuizzes) { //TODO remove logging
 		console.log("Quiz of user", quiz.accountId);
 		console.log("Quiz ID:", quiz.quizId);
 		console.log("Title:", quiz.title);
