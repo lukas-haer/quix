@@ -13,6 +13,8 @@ import { HostSolutionScreen } from "./HostSolutionScreen/HostSolutionScreen.tsx"
 import { HostSetupScreen } from "./HostSetupScreen/HostSetupScreen.tsx";
 import { Quiz } from "common/models/Quiz.ts";
 import { UIX } from "uix";
+import { BackgroundMusic } from "frontend/src/components/utils/music/BackgroundMusic.tsx";
+import { BackgroundMusicButton } from "frontend/src/components/utils/music/BackgroundMusicButton.tsx";
 
   //TODO: Does it make any difference having the pointers and api outside vs inside of a component?
   //TODO: pause/reset timeout
@@ -198,6 +200,7 @@ import { UIX } from "uix";
 
     return (
       <div class="container">
+        <BackgroundMusic />
         <Snackbar />
           {
             state.val === "setup" && <HostSetupScreen state={state} gameStateObjects={gameStateObjects} />
