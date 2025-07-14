@@ -8,6 +8,45 @@ type HostFinishedScreenProps = {
 @template(({ resetGame, getScoreboard }: HostFinishedScreenProps) => {
     const colors = ['#797979', '#007BFF', '#28a745', '#ffc107', '#dc3545'];
 
+    type Player = { name: string; points: number };
+    type PlayerWithRank = Player & { rank: number };
+
+    function getRankedScoreboard(scoreboard: { name: string; points: number }[]): PlayerWithRank[] {
+        const sorted = [...scoreboard].sort((a, b) => b.points - a.points);
+        let rank = 1;
+        let lastPoints: number | null = null;
+
+        return sorted.map((player, i) => {
+            if (player.points !== lastPoints) {
+                rank = i + 1;
+                lastPoints = player.points;
+            }
+            return {...player, rank};
+        });
+    }
+
+    function getPlayer(index: number):{
+       points: number;
+        rank: number;
+        name: string;
+    } | null {
+        if(index < 0 || index >= rankedScoreboard.length){
+            return null;
+        }
+         const p = rankedScoreboard[index];
+
+        return{
+            points: p.points,
+            rank: p.rank,
+            name: p.name
+        };
+    }
+
+    const rankedScoreboard = getRankedScoreboard(getScoreboard());
+    const winner = getPlayer(0);
+    const second = getPlayer(1);
+    const third = getPlayer(2);
+
     function makePartikle() {
         const size = Math.random() * 8 + 2; // 2px to 10px
         const duration = 8 + Math.random() * 12; // 8s to 20s
@@ -42,32 +81,35 @@ type HostFinishedScreenProps = {
 
     return (
         <main>
-            <h1>🏆 The Game is over</h1>
-            {/* <div class="podium">
-                {namen[1] && points[1] && (
-                    <div class="place second">
-                        <div class="name" id="secondName">{namen[1]}</div>
-                        <div class="score" id="secondScore">{points[1]}</div>
-                    </div>
-                )}
-                {namen[0] && points[0] && (
-                    <div class="place first">
-                        <div class="name" id="firstName">{namen[0]}</div>
-                        <div class="score" id="firstScore">{points[0]}</div>
-                    </div>
-                )}
-                {namen[2] && points[2] && (
-                    <div class="place third">
-                        <div class="name" id="thirdName">{namen[2]}</div>
-                        <div class="score" id="thirdScore">{points[2]}</div>
-                    </div>
-                )} 
-
-
-            </div> */}
-            <button type="button" onclick={resetGame}>
-                New Round
-            </button>
+            <section>
+                <h1>🏆 The Game is over</h1>
+                <div class="podium">
+                    {second != null && (
+                        <div class="place second">
+                            <div class="name" id="secondName">2#</div>
+                            <div class="name" id="secondName">{second.name}</div>
+                            <div class="score" id="secondScore">{second.points} Points</div>
+                        </div>
+                    )}
+                    {winner != null && (
+                        <div class="place first">
+                            <div class="name" id="firstName">1#</div>
+                            <div class="name" id="firstName">{winner.name}</div>
+                            <div class="score" id="firstScore">{winner.points} Points</div>
+                        </div>
+                    )}
+                    {third != null && (
+                        <div class="place third">
+                            <div class="name" id="thirdName">3#</div>
+                            <div class="name" id="thirdName">{third.name}</div>
+                            <div class="score" id="thirdScore">{third.points} Points</div>
+                        </div>
+                    )} 
+                </div>
+                <button class="button" type="button" onclick={resetGame}>
+                    New Round
+                </button>
+            </section>
             {[...Array(200)].map((_, i) => makePartikle())}
         </main>
     );

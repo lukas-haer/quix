@@ -36,6 +36,10 @@ type PlayerFinishedScreenProps = {
         return me ? me.points : -1;
     }
 
+    function getMyIndex(rankedScoreboard: PlayerWithRank[], myName: string): number {
+        return rankedScoreboard.findIndex(p => p.name === myName);
+    }
+
     function pointsToNextRankAndPlace(rankedScoreboard: PlayerWithRank[], myName: string): {
         pointsNeeded: number;
         nextRank: number
@@ -64,67 +68,67 @@ type PlayerFinishedScreenProps = {
         return `${rank}th`;
     }
 
+    function getNextPlayers(index: number) :{
+        points: number;
+        rank: number;
+        name: string;
+    } | null {
+        if(index < 0 || index >= rankedScoreboard.length){
+            return null;
+        }
+        const p = rankedScoreboard[index];
+
+        return{
+            points: p.points,
+            rank: p.rank,
+            name: p.name
+        };
+    }
+
     const rankedScoreboard = getRankedScoreboard(await getScoreboard())
     const myName = await getName();
 
     const nextRankInfo = pointsToNextRankAndPlace(rankedScoreboard, myName);
-    const myRank = getMyRank(rankedScoreboard, myName)
-    const myPoints = getMyPoints(rankedScoreboard, myName)    
+    const myRank = getMyRank(rankedScoreboard, myName);
+    const myPoints = getMyPoints(rankedScoreboard, myName);    
+    const myIndex = getMyIndex(rankedScoreboard, myName);
+    const betterPlayer = getNextPlayers(myIndex-1);
+    const worstPlayer = getNextPlayers(myIndex+1);    
 
-    /* return (
-        <div class="color-fade player-finished-container">
-            <div>
-                <h1>
-                    {formatNumberToNumberWithSuffix(myRank)} Place
-                </h1>
-                <h3>
-                    {myPoints} Point{myPoints !== 1 && "s"}
-                </h3>
-                {nextRankInfo != null && (
-                    <h4>
-                        {nextRankInfo.pointsNeeded} point{nextRankInfo.pointsNeeded !== 1 && "s"} away
-                        from {formatNumberToNumberWithSuffix(nextRankInfo.nextRank)} place
-                    </h4>
-                )}
-            </div>
-            <div class="button-container">
-                <button onclick={navigateToJoinScreen}>
-                    Join another quix
-                </button>
-                <button onclick={navigateToMainMenu}>
-                    Create your own quix for free
-                </button>
-            </div>
-        </div>
-    ); */
-
-    return (
+   return (
         <main>
             <h1>🎉 Game Over!</h1>
             <div class="main-info">You finished #{formatNumberToNumberWithSuffix(myRank)} with {myPoints} Point{myPoints !== 1 && "s"}</div>
-{/* 
+ 
             <div class="cards-container">
-                {nextRankInfo != null && (
+                {betterPlayer != null && (
                 <div class="player-card">
                     <div class="player-name"> 
-                        {formatNumberToNumberWithSuffix(nextRankInfo.nextRank)} place 
+                        {betterPlayer.rank}# {betterPlayer.name}
                     </div>
                     <div class="player-score">
-                        {myPoints+nextRankInfo.pointsNeeded}pts
+                        {betterPlayer.points}pts
                     </div>
                     <div class="diff">
-                        {nextRankInfo.pointsNeeded} point{nextRankInfo.pointsNeeded !== 1 && "s"}
+                        {betterPlayer.points-myPoints}
                     </div>
                 </div>
                 )}
-
+                {worstPlayer != null &&(
                 <div class="player-card">
-                    <div class="player-name">#5 Maya</div>
-                    <div class="player-score">2350 pts</div>
-                    <div class="diff">-50 pts</div>
-                </div>
-                
-            </div>  */}
+                    <div class="player-name">
+                        {worstPlayer.rank}# {worstPlayer.name}
+                    </div>
+                    <div class="player-score">
+                        {worstPlayer.points}pts
+                    </div>
+                    <div class="diff">
+                        {worstPlayer.points-myPoints}
+                    </div>
+                </div>        
+                )}
+                                
+            </div> 
                 <button type="button" class="button" onclick={() => redirect('/')}>
                     Join another quix
                 </button>
