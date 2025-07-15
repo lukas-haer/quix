@@ -4,15 +4,6 @@
   box-sizing: border-box;
 }
 
-html,
-body {
-  height: 100%;
-  width: 100%;
-  background: #fff;
-  font-family: 'Avenir Next', Arial, sans-serif;
-  overflow: hidden;
-}
-
 .loading-screen {
   position: fixed;
   inset: 0;
@@ -22,6 +13,11 @@ body {
   justify-content: center;
   flex-direction: column;
   z-index: 1;
+
+  height: 100%;
+  width: 100%;
+  font-family: 'Avenir Next', Arial, sans-serif;
+  overflow: hidden;
 }
 
 
