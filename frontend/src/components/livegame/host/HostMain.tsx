@@ -50,8 +50,6 @@ import { BackgroundMusicButton } from "frontend/src/components/utils/music/Backg
     }
 
     @property static submitAnswer(answer: any): number {
-
-      console.log("ANSWER SUBMITTED");
       
       if(state.val !== "question") throw new Error("Game has not started yet.")
 
@@ -64,7 +62,8 @@ import { BackgroundMusicButton } from "frontend/src/components/utils/music/Backg
       const currentQuestion = (gameStateObjects.questions[currentRound.val] as SingleChoiceQuestion )      
 
       //Make fit for different question types
-      if(!currentQuestion.content.correctAnswerId == answer) throw new Error("Wrong answer.");
+      if(!currentQuestion.isCorrect(answer)) throw new Error("Wrong answer.");
+      
       
       const { currentDeadline } = PlayerAPI.getCurrentQuestion();
 

@@ -13,18 +13,21 @@ export type QuestionType = SingleChoiceQuestionType | MultipleChoiceQuestionType
 export abstract class Question<Type> {
     readonly id: string;
     content: Type;
+    questionType: "singlechoise" | "multiplechoise"; // Only important for export and import
 
-    constructor(content: Type){
+    constructor(content: Type, questionType: "singlechoise" | "multiplechoise"){
         this.id = crypto.randomUUID();
         this.content = content;
+        this.questionType = questionType
     }
 
     abstract isCorrect(answer: any): boolean;
 }
 
 export class SingleChoiceQuestion extends Question<SingleChoiceQuestionType> {
+
     constructor(content: SingleChoiceQuestionType){
-        super(content);
+        super(content, "singlechoise");
     }
 
     isCorrect(answer: number) {
@@ -34,7 +37,7 @@ export class SingleChoiceQuestion extends Question<SingleChoiceQuestionType> {
 
 export class MultipleChoiceQuestion extends Question<MultipleChoiceQuestionType> {
     constructor(content: MultipleChoiceQuestionType){
-        super(content);
+        super(content, "multiplechoise");
     }
 
     isCorrect(answer: number[]) {
