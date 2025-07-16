@@ -18,7 +18,7 @@ import { quizzes } from "backend/SaveQuiz.ts";
  * @property {Array<Question>} questions - Array of questions in the quiz.
  *
  */
-let quiz = $(Quiz ({
+const quiz = $(Quiz ({
     quizId: crypto.randomUUID(),
     title: "",
     description: "",
@@ -55,8 +55,6 @@ function addQuestion() {
         return;
     }
 }
-
-
 
 /**
  * 
