@@ -228,7 +228,6 @@ p {
     cursor: pointer;
     transition: background-color 0.3s ease;
     white-space: nowrap;
-
 	animation: fadeIn 1s ease-in-out;
 }
 
