@@ -197,3 +197,77 @@ input {
 	background-color: #045cba;
 	transform: scale(1.07);
 }
+
+
+
+.open-modal-btn {
+  padding: 0.5rem 1rem;
+  background-color: #007BFF;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+  width: 90%;
+  min-width: 300px;
+  max-width: 450px;
+  min-height: 200px;
+  text-align: center;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+.modal-btn {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: space-around;
+}
+
+.confirm-btn, .close-btn {
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.confirm-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.confirm-btn:hover {
+  background-color: #218838;
+}
+
+.close-btn {
+  background-color: rgb(185, 185, 185);
+  color: white;
+}
+
+.close-btn:hover {
+  background-color: gray;
+}
+
+.modal-message {
+	font-size: 1.2rem;
+	margin-bottom: 3rem;
+}
