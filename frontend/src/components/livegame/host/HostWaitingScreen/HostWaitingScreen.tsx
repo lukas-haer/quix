@@ -107,7 +107,11 @@ type HostWaitingScreenProps = {
           </p>
           <button class="button" type="button" onclick={() => startGame()}>Start Game</button>
         </div>
-        <QuizImport gameStateObjects={gameStateObjects} />
+        <div>
+          <Separator text="Create and export a Quiz without an account"/>
+          <button class="create-quiz-button" type="button" onclick={() => redirect("/createQuiz")}>Create Quiz</button>
+          <QuizImport gameStateObjects={gameStateObjects} />
+        </div>
       </section>
     );
   },
