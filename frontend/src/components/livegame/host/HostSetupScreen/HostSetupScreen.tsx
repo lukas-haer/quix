@@ -6,6 +6,7 @@ import { ObjectRef } from "datex-core-legacy/runtime/pointers.ts";
 import { GameStateObjects } from "frontend/src/models/GameState.ts";
 import { failureSnackbarMessage } from "frontend/src/components/utils/snackbar/Snackbar.tsx";
 import { UserLoginPanel } from "frontend/src/components/userAccount/AccountAccess/UserLoginForm.tsx";
+import { Separator } from "frontend/src/components/utils/Separator/Separator.tsx";
 //import { getUserQuizzes } from "/backend/SaveQuiz.ts";
 
 type HostSetupScreenProps = {
@@ -36,11 +37,13 @@ type HostSetupScreenProps = {
 			{
 				//TODO: only display Login Panel if user is not logged in
 			}
-			<UserLoginPanel text={"LOG IN TO BROWSE YOUR QUIZZES"} />
+			<UserLoginPanel text={"LOG IN TO BROWSE YOUR QUIZZES"}/>
+			<Separator text="Create and export a Quiz without an account"/>
+          	<button class="create-quiz-button" type="button" onclick={() => redirect("/createQuiz")}>Create Quiz</button>
 			<QuizImport gameStateObjects={gameStateObjects} />
 			<button class="button" onclick={proceedToWaiting}>Proceed to Lobby</button>
 		</div>
 		</section>
 	);
 })
-export class HostSetupScreen extends Component<HostSetupScreenProps> {}
+export class HostSetupScreen extends Component<HostSetupScreenProps> {}			
