@@ -6,6 +6,12 @@ import { failureSnackbarMessage, Snackbar, successSnackbarMessage } from 'fronte
     /** Remove default UIX styling */
     UIX.Theme.useTheme('uix-light-plain');
 
+    function setViewportHeight() {
+        const vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+    }
+    setViewportHeight();
+
     const activeSection = $('joinSection' as 'joinSection' | 'hostSection');
 
     const codeInputValues = $(['', '', '', '', '', '']);
