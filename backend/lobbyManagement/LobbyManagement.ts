@@ -9,6 +9,13 @@ export async function registerLobby() {
 			throw new Error("No caller ID found. Cannot register lobby.");
 		}
 
+		// remove existing lobby if the host requests a new one
+		// since it should not be possible to have multiple lobbies with the same host
+		// removing only one lobby should be sufficient
+		const existingLobbyIndex = lobbies.findIndex(lobby => lobby.host.endpointId === callerID);
+		if (existingLobbyIndex !== -1) {
+			lobbies.splice(existingLobbyIndex, 1);
+		}
 		
 	   const gameCodeRegex = /^\d{6}$/;
 	   let lobbyCode: string | undefined = undefined;
