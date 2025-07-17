@@ -77,6 +77,11 @@ const apiObj: ObjectRef<{ playerApi?: PlayerAPIType }> = $({}); //encapsulate ap
 
     const joinGame = async () => {
         try {
+            if (name.val.length < 1) {
+                failureSnackbarMessage('Unable to Join', 'Please enter a name before joining the game.');
+                return;
+            }
+            
             activeComponent.val = 'loading';
 
             if (!gamecode || !gamecode.val || gamecode.val == '') {
