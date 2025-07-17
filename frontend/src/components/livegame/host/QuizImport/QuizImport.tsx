@@ -19,13 +19,11 @@ type ImportButtonProps = {
 	const currentQuizName = $("")
 
 	return (
-		<div class="l-col l-col-6 center-vertically" >
-			<Separator text={"or manually import quiz"} />
+		<div>
 			<ImportButton callback={(quiz: Quiz) => {
 				gameStateObjects.questions = quiz.questions
 				currentQuizName.val = quiz.title
 			}}/>
-			<span style="margin-top: 20px">{currentQuizName.val}</span>
 		</div>
 	);
 })
@@ -72,8 +70,8 @@ export class QuizImport extends Component<QuizImportProps> {}
 		if (typeof quiz !== "object" || !quiz.questions) return failureSnackbarMessage("Error", "The file does not contain a valid quiz object.")
 		
 		callback(quiz)
-		console.log("Successfully importet quiz: ",quiz);
-        successSnackbarMessage("Success", "Quiz import succeeded.", 2000)
+		console.log("Successfully importet quiz: ",quiz.title);
+        successSnackbarMessage("Success", `Quiz "${quiz.title}" imported successfully.`, 10_000)
 			} catch (error) {
 			console.error("Error when parsing JSON: ",error);
 			failureSnackbarMessage("Import failed","The file could not be importet. Please make sure it is in the right format.")
