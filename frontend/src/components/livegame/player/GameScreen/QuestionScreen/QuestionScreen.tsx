@@ -19,6 +19,14 @@ type ComponentQuestionScreenProps = DefaultQuestionScreenProps & { submittedAnsw
         submittedAnswer.val = true;
     }
 
+    function setViewportHeight() {
+        const vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+    }
+    setViewportHeight();
+
+    globalThis.addEventListener('resize' , setViewportHeight)
+
     return (
         <main>
             {!submittedAnswer.val ? (
@@ -26,9 +34,9 @@ type ComponentQuestionScreenProps = DefaultQuestionScreenProps & { submittedAnsw
                     <div class="host-bg-shape-main"></div>
                     <div class="host-bg-shape-circle"></div>
                     <div class="top flex-center">
-                            <div class="question-title-container ">
-                                <h1>{questionText}</h1>
-                            </div>
+                        <div class="question-title-container ">
+                            <h1>{questionText}</h1>
+                        </div>
                     </div>
                     <div class="bottom flex-center">
                         <div class="button-container">

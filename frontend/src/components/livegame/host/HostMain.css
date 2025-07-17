@@ -110,7 +110,7 @@ p {
 	display: block;
 }
 
-.button {
+.button, .create-quiz-button {
 	background-color: #007BFF;
 	color: white;
 	border: none;
@@ -120,6 +120,13 @@ p {
 	cursor: pointer;
 	transition: background-color 0.3s ease, transform 0.15s cubic-bezier(0.23, 1, 0.32, 1);
 	margin-top: 1rem;
+}
+.create-quiz-button {
+	margin-top: 0px;
+	width: 150px;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .button:hover {
@@ -229,10 +236,6 @@ p {
 	}
 }
 
-section>*:not(.host-bg-shape-main):not(.host-bg-shape-circle) {
-	position: relative;
-	z-index: 1;
-}
 
 .player-list {
 	display: flex;
@@ -360,6 +363,12 @@ section>*:not(.host-bg-shape-main):not(.host-bg-shape-circle) {
 .copy-invite-link:hover {
 	color: #007bff;
 	transform: scale(1.15) rotate(-10deg);
+}
+
+.bg-music-btn {
+	position: fixed;
+	top: 20px;
+	right: 20px;
 }
 
 @media (max-width: 1111px) {

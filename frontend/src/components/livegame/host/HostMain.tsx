@@ -13,6 +13,8 @@ import { HostSolutionScreen } from "./HostSolutionScreen/HostSolutionScreen.tsx"
 import { HostSetupScreen } from "./HostSetupScreen/HostSetupScreen.tsx";
 import { Quiz } from "common/models/Quiz.ts";
 import { UIX } from "uix";
+import { BackgroundMusic } from "frontend/src/components/utils/music/BackgroundMusic.tsx";
+import { BackgroundMusicButton } from "frontend/src/components/utils/music/BackgroundMusicButton.tsx";
 
   //TODO: Does it make any difference having the pointers and api outside vs inside of a component?
   //TODO: pause/reset timeout
@@ -48,8 +50,6 @@ import { UIX } from "uix";
     }
 
     @property static submitAnswer(answer: any): number {
-
-      console.log("ANSWER SUBMITTED");
       
       if(state.val !== "question") throw new Error("Game has not started yet.")
 
@@ -62,7 +62,8 @@ import { UIX } from "uix";
       const currentQuestion = (gameStateObjects.questions[currentRound.val] as SingleChoiceQuestion )      
 
       //Make fit for different question types
-      if(!currentQuestion.content.correctAnswerId == answer) throw new Error("Wrong answer.");
+      if(!currentQuestion.isCorrect(answer)) throw new Error("Wrong answer.");
+      
       
       const { currentDeadline } = PlayerAPI.getCurrentQuestion();
 
@@ -198,6 +199,7 @@ import { UIX } from "uix";
 
     return (
       <div class="container">
+        <BackgroundMusic />
         <Snackbar />
           {
             state.val === "setup" && <HostSetupScreen state={state} gameStateObjects={gameStateObjects} />

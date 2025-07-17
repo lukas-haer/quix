@@ -29,7 +29,7 @@ import { deleteQuiz } from "../../gamecreation/createQuiz/CreateQuiz.tsx";
 				userQuizzes.length === 0 
 			?(
 				<div> 
-					<div class="no-quizzes-message">You don't have any Quizzes for now</div> 
+					<div class="no-quizzes-message">You currently don't have any Quizzes</div> 
 					<div class="quiz-section-divider"></div>
 					<div class="quiz-container">
 						<div class="create-card">

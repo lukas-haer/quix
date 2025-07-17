@@ -3,8 +3,7 @@ import { User } from "common/models/User.ts";
 import { quizzes } from "../SaveQuiz.ts";
 
 import * as argon2 from "jsr:@felix/argon2";
-import { provideRedirect } from "uix/providers/common.tsx";
-import { InvalidPasswordError, UsernameTakenError, UserNotFoundError, WeakPasswordError, InvalidPasswordRepeatError, InvalidPasswordOrUsernameError } from "common/models/errors/accountErrors.ts";
+import { UsernameTakenError, WeakPasswordError, InvalidPasswordRepeatError, InvalidPasswordOrUsernameError } from "common/models/errors/accountErrors.ts";
 
 export const users = eternal ?? $({} as Record<string, User>);
 
@@ -49,8 +48,6 @@ export async function userLogin(username: string, password: string) {
 //Signup
 export async function userSignUp(username: string, password: string, passwordRepeat : string)  {
 
-	console.log("LOGGING ALLE USER users:", users);
-
 	//wrong password for existing user
 	if (!isValidPassword(password)) {
 		throw new WeakPasswordError();
@@ -87,18 +84,4 @@ export async function userSignUp(username: string, password: string, passwordRep
 function isValidPassword (password: string) : boolean {
 	const regex = /^(?=.*[0-9])(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\/-])[A-Za-z\d!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]{8,}$/;
 	return regex.test(password);
-}
-
-//user logout, not used right now 
-export async function logout () {
-	const session = await Context.getPrivateData(datex.meta.caller)
-	const currentUser = session.userId;
-
-	if (currentUser) {
-		session.userId = undefined
-		console.log("User logged out, userId shouldn't be set anymore: ", session.userId)
-	} else {
-		throw new Error ("No current user logged in that could be logged out");
-	}
-	return provideRedirect("/");
 }

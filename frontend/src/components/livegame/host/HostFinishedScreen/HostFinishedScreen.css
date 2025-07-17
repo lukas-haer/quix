@@ -63,6 +63,11 @@ h1 {
 	margin-top: 2rem;
 }
 
+section{
+	background: transparent;
+	z-index: 2;
+}
+
 .place {
 	width: 220px;
 	border-radius: 20px 20px 0 0;
@@ -196,5 +201,7 @@ h1 {
 	border-radius: 8px;
 	cursor: pointer;
 	transition: background-color 0.3s ease, transform 0.15s cubic-bezier(0.23, 1, 0.32, 1);
-	margin-top: 1rem;
+	/*margin-top: 1rem; */
+	display: block;
+	margin: 3rem auto 0 auto;
 }

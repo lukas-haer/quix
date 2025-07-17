@@ -1,0 +1,25 @@
+.background-music-button {
+  background-color: #000;
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 10px 10px;
+  border-radius: 7px;
+  height: 42px;
+  width: 42px;
+}
+
+.background-music-button:hover {
+    background-color: #015cbd;
+}
+
+.background-music-icon {
+  height: 1.2rem;
+  width: 1.2rem;
+  vertical-align: middle;
+  stroke-width: 2;
+}
+
+.hidden {
+    display: none;
+}

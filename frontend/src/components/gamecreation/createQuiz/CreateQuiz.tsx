@@ -18,7 +18,7 @@ import { quizzes } from "backend/SaveQuiz.ts";
  * @property {Array<Question>} questions - Array of questions in the quiz.
  *
  */
-let quiz = $(Quiz ({
+const quiz = $(Quiz ({
     quizId: crypto.randomUUID(),
     title: "",
     description: "",
@@ -56,8 +56,6 @@ function addQuestion() {
     }
 }
 
-
-
 /**
  * 
  * @param questionId - The ID of the question to remove.
@@ -82,11 +80,16 @@ export function removeQuestionById(questionId: string) {
     }
 }
 
+const showModal = $(false);
+
 /**
  * Exports the current quiz as a JSON file.
  * The file will be named `quiz-{quiz.id}.json`.
  */
 function exportQuestionSet() {
+
+    showModal.val = true;
+
 	try {
 	const fileName = `quix-${quiz.title.replace(/\s+/g, "-").toLowerCase()}.json`;
 
@@ -180,6 +183,18 @@ function refresh() {
                 	<button type="button" id="export-btn" onclick={exportQuestionSet}>
                 	    Export Quiz
                 	</button>
+                    {showModal.val && (
+                        <div class="modal-overlay">
+                            <div class="modal">
+                                <h3 class="modal-message">Your Quiz has been Exported. Do you want to continue editing or return to Homepage?</h3>
+                                <div class="modal-btn">
+                                    <button class="close-btn" type="button" onclick={() => { showModal.val = false;}}>Continue Editing</button>
+                                    <button type="button" class="confirm-btn" onclick={() => {showModal.val = false; redirect("/")}}>
+                                        Return to Homepage</button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
 				</div>
             </div>
         </header>
